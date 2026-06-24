@@ -2,7 +2,7 @@
   "vocab": {
     "1": [
       {
-        "kanji": null,
+        "kanji": "私",
         "kana": "わたし",
         "romaji": "watashi",
         "meaning": "tôi"
@@ -11,13 +11,13 @@
         "kanji": null,
         "kana": "あなた",
         "romaji": "anata",
-        "meaning": "you"
+        "meaning": "anh/chị, bạn"
       },
       {
         "kanji": "あの 人（あの 方）",
         "kana": "あの ひと（あの かた）",
         "romaji": "ano hito (ano kata)",
-        "meaning": "that person, he, she (あの かた is the polite equivalent of あの ひと)"
+        "meaning": "người kia"
       },
       {
         "kanji": null,
@@ -98,22 +98,22 @@
         "meaning": "bệnh viện"
       },
       {
-        "kanji": null,
+        "kanji": "誰（どなた）",
         "kana": "だれ（どなた）",
         "romaji": "dare (donata)",
-        "meaning": "who (どなた is the polite equivalent of だれ)"
+        "meaning": "ai (hỏi người nào đó)"
       },
       {
         "kanji": "－歳",
         "kana": "－さい",
         "romaji": "-sai",
-        "meaning": "－ years old"
+        "meaning": "tuổi (hậu tố đứng sau số)"
       },
       {
         "kanji": "何歳",
         "kana": "なんさい（おいくつ）",
         "romaji": "nansai (oikutsu)",
-        "meaning": "how old (おいくつ is the polite equivalent of なんさい)"
+        "meaning": "mấy tuổi, bao nhiêu tuổi."
       },
       {
         "kanji": null,
@@ -131,19 +131,19 @@
         "kanji": "初めまして。",
         "kana": "はじめまして。",
         "romaji": "hajimemashite.",
-        "meaning": "How do you do? (lit. I am meeting you for the first time. Usually used as the first phrase when introducing oneself.)"
+        "meaning": "chào lần đầu gặp nhau"
       },
       {
         "kanji": "～から 来ました。",
         "kana": "～から きました。",
         "romaji": "~kara kimashita.",
-        "meaning": "I'm from ～ (country)"
+        "meaning": "đến từ ～"
       },
       {
         "kanji": "［どうぞ］よろしく［お願いします］。",
         "kana": "［どうぞ］よろしく［おねがいします］。",
         "romaji": "[dozo] yoroshiku [onegaishimasu].",
-        "meaning": "Pleased to meet you. (lit. Please be nice to me. Usually used at the end of a self-introduction.)"
+        "meaning": "rất hân hạnh được làm quen"
       },
       {
         "kanji": "失礼ですが",
@@ -161,7 +161,7 @@
         "kanji": null,
         "kana": "こちらは ～さんです。",
         "romaji": "kochirawa ~sandesu.",
-        "meaning": "This is Mr./Ms. ～."
+        "meaning": "đây là ngài ～"
       },
       {
         "kanji": null,
@@ -227,28 +227,28 @@
         "kanji": "IMC／パワー電気／ブラジルエアー",
         "kana": "IMC／パワーでんき／ブラジルエアー",
         "romaji": "IMC/pawadenki/burajiruea",
-        "meaning": "fictitious companies"
+        "meaning": "công ty giả định (trong sách)"
       },
       {
         "kanji": null,
         "kana": "AKC",
         "romaji": "AKC",
-        "meaning": "a fictitious institute"
+        "meaning": "học viện giả định (trong sách)"
       },
       {
         "kanji": "神戸病院",
         "kana": "こうべびょういん",
         "romaji": "kobebyoin",
-        "meaning": "a fictitious hospital"
+        "meaning": "bệnh viện giả định (trong sách)"
       },
       {
         "kanji": "さくら大学／富士大学",
         "kana": "さくらだいがく／ふじだいがく",
         "romaji": "sakuradaigaku/fujidaigaku",
-        "meaning": "fictitious universities"
+        "meaning": "trường đại học giả định (trong sách)"
       },
       {
-        "kanji": null,
+        "kanji": "私たち",
         "kana": "わたしたち",
         "romaji": "watashitachi",
         "meaning": "chúng tôi"
@@ -286,19 +286,19 @@
     ],
     "2": [
       {
-        "kanji": null,
+        "kanji": "此れ",
         "kana": "これ",
         "romaji": "kore",
         "meaning": "cái này, đây( vật ở gần người nói)"
       },
       {
-        "kanji": null,
+        "kanji": "其れ",
         "kana": "それ",
         "romaji": "sore",
         "meaning": "cái đó, đó( vật ở gần người nghe)"
       },
       {
-        "kanji": null,
+        "kanji": "彼れ",
         "kana": "あれ",
         "romaji": "are",
         "meaning": "cái kia, kia( vật ở xa cả người nói và người nghe)"
@@ -388,7 +388,7 @@
         "meaning": "bút chì bấm"
       },
       {
-        "kanji": null,
+        "kanji": "鍵",
         "kana": "かぎ",
         "romaji": "kagi",
         "meaning": "chìa khoá"
@@ -406,7 +406,7 @@
         "meaning": "cái dù"
       },
       {
-        "kanji": null,
+        "kanji": "鞄",
         "kana": "かばん",
         "romaji": "kaban",
         "meaning": "cái cặp"
@@ -454,7 +454,7 @@
         "meaning": "cái bàn"
       },
       {
-        "kanji": null,
+        "kanji": "椅子",
         "kana": "いす",
         "romaji": "isu",
         "meaning": "chair"
@@ -523,7 +523,7 @@
         "kanji": null,
         "kana": "どうぞ。",
         "romaji": "dozo.",
-        "meaning": "Here you are. (used when offering someone something)"
+        "meaning": "xin mời"
       },
       {
         "kanji": null,
@@ -535,13 +535,13 @@
         "kanji": null,
         "kana": "そうですか。",
         "romaji": "sodesuka.",
-        "meaning": "I see."
+        "meaning": "thế à?"
       },
       {
         "kanji": "違います。",
         "kana": "ちがいます。",
         "romaji": "chigaimasu.",
-        "meaning": "No, it isn't./You are wrong."
+        "meaning": "không phải, sai rồi"
       },
       {
         "kanji": null,
@@ -559,7 +559,7 @@
         "kanji": "こちらこそ［どうぞ］よろしく［お願いします］。",
         "kana": "こちらこそ［どうぞ］よろしく［おねがいします］。",
         "romaji": "kochirakoso [dozo] yoroshiku [onegaishimasu].",
-        "meaning": "Pleased to meet you, too. (response to［どうぞ］よろしく［おねがいします］。)"
+        "meaning": "Chính tôi mới là người mong được giúp đỡ."
       },
       {
         "kanji": null,
@@ -589,60 +589,60 @@
         "kanji": "ほんの 気持ちです。",
         "kana": "ほんの きもちです。",
         "romaji": "honno kimochidesu.",
-        "meaning": "It's nothing./It's a token of my gratitude."
+        "meaning": "đây là chút lòng thành"
       },
       {
         "kanji": null,
         "kana": "どうも。",
         "romaji": "domo.",
-        "meaning": "Well, thanks."
+        "meaning": "cám ơn"
       }
     ],
     "3": [
       {
-        "kanji": null,
+        "kanji": "此処",
         "kana": "ここ",
         "romaji": "koko",
         "meaning": "chỗ này, đây"
       },
       {
-        "kanji": null,
+        "kanji": "其処",
         "kana": "そこ",
         "romaji": "soko",
         "meaning": "chỗ đó, đó"
       },
       {
-        "kanji": null,
+        "kanji": "彼処",
         "kana": "あそこ",
         "romaji": "asoko",
         "meaning": "chỗ kia, kia"
       },
       {
-        "kanji": null,
+        "kanji": "何処",
         "kana": "どこ",
         "romaji": "doko",
         "meaning": "chỗ nào, đâu"
       },
       {
-        "kanji": null,
+        "kanji": "此方",
         "kana": "こちら",
         "romaji": "kochira",
         "meaning": "phía này, đằng này, chỗ này, đây"
       },
       {
-        "kanji": null,
+        "kanji": "其方",
         "kana": "そちら",
         "romaji": "sochira",
         "meaning": "phía đó, đằng đó, chỗ đó, đó"
       },
       {
-        "kanji": null,
+        "kanji": "彼方",
         "kana": "あちら",
         "romaji": "achira",
         "meaning": "phía kia, đằng kia, chỗ kia, kia"
       },
       {
-        "kanji": null,
+        "kanji": "何方",
         "kana": "どちら",
         "romaji": "dochira",
         "meaning": "phía nào, đằng nào, chỗ nào, đâu"
@@ -729,7 +729,7 @@
         "kanji": "［お］国",
         "kana": "［お］くに",
         "romaji": "[o] kuni",
-        "meaning": "country"
+        "meaning": "đất nước (của anh/chị)"
       },
       {
         "kanji": "会社",
@@ -738,7 +738,7 @@
         "meaning": "công ty"
       },
       {
-        "kanji": null,
+        "kanji": "家",
         "kana": "うち",
         "romaji": "uchi",
         "meaning": "nhà"
@@ -777,7 +777,7 @@
         "kanji": "－階",
         "kana": "－かい（－がい）",
         "romaji": "-kai (-gai)",
-        "meaning": "-th floor"
+        "meaning": "tầng thứ –"
       },
       {
         "kanji": "何階",
@@ -819,7 +819,7 @@
         "kanji": null,
         "kana": "すみません。",
         "romaji": "sumimasen.",
-        "meaning": "Excuse me."
+        "meaning": "Xin lỗi"
       },
       {
         "kanji": null,
@@ -894,7 +894,7 @@
         "meaning": "name of a station in Osaka"
       },
       {
-        "kanji": null,
+        "kanji": "煙草",
         "kana": "たばこ",
         "romaji": "tabako",
         "meaning": "thuốc lá"
@@ -909,7 +909,7 @@
         "kanji": null,
         "kana": "MT／ヨーネン／アキックス",
         "romaji": "MT/yonen/akikkusu",
-        "meaning": "fictitious companies"
+        "meaning": "công ty giả định (trong sách)"
       }
     ],
     "4": [
@@ -1043,7 +1043,7 @@
         "kanji": "晩（夜）",
         "kana": "ばん（よる）",
         "romaji": "ban (yoru)",
-        "meaning": "night, evening"
+        "meaning": "tối"
       },
       {
         "kanji": null,
@@ -1220,7 +1220,7 @@
         "meaning": "số mấy"
       },
       {
-        "kanji": null,
+        "kanji": "其方",
         "kana": "そちら",
         "romaji": "sochira",
         "meaning": "phía ông, bà"
@@ -1719,7 +1719,7 @@
         "kanji": "吸います［たばこを～］",
         "kana": "すいます［たばこを～］",
         "romaji": "suimasu [tabakowo~]",
-        "meaning": "smoke [a cigarette]"
+        "meaning": "hút [thuốc lá]"
       },
       {
         "kanji": "見ます",
@@ -1755,7 +1755,7 @@
         "kanji": "撮ります［写真を～］",
         "kana": "とります［しゃしんを～］",
         "romaji": "torimasu [shashinwo~]",
-        "meaning": "take [a photograph]"
+        "meaning": "chụp [ảnh]"
       },
       {
         "kanji": null,
@@ -1767,7 +1767,7 @@
         "kanji": "会います［友達に～］",
         "kana": "あいます［ともだちに～］",
         "romaji": "aimasu [tomodachini~]",
-        "meaning": "meet [a friend]"
+        "meaning": "gặp gỡ"
       },
       {
         "kanji": null,
@@ -1851,7 +1851,7 @@
         "kanji": "牛乳（ミルク）",
         "kana": "ぎゅうにゅう（ミルク）",
         "romaji": "gyunyu (miruku)",
-        "meaning": "milk"
+        "meaning": "sữa bò"
       },
       {
         "kanji": null,
@@ -1869,10 +1869,10 @@
         "kanji": "［お］酒",
         "kana": "［お］さけ",
         "romaji": "[o] sake",
-        "meaning": "alcohol, Japanese rice wine"
+        "meaning": "rượu, rượu sake"
       },
       {
-        "kanji": null,
+        "kanji": "煙草",
         "kana": "たばこ",
         "romaji": "tabako",
         "meaning": "tobacco, cigarette"
@@ -1983,7 +1983,7 @@
         "kanji": null,
         "kana": "いいですね。",
         "romaji": "iidesune.",
-        "meaning": "That's good."
+        "meaning": "Được đấy nhỉ/ tốt nhỉ"
       },
       {
         "kanji": null,
@@ -2111,7 +2111,7 @@
         "kanji": "かけます［電話を～］",
         "kana": "かけます［でんわを～］",
         "romaji": "kakemasu [denwawo~]",
-        "meaning": "make [a telephone call]"
+        "meaning": "gọi điện"
       },
       {
         "kanji": "手",
@@ -2297,7 +2297,7 @@
         "kanji": null,
         "kana": "いらっしゃい。",
         "romaji": "irasshai.",
-        "meaning": "How nice of you to come. (lit. Welcome.)"
+        "meaning": "anh (chị) đến chơi"
       },
       {
         "kanji": "どうぞ お上がり ください。",
@@ -2309,7 +2309,7 @@
         "kanji": "失礼します。",
         "kana": "しつれいします。",
         "romaji": "shitsureishimasu.",
-        "meaning": "May I? (lit. I commit an incivility.)"
+        "meaning": "xin lỗi, làm phiền"
       },
       {
         "kanji": null,
@@ -2339,7 +2339,7 @@
         "kanji": null,
         "kana": "ファクス",
         "romaji": "fuakusu",
-        "meaning": "fax"
+        "meaning": "fax, máy fax"
       },
       {
         "kanji": null,
@@ -2377,7 +2377,7 @@
         "kanji": null,
         "kana": "ハンサム［な］",
         "romaji": "hansamu [na]",
-        "meaning": "handsome"
+        "meaning": "đẹp trai"
       },
       {
         "kanji": null,
@@ -2389,49 +2389,49 @@
         "kanji": "静か［な］",
         "kana": "しずか［な］",
         "romaji": "shizuka [na]",
-        "meaning": "quiet"
+        "meaning": "yên tĩnh"
       },
       {
         "kanji": null,
         "kana": "にぎやか［な］",
         "romaji": "nigiyaka [na]",
-        "meaning": "lively"
+        "meaning": "nhộn nhịp, náo nhiệt"
       },
       {
         "kanji": "有名［な］",
         "kana": "ゆうめい［な］",
         "romaji": "yumei [na]",
-        "meaning": "famous"
+        "meaning": "nổi tiếng"
       },
       {
         "kanji": "親切［な］",
         "kana": "しんせつ［な］",
         "romaji": "shinsetsu [na]",
-        "meaning": "helpful, kind, considerate (not used about one's own family members)"
+        "meaning": "tử tế, tốt bụng"
       },
       {
         "kanji": "元気［な］",
         "kana": "げんき［な］",
         "romaji": "genki [na]",
-        "meaning": "healthy, energetic, cheerful"
+        "meaning": "khỏe"
       },
       {
         "kanji": "暇［な］",
         "kana": "ひま［な］",
         "romaji": "hima [na]",
-        "meaning": "free (time)"
+        "meaning": "rảnh rỗi"
       },
       {
         "kanji": "便利［な］",
         "kana": "べんり［な］",
         "romaji": "benri [na]",
-        "meaning": "convenient"
+        "meaning": "tiện lợi"
       },
       {
         "kanji": null,
         "kana": "すてき［な］",
         "romaji": "suteki [na]",
-        "meaning": "fine, nice, wonderful"
+        "meaning": "đẹp, hay, tuyệt vời"
       },
       {
         "kanji": "大きい",
@@ -2461,7 +2461,7 @@
         "kanji": null,
         "kana": "いい（よい）",
         "romaji": "ii (yoi)",
-        "meaning": "good"
+        "meaning": "tốt"
       },
       {
         "kanji": "悪い",
@@ -2629,7 +2629,7 @@
         "kanji": null,
         "kana": "どんな ～",
         "romaji": "donna ~",
-        "meaning": "～nào"
+        "meaning": "what kind of ～"
       },
       {
         "kanji": null,
@@ -2659,13 +2659,13 @@
         "kanji": "お元気ですか。",
         "kana": "おげんきですか。",
         "romaji": "ogenkidesuka.",
-        "meaning": "How are you?"
+        "meaning": "có khỏe không?"
       },
       {
         "kanji": null,
         "kana": "そうですね。",
         "romaji": "sodesune.",
-        "meaning": "Well let me see. (pausing)"
+        "meaning": "đúng vậy./ ừ nhỉ."
       },
       {
         "kanji": "［～、］もう 一杯 いかがですか。",
@@ -2701,7 +2701,7 @@
         "kanji": null,
         "kana": "また いらっしゃって ください。",
         "romaji": "mata irasshatte kudasai.",
-        "meaning": "Please come again"
+        "meaning": "Lần sau anh( chị, …) lại đến chơi nhé."
       },
       {
         "kanji": null,
@@ -2755,7 +2755,7 @@
         "kanji": "日本の 生活に 慣れましたか。",
         "kana": "にほんの せいかつに なれましたか。",
         "romaji": "nihonno seikatsuni naremashitaka.",
-        "meaning": "Have you got used to the life in Japan?"
+        "meaning": "Đã quen với cuộc sống Nhật Bản chưa ?"
       },
       {
         "kanji": "琵琶湖",
@@ -2781,25 +2781,25 @@
         "kanji": "好き［な］",
         "kana": "すき［な］",
         "romaji": "suki [na]",
-        "meaning": "like"
+        "meaning": "thích"
       },
       {
         "kanji": "嫌い［な］",
         "kana": "きらい［な］",
         "romaji": "kirai [na]",
-        "meaning": "dislike"
+        "meaning": "ghét, không thích"
       },
       {
         "kanji": "上手［な］",
         "kana": "じょうず［な］",
         "romaji": "jozu [na]",
-        "meaning": "good at"
+        "meaning": "giỏi, khéo"
       },
       {
         "kanji": "下手［な］",
         "kana": "へた［な］",
         "romaji": "heta [na]",
-        "meaning": "poor at"
+        "meaning": "kém"
       },
       {
         "kanji": "飲み物",
@@ -3045,7 +3045,7 @@
         "kanji": "残念です［が］",
         "kana": "ざんねんです［が］",
         "romaji": "zannendesu [ga]",
-        "meaning": "I'm sorry [, but], unfortunately"
+        "meaning": "Thật đáng tiếc nhỉ/ buồn nhỉ"
       },
       {
         "kanji": null,
@@ -3057,7 +3057,7 @@
         "kanji": null,
         "kana": "いっしょに いかがですか。",
         "romaji": "isshoni ikagadesuka.",
-        "meaning": "Won't you join me (us)?"
+        "meaning": "Anh/chị cùng ~ (làm cái gì đó) với chúng tôi được không?"
       },
       {
         "kanji": null,
@@ -3075,7 +3075,7 @@
         "kanji": "また 今度 お願いします。",
         "kana": "また こんど おねがいします。",
         "romaji": "mata kondo onegaishimasu.",
-        "meaning": "Please ask me again some other time. (used when refusing an invitation indirectly, considering someone's feelings)"
+        "meaning": "hẹn lần sau"
       },
       {
         "kanji": "残念です［ね］。",
@@ -3087,7 +3087,7 @@
         "kanji": null,
         "kana": "すみません。",
         "romaji": "sumimasen.",
-        "meaning": "I am sorry."
+        "meaning": "Xin lỗi"
       },
       {
         "kanji": null,
@@ -3119,7 +3119,7 @@
         "kanji": null,
         "kana": "いろいろ［な］",
         "romaji": "iroiro [na]",
-        "meaning": "various"
+        "meaning": "nhiều, đa dạng"
       },
       {
         "kanji": "男の 人",
@@ -3451,13 +3451,13 @@
         "kanji": "います［子どもが～］",
         "kana": "います［こどもが～］",
         "romaji": "imasu [kodomoga~]",
-        "meaning": "have [a child]"
+        "meaning": "có (động vật)"
       },
       {
         "kanji": "います［日本に～］",
         "kana": "います［にほんに～］",
         "romaji": "imasu [nihonni~]",
-        "meaning": "stay, be [in Japan]"
+        "meaning": "có (động vật)"
       },
       {
         "kanji": null,
@@ -3469,7 +3469,7 @@
         "kanji": "休みます［会社を～］",
         "kana": "やすみます［かいしゃを～］",
         "romaji": "yasumimasu [kaishawo~]",
-        "meaning": "take a day off [work]"
+        "meaning": "nghỉ ngơi, nghỉ"
       },
       {
         "kanji": "１つ",
@@ -3595,7 +3595,7 @@
         "kanji": null,
         "kana": "カレー［ライス］",
         "romaji": "kare [raisu]",
-        "meaning": "curry [with rice]"
+        "meaning": "cà ri (cơm)"
       },
       {
         "kanji": null,
@@ -3769,13 +3769,13 @@
         "kanji": "お出かけですか。",
         "kana": "おでかけですか。",
         "romaji": "odekakedesuka.",
-        "meaning": "Are you going out?"
+        "meaning": "đi ra ngoài đấy hả ?"
       },
       {
         "kanji": null,
         "kana": "ちょっと ～まで。",
         "romaji": "chotto ~made.",
-        "meaning": "I'm just going to ～."
+        "meaning": "đến～một chút"
       },
       {
         "kanji": "行ってらっしゃい。",
@@ -3787,7 +3787,7 @@
         "kanji": "行って きます。",
         "kana": "いって きます。",
         "romaji": "itte kimasu.",
-        "meaning": "See you later./So long. (lit. I'm going and coming back.)"
+        "meaning": "(tôi) đi đây"
       },
       {
         "kanji": "船便",
@@ -3799,7 +3799,7 @@
         "kanji": "航空便（エアメール）",
         "kana": "こうくうびん（エアメール）",
         "romaji": "kokubin (eameru)",
-        "meaning": "airmail"
+        "meaning": "(gửi bằng) đường hàng không"
       },
       {
         "kanji": "お願いします。",
@@ -3829,13 +3829,13 @@
         "kanji": null,
         "kana": "いらっしゃいませ。",
         "romaji": "irasshaimase.",
-        "meaning": "Welcome./May I help you? (a greeting to a customer or a guest entering a shop, etc.)"
+        "meaning": "xin mời qúy khách"
       },
       {
         "kanji": "行って まいります。",
         "kana": "いって まいります。",
         "romaji": "itte mairimasu.",
-        "meaning": "So long. (lit. I'm going and coming back)"
+        "meaning": "(tôi) đi đây (lịch sự hơn)"
       },
       {
         "kanji": null,
@@ -3879,13 +3879,13 @@
         "kanji": "多い［人が～］",
         "kana": "おおい［ひとが～］",
         "romaji": "oi [hitoga~]",
-        "meaning": "many [people], much"
+        "meaning": "nhiều [người]"
       },
       {
         "kanji": "少ない［人が～］",
         "kana": "すくない［ひとが～］",
         "romaji": "sukunai [hitoga~]",
-        "meaning": "few [people], a little"
+        "meaning": "ít [người]"
       },
       {
         "kanji": "暖かい、温かい",
@@ -3927,7 +3927,7 @@
         "kanji": null,
         "kana": "いい［コーヒーが～］",
         "romaji": "ii [kohiiga~]",
-        "meaning": "prefer [coffee]"
+        "meaning": "thích, chọn, dùng"
       },
       {
         "kanji": "季節",
@@ -4035,7 +4035,7 @@
         "kanji": null,
         "kana": "［お］すし",
         "romaji": "[o] sushi",
-        "meaning": "sushi (vinegared rice topped with raw fish)"
+        "meaning": "Sushi"
       },
       {
         "kanji": null,
@@ -4080,7 +4080,7 @@
         "meaning": "lá đỏ"
       },
       {
-        "kanji": null,
+        "kanji": "何方",
         "kana": "どちら",
         "romaji": "dochira",
         "meaning": "cái nào"
@@ -4131,7 +4131,7 @@
         "kanji": "疲れました。",
         "kana": "つかれました。",
         "romaji": "tsukaremashita.",
-        "meaning": "I'm tired"
+        "meaning": "Tôi mệt rồi, mệt mỏi"
       },
       {
         "kanji": "祇園祭",
@@ -4235,7 +4235,7 @@
         "kanji": "散歩します［公園を～］",
         "kana": "さんぽします［こうえんを～］",
         "romaji": "sanposhimasu [koenwo~]",
-        "meaning": "take a walk [in a park]"
+        "meaning": "đi dạo"
       },
       {
         "kanji": "大変［な］",
@@ -4337,7 +4337,7 @@
         "kanji": null,
         "kana": "そう しましょう。",
         "romaji": "so shimashou.",
-        "meaning": "Let's do that. (used when agreeing with someone's suggestion)"
+        "meaning": "làm như vậy nhé"
       },
       {
         "kanji": "ご注文は？",
@@ -4391,19 +4391,19 @@
         "kanji": "出します［手紙を～］",
         "kana": "だします［てがみを～］",
         "romaji": "dashimasu [tegamiwo~]",
-        "meaning": "send [a letter]"
+        "meaning": "giao, nộp"
       },
       {
         "kanji": "入ります［喫茶店に～］",
         "kana": "はいります［きっさてんに～］",
         "romaji": "hairimasu [kissatenni~]",
-        "meaning": "enter [a coffee shop]"
+        "meaning": "vào, bỏ vào"
       },
       {
         "kanji": "出ます［喫茶店を～］",
         "kana": "でます［きっさてんを～］",
         "romaji": "demasu [kissatenwo~]",
-        "meaning": "go out [of a coffee shop]"
+        "meaning": "đi ra ngoài"
       },
       {
         "kanji": "寂しい",
@@ -4439,7 +4439,7 @@
         "kanji": null,
         "kana": "おなかが いっぱいです。",
         "romaji": "onakaga ippaidesu.",
-        "meaning": "(I'm) full."
+        "meaning": "no rồi"
       },
       {
         "kanji": null,
@@ -4549,7 +4549,7 @@
         "kanji": "教えます［住所を～］",
         "kana": "おしえます［じゅうしょを～］",
         "romaji": "oshiemasu [jushowo~]",
-        "meaning": "tell [an address]"
+        "meaning": "dạy"
       },
       {
         "kanji": "座ります",
@@ -4579,7 +4579,7 @@
         "kanji": "降ります［雨が～］",
         "kana": "ふります［あめが～］",
         "romaji": "furimasu [amega~]",
-        "meaning": "rain"
+        "meaning": "rơi rớt"
       },
       {
         "kanji": null,
@@ -4741,7 +4741,7 @@
         "kanji": "曲がります［右へ～］",
         "kana": "まがります［みぎへ～］",
         "romaji": "magarimasu [migihe~]",
-        "meaning": "turn [to the right]"
+        "meaning": "uốn cong, rẽ"
       },
       {
         "kanji": "始めます",
@@ -4935,7 +4935,7 @@
         "kanji": "住んで います［大阪に～］",
         "kana": "すんで います［おおさかに～］",
         "romaji": "sunde imasu [osakani~]",
-        "meaning": "live [in Osaka]"
+        "meaning": "sống"
       },
       {
         "kanji": "専門",
@@ -4973,13 +4973,13 @@
         "kanji": "乗ります［電車に～］",
         "kana": "のります［でんしゃに～］",
         "romaji": "norimasu [denshani~]",
-        "meaning": "ride, get on [a train]"
+        "meaning": "Đi lên tàu, xe"
       },
       {
         "kanji": "降ります［電車を～］",
         "kana": "おります［でんしゃを～］",
         "romaji": "orimasu [denshawo~]",
-        "meaning": "get off"
+        "meaning": "xuống tàu ,xe"
       },
       {
         "kanji": "乗り換えます",
@@ -4991,7 +4991,7 @@
         "kanji": "浴びます［シャワーを～］",
         "kana": "あびます［シャワーを～］",
         "romaji": "abimasu [shawawo~]",
-        "meaning": "take [a shower]"
+        "meaning": "tắm"
       },
       {
         "kanji": "入れます",
@@ -5015,13 +5015,13 @@
         "kanji": "入ります［大学に～］",
         "kana": "はいります［だいがくに～］",
         "romaji": "hairimasu [daigakuni~]",
-        "meaning": "enter [university]"
+        "meaning": "Vào, nhập học đại học."
       },
       {
         "kanji": "出ます［大学を～］",
         "kana": "でます［だいがくを～］",
         "romaji": "demasu [daigakuwo~]",
-        "meaning": "graduate from [university]"
+        "meaning": "Ra, tốt nghiệp đại học."
       },
       {
         "kanji": "押します",
@@ -5231,7 +5231,7 @@
         "kanji": "お引き出しですか。",
         "kana": "おひきだしですか。",
         "romaji": "ohikidashidesuka.",
-        "meaning": "Are you making a withdrawal?"
+        "meaning": "anh chị rút tiền phải không?"
       },
       {
         "kanji": null,
@@ -5321,7 +5321,7 @@
         "kanji": "やめます［会社を～］",
         "kana": "やめます［かいしゃを～］",
         "romaji": "yamemasu [kaishawo~]",
-        "meaning": "quit or retire from [a company], stop, give up"
+        "meaning": "từ bỏ"
       },
       {
         "kanji": "背が 高い",
@@ -5437,25 +5437,25 @@
         "kanji": "飲みます［薬を～］",
         "kana": "のみます［くすりを～］",
         "romaji": "nomimasu [kusuriwo~]",
-        "meaning": "take [medicine]"
+        "meaning": "uống"
       },
       {
         "kanji": "入ります［おふろに～］",
         "kana": "はいります［おふろに～］",
         "romaji": "hairimasu [ofuroni~]",
-        "meaning": "take [a bath]"
+        "meaning": "vào"
       },
       {
         "kanji": "大切［な］",
         "kana": "たいせつ［な］",
         "romaji": "taisetsu [na]",
-        "meaning": "important, precious"
+        "meaning": "quan trọng, quý giá"
       },
       {
         "kanji": "大丈夫［な］",
         "kana": "だいじょうぶ［な］",
         "romaji": "daijobu [na]",
-        "meaning": "all right"
+        "meaning": "không sao, không vấn đề gì"
       },
       {
         "kanji": "危ない",
@@ -5473,7 +5473,7 @@
         "kanji": "［健康］保険証",
         "kana": "［けんこう］ほけんしょう",
         "romaji": "[kenko] hokensho",
-        "meaning": "[health] insurance card"
+        "meaning": "thẻ bảo hiểm"
       },
       {
         "kanji": "熱",
@@ -5497,7 +5497,7 @@
         "kanji": null,
         "kana": "［お］ふろ",
         "romaji": "[o] furo",
-        "meaning": "bath"
+        "meaning": "bồn tắm"
       },
       {
         "kanji": "上着",
@@ -5575,7 +5575,7 @@
         "kanji": "出します［レポートを～］",
         "kana": "だします［レポートを～］",
         "romaji": "dashimasu [repotowo~]",
-        "meaning": "hand in [a report]"
+        "meaning": "nộp"
       },
       {
         "kanji": "問題",
@@ -5787,7 +5787,7 @@
         "kanji": "国際～",
         "kana": "こくさい～",
         "romaji": "kokusai~",
-        "meaning": "quốc tế"
+        "meaning": "international ～"
       },
       {
         "kanji": "牧場",
@@ -5807,7 +5807,7 @@
         "kanji": "泊まります［ホテルに～］",
         "kana": "とまります［ホテルに～］",
         "romaji": "tomarimasu [hoteruni~]",
-        "meaning": "stay [at a hotel]"
+        "meaning": "trọ, ngủ trọ"
       },
       {
         "kanji": "掃除します",
@@ -6001,7 +6001,7 @@
         "kanji": "要ります［ビザが～］",
         "kana": "いります［ビザが～］",
         "romaji": "irimasu [bizaga~]",
-        "meaning": "need, require [a visa]"
+        "meaning": "cần visa"
       },
       {
         "kanji": "調べます",
@@ -6207,7 +6207,7 @@
         "kanji": "あります［お祭りが～］",
         "kana": "あります［おまつりが～］",
         "romaji": "arimasu [omatsuriga~]",
-        "meaning": "[a festival] be held, take place"
+        "meaning": "được tổ chức"
       },
       {
         "kanji": "役に 立ちます",
@@ -6243,13 +6243,13 @@
         "kanji": null,
         "kana": "むだ［な］",
         "romaji": "muda [na]",
-        "meaning": "wasteful"
+        "meaning": "sự lãng phí"
       },
       {
         "kanji": "不便［な］",
         "kana": "ふべん［な］",
         "romaji": "fuben [na]",
-        "meaning": "inconvenient"
+        "meaning": "bất tiện"
       },
       {
         "kanji": null,
@@ -6405,7 +6405,7 @@
         "kanji": "～でも 飲みませんか。",
         "kana": "～でも のみませんか。",
         "romaji": "~demo nomimasenka.",
-        "meaning": "How about drinking ～ or something?"
+        "meaning": "Anh/chị uống (cà phê, rượu hay cái gì đó) nhé"
       },
       {
         "kanji": null,
@@ -6555,7 +6555,7 @@
         "kanji": null,
         "kana": "しばらくですね。",
         "romaji": "shibarakudesune.",
-        "meaning": "It's been a long time (since I last saw you)./Long time no see."
+        "meaning": "Lâu rồi không gặp"
       },
       {
         "kanji": "見ないと……。",
@@ -6602,7 +6602,7 @@
         "meaning": "sinh ra"
       },
       {
-        "kanji": null,
+        "kanji": "私たち",
         "kana": "わたしたち",
         "romaji": "watashitachi",
         "meaning": "we"
@@ -6698,7 +6698,7 @@
         "meaning": "Well then,"
       },
       {
-        "kanji": null,
+        "kanji": "此方",
         "kana": "こちら",
         "romaji": "kochira",
         "meaning": "cái này (cách nói lịch sử của “これ”)"
@@ -6805,13 +6805,13 @@
         "kanji": "触ります［ドアに～］",
         "kana": "さわります［ドアに～］",
         "romaji": "sawarimasu [doani~]",
-        "meaning": "touch [a door]"
+        "meaning": "sờ, chạm vào"
       },
       {
         "kanji": "出ます［お釣りが～］",
         "kana": "でます［おつりが～］",
         "romaji": "demasu [otsuriga~]",
-        "meaning": "[change] come out"
+        "meaning": "ra,đi ra"
       },
       {
         "kanji": "歩きます",
@@ -6823,7 +6823,7 @@
         "kanji": "渡ります［橋を～］",
         "kana": "わたります［はしを～］",
         "romaji": "watarimasu [hashiwo~]",
-        "meaning": "cross [a bridge]"
+        "meaning": "qua ,đi qua (cầu)"
       },
       {
         "kanji": "曲がります［右へ～］",
@@ -6949,13 +6949,13 @@
         "kanji": "動きます［時計が～］",
         "kana": "うごきます［とけいが～］",
         "romaji": "ugokimasu [tokeiga~]",
-        "meaning": "[a watch] move, work"
+        "meaning": "chuyển động ,chạy"
       },
       {
         "kanji": "気を つけます［車に～］",
         "kana": "きを つけます［くるまに～］",
         "romaji": "kiwo tsukemasu [kurumani~]",
-        "meaning": "pay attention [to cars], take care"
+        "meaning": "chú ý,cẩn thận"
       },
       {
         "kanji": "引っ越しします",
@@ -7035,7 +7035,7 @@
         "kanji": "送ります［人を～］",
         "kana": "おくります［ひとを～］",
         "romaji": "okurimasu [hitowo~]",
-        "meaning": "escort [someone], go with"
+        "meaning": "đưa đi, đưa đến, tiễn"
       },
       {
         "kanji": "紹介します",
@@ -7119,7 +7119,7 @@
         "kanji": null,
         "kana": "いれます［コーヒーを～］",
         "romaji": "iremasu [kohiiwo~]",
-        "meaning": "make [coffee]"
+        "meaning": "pha(cà phê)"
       },
       {
         "kanji": "意味",
@@ -7151,13 +7151,13 @@
         "kanji": "着きます",
         "kana": "つきます",
         "romaji": "tsukimasu",
-        "meaning": "arrive"
+        "meaning": "đến [ga]"
       },
       {
         "kanji": "取ります［年を～］",
         "kana": "とります［としを～］",
         "romaji": "torimasu [toshiwo~]",
-        "meaning": "grow old"
+        "meaning": "thêm [tuổi]"
       },
       {
         "kanji": "足ります",
@@ -7187,7 +7187,7 @@
         "kanji": null,
         "kana": "もし［～たら］",
         "romaji": "moshi [~tara]",
-        "meaning": "if"
+        "meaning": "nếu [~ thì]"
       },
       {
         "kanji": "意味",
@@ -7235,7 +7235,7 @@
         "kanji": "どうぞ お元気で。",
         "kana": "どうぞ おげんきで。",
         "romaji": "dozo ogenkide.",
-        "meaning": "Please take care of yourself. (said when expecting a long separation)"
+        "meaning": "Chúc anh/chị mạnh khỏe."
       },
       {
         "kanji": null,
@@ -7265,13 +7265,13 @@
         "kanji": null,
         "kana": "いくら［～でも］",
         "romaji": "ikura [~demo]",
-        "meaning": "however ～, even if ～"
+        "meaning": "cho dù, thế nào [~ đi nữa]"
       },
       {
         "kanji": "一杯 飲みましょう。",
         "kana": "いっぱい のみましょう。",
         "romaji": "ippai nomimashou.",
-        "meaning": "Let's have a drink together"
+        "meaning": "Chúng ta cùng uống nhé."
       }
     ],
     "26": [
@@ -7291,7 +7291,7 @@
         "kanji": "遅れます［時間に～］",
         "kana": "おくれます［じかんに～］",
         "romaji": "okuremasu [jikanni~]",
-        "meaning": "be late [for an appointment, etc.]"
+        "meaning": "chậm, muộn [cuộc hẹn,v.v.]"
       },
       {
         "kanji": "間に 合います［時間に～］",
@@ -7459,13 +7459,13 @@
         "kanji": "片づきます［荷物が～］",
         "kana": "かたづきます［にもつが～］",
         "romaji": "katazukimasu [nimotsuga~]",
-        "meaning": "[boxes] be put in order, tidy up"
+        "meaning": "được dọn dẹp ngăn nắp, gọn gàng [đồ đạc ~]"
       },
       {
         "kanji": "出します［ごみを～］",
         "kana": "だします［ごみを～］",
         "romaji": "dashimasu [gomiwo~]",
-        "meaning": "put out [the rubbish]"
+        "meaning": "đổ, để [rác]"
       },
       {
         "kanji": "燃える ごみ",
@@ -7561,7 +7561,7 @@
         "kanji": "参加します［パーティーに～］",
         "kana": "さんかします［パーティーに～］",
         "romaji": "sankashimasu [pateiini~]",
-        "meaning": "attend [a party]"
+        "meaning": "tham gia, dự [buổi tiệc]"
       },
       {
         "kanji": "申し込みます",
@@ -7609,7 +7609,7 @@
         "kanji": "燃えます［ごみが～］",
         "kana": "もえます［ごみが～］",
         "romaji": "moemasu [gomiga~]",
-        "meaning": "[trash] burn"
+        "meaning": "cháy được [rác ~]"
       },
       {
         "kanji": "月・水・金",
@@ -7659,31 +7659,31 @@
         "kanji": "走ります［道を～］",
         "kana": "はしります［みちを～］",
         "romaji": "hashirimasu [michiwo~]",
-        "meaning": "run, drive [along a road]"
+        "meaning": "chạy"
       },
       {
         "kanji": "見えます［山が～］",
         "kana": "みえます［やまが～］",
         "romaji": "miemasu [yamaga~]",
-        "meaning": "[a mountain] can be seen"
+        "meaning": "có thể nhìn thấy"
       },
       {
         "kanji": "聞こえます［音が～］",
         "kana": "きこえます［おとが～］",
         "romaji": "kikoemasu [otoga~]",
-        "meaning": "[a sound] can be heard"
+        "meaning": "có thể nghe thấy"
       },
       {
         "kanji": "できます［道が～］",
         "kana": "できます［みちが～］",
         "romaji": "dekimasu [michiga~]",
-        "meaning": "[a road] be made, be completed, come into existence"
+        "meaning": "được hoàn thành,được làm"
       },
       {
         "kanji": "開きます［教室を～］",
         "kana": "ひらきます［きょうしつを～］",
         "romaji": "hirakimasu [kyoshitsuwo~]",
-        "meaning": "set up [a class], open, hold"
+        "meaning": "mở,tổ chức (lớp)"
       },
       {
         "kanji": "心配［な］",
@@ -7833,7 +7833,7 @@
         "kanji": "大好き［な］",
         "kana": "だいすき［な］",
         "romaji": "daisuki [na]",
-        "meaning": "like very much"
+        "meaning": "rất thích"
       },
       {
         "kanji": "主人公",
@@ -7917,7 +7917,7 @@
         "kanji": "取ります［休みを～］",
         "kana": "とります［やすみを～］",
         "romaji": "torimasu [yasumiwo~]",
-        "meaning": "take [a holiday]"
+        "meaning": "xin(nghỉ)"
       },
       {
         "kanji": "景色",
@@ -8003,7 +8003,7 @@
         "kanji": "売れます［パンが～］",
         "kana": "うれます［パンが～］",
         "romaji": "uremasu [panga~]",
-        "meaning": "[bread] sell, be sold"
+        "meaning": "bán"
       },
       {
         "kanji": "踊ります",
@@ -8027,7 +8027,7 @@
         "kanji": "通います［大学に～］",
         "kana": "かよいます［だいがくに～］",
         "romaji": "kayoimasu [daigakuni~]",
-        "meaning": "go to and from [university]"
+        "meaning": "đi học(đại học)"
       },
       {
         "kanji": null,
@@ -8039,13 +8039,13 @@
         "kanji": null,
         "kana": "まじめ［な］",
         "romaji": "majime [na]",
-        "meaning": "serious"
+        "meaning": "nghiêm túc,đàng hoàng"
       },
       {
         "kanji": "熱心［な］",
         "kana": "ねっしん［な］",
         "romaji": "nesshin [na]",
-        "meaning": "earnest"
+        "meaning": "nhiệt tình"
       },
       {
         "kanji": "偉い",
@@ -8365,73 +8365,73 @@
         "kanji": "開きます［ドアが～］",
         "kana": "あきます［ドアが～］",
         "romaji": "akimasu [doaga~]",
-        "meaning": "[a door] open"
+        "meaning": "mở (cửa)"
       },
       {
         "kanji": "閉まりる［ドアが～］",
         "kana": "しまります［ドアが～］",
         "romaji": "shimarimasu [doaga~]",
-        "meaning": "[a door] close, shut"
+        "meaning": "đóng(cửa)"
       },
       {
         "kanji": "つきます［電気が～］",
         "kana": "つきます［でんきが～］",
         "romaji": "tsukimasu [denkiga~]",
-        "meaning": "[a light] come on, be turned on"
+        "meaning": "dính, đính (có túi)"
       },
       {
         "kanji": "消えます［電気が～］",
         "kana": "きえます［でんきが～］",
         "romaji": "kiemasu [denkiga~]",
-        "meaning": "[a light] go off"
+        "meaning": "tắt(đèn)"
       },
       {
         "kanji": "壊れます［いすが～］",
         "kana": "こわれます［いすが～］",
         "romaji": "kowaremasu [isuga~]",
-        "meaning": "[a chair] break"
+        "meaning": "hỏng(ghế)"
       },
       {
         "kanji": "割れます［コップが～］",
         "kana": "われます［コップが～］",
         "romaji": "waremasu [koppuga~]",
-        "meaning": "[a glass] break, smash"
+        "meaning": "có thể nghe thấy"
       },
       {
         "kanji": "折れます［木が～］",
         "kana": "おれます［きが～］",
         "romaji": "oremasu [kiga~]",
-        "meaning": "[a tree] break, snap"
+        "meaning": "gãy(cây)"
       },
       {
         "kanji": "破れます［紙が～］",
         "kana": "やぶれます［かみが～］",
         "romaji": "yaburemasu [kamiga~]",
-        "meaning": "[paper] tear"
+        "meaning": "rách(giấy)"
       },
       {
         "kanji": "汚れます［服が～］",
         "kana": "よごれます［ふくが～］",
         "romaji": "yogoremasu [fukuga~]",
-        "meaning": "[clothes] get dirty"
+        "meaning": "dơ,bẩn(tay)"
       },
       {
         "kanji": "付きます［ポケットが～］",
         "kana": "つきます［ポケットが～］",
         "romaji": "tsukimasu [pokettoga~]",
-        "meaning": "[a pocket] be attached"
+        "meaning": "dính, đính (có túi)"
       },
       {
         "kanji": "外れます［ボタンが～］",
         "kana": "はずれます［ボタンが～］",
         "romaji": "hazuremasu [botanga~]",
-        "meaning": "[a button] be undone"
+        "meaning": "tuột,bung,rời ra(sút nút)"
       },
       {
         "kanji": "止まります［車が～］",
         "kana": "とまります［くるまが～］",
         "romaji": "tomarimasu [kurumaga~]",
-        "meaning": "[a car] stop, park"
+        "meaning": "dừng"
       },
       {
         "kanji": null,
@@ -8449,7 +8449,7 @@
         "kanji": "掛かります［かぎが～］",
         "kana": "かかります［かぎが～］",
         "romaji": "kakarimasu [kagiga~]",
-        "meaning": "be locked"
+        "meaning": "khóa"
       },
       {
         "kanji": null,
@@ -8473,13 +8473,13 @@
         "kanji": "［お］皿",
         "kana": "［お］さら",
         "romaji": "[o] sara",
-        "meaning": "plate, dish"
+        "meaning": "đĩa"
       },
       {
         "kanji": null,
         "kana": "［お］ちゃわん",
         "romaji": "[o] chawan",
-        "meaning": "(rice) bowl"
+        "meaning": "bát,chén"
       },
       {
         "kanji": null,
@@ -8569,7 +8569,7 @@
         "kanji": "～側",
         "kana": "～がわ",
         "romaji": "~gawa",
-        "meaning": "phía…"
+        "meaning": "～ side"
       },
       {
         "kanji": null,
@@ -8581,13 +8581,13 @@
         "kanji": "～ 辺",
         "kana": "～ へん",
         "romaji": "~ hen",
-        "meaning": "chỗ,vùng…"
+        "meaning": "around ～, ～ about"
       },
       {
         "kanji": "覚えて いません。",
         "kana": "おぼえて いません。",
         "romaji": "oboete imasen.",
-        "meaning": "I don't remember."
+        "meaning": "tôi không nhớ"
       },
       {
         "kanji": "網棚",
@@ -8605,7 +8605,7 @@
         "kanji": null,
         "kana": "［ああ、］よかった。",
         "romaji": "[a,] yokatta.",
-        "meaning": "[Oh,] that's great!/Thank goodness! (used to express a feeling of relief)"
+        "meaning": "ôi, may quá"
       },
       {
         "kanji": "新宿",
@@ -8677,13 +8677,13 @@
         "kanji": "込みます［道が～］",
         "kana": "こみます［みちが～］",
         "romaji": "komimasu [michiga~]",
-        "meaning": "[a road] get crowded"
+        "meaning": "đông(đường)"
       },
       {
         "kanji": "すきます［道が～］",
         "kana": "すきます［みちが～］",
         "romaji": "sukimasu [michiga~]",
-        "meaning": "[a road] get empty"
+        "meaning": "vắng, thoáng [đường ~]"
       },
       {
         "kanji": "財布",
@@ -8991,7 +8991,7 @@
         "kanji": "嫌［な］",
         "kana": "いや［な］",
         "romaji": "iya [na]",
-        "meaning": "hateful, disagreeable"
+        "meaning": "chán, ghét, không chấp nhận được"
       },
       {
         "kanji": null,
@@ -9051,7 +9051,7 @@
         "kanji": "ご苦労さま。",
         "kana": "ごくろうさま。",
         "romaji": "gokurosama.",
-        "meaning": "Thank you for your hard work. (used by a superior or older person to express appreciation for a subordinate's work)"
+        "meaning": "anh, chị đã làm việc vất vả/cảm ơn anh, chị"
       },
       {
         "kanji": "希望",
@@ -9063,7 +9063,7 @@
         "kanji": "何か ご希望が ありますか。",
         "kana": "なにか ごきぼうが ありますか。",
         "romaji": "nanika gokiboga arimasuka.",
-        "meaning": "Do you have any requests?"
+        "meaning": "Anh/chị có nguyện vọng gì không?/ anh/chị có yêu cầu gì không?"
       },
       {
         "kanji": null,
@@ -9439,19 +9439,19 @@
         "kanji": "失敗します［試験に～］",
         "kana": "しっぱいします［しけんに～］",
         "romaji": "shippaishimasu [shikenni~]",
-        "meaning": "fail [an examination]"
+        "meaning": "thất bại, trượt"
       },
       {
         "kanji": "合格します［試験に～］",
         "kana": "ごうかくします［しけんに～］",
         "romaji": "gokakushimasu [shikenni~]",
-        "meaning": "pass [an examination]"
+        "meaning": "đỗ"
       },
       {
         "kanji": "やみます［雨が～］",
         "kana": "やみます［あめが～］",
         "romaji": "yamimasu [amega~]",
-        "meaning": "[rain] stop"
+        "meaning": "tạnh ,ngừng"
       },
       {
         "kanji": "晴れます",
@@ -9469,7 +9469,7 @@
         "kanji": "続づきます［熱が～］",
         "kana": "つづきます［ねつが～］",
         "romaji": "tsuzukimasu [netsuga~]",
-        "meaning": "[high temperature/fever] continue"
+        "meaning": "tiếp tục, tiếp diễn"
       },
       {
         "kanji": null,
@@ -9517,7 +9517,7 @@
         "kanji": "十分［な］",
         "kana": "じゅうぶん［な］",
         "romaji": "jubun [na]",
-        "meaning": "enough, sufficient"
+        "meaning": "đủ"
       },
       {
         "kanji": null,
@@ -9703,7 +9703,7 @@
         "kanji": null,
         "kana": "それは いけませんね。",
         "romaji": "sorewa ikemasenne.",
-        "meaning": "I'm sorry to hear that."
+        "meaning": "thế thì thật không tốt."
       },
       {
         "kanji": "星占い",
@@ -9739,7 +9739,7 @@
         "kanji": "当たります［宝くじが～］",
         "kana": "あたります［たからくじが～］",
         "romaji": "atarimasu [takarakujiga~]",
-        "meaning": "win [a lottery]"
+        "meaning": "trúng(số)"
       },
       {
         "kanji": "健康",
@@ -9781,25 +9781,25 @@
         "kanji": "吹きます［風が～］",
         "kana": "ふきます［かぜが～］",
         "romaji": "fukimasu [kazega~]",
-        "meaning": "[wind] blow"
+        "meaning": "thổi"
       },
       {
         "kanji": "治ります［病気が～］",
         "kana": "なおります［びょうきが～］",
         "romaji": "naorimasu [byokiga~]",
-        "meaning": "recover from [sickness], get well"
+        "meaning": "khỏi"
       },
       {
         "kanji": "直ります［故障が～］",
         "kana": "なおります［こしょうが～］",
         "romaji": "naorimasu [koshoga~]",
-        "meaning": "be fixed, be repaired"
+        "meaning": "khỏi"
       },
       {
         "kanji": "心配［な］",
         "kana": "しんぱい［な］",
         "romaji": "shinpai [na]",
-        "meaning": "worried, anxious"
+        "meaning": "lo lắng"
       },
       {
         "kanji": "月",
@@ -9885,13 +9885,13 @@
         "kanji": "注意します［車に～］",
         "kana": "ちゅういします［くるまに～］",
         "romaji": "chuishimasu [kurumani~]",
-        "meaning": "be careful [of the cars]"
+        "meaning": "chú ý"
       },
       {
         "kanji": "外します［席を～］",
         "kana": "はずします［せきを～］",
         "romaji": "hazushimasu [sekiwo~]",
-        "meaning": "be away [from one's desk]"
+        "meaning": "rời, không có ở (chỗ ngồi)"
       },
       {
         "kanji": "戻ります",
@@ -9915,7 +9915,7 @@
         "kanji": null,
         "kana": "だめ［な］",
         "romaji": "dame [na]",
-        "meaning": "no good, not permitted, impossible"
+        "meaning": "không được, không thể"
       },
       {
         "kanji": "同じ",
@@ -10059,7 +10059,7 @@
         "kanji": null,
         "kana": "あと ～",
         "romaji": "ato ~",
-        "meaning": "còn~"
+        "meaning": "～ left"
       },
       {
         "kanji": null,
@@ -10209,7 +10209,7 @@
         "kanji": "打ちます［電報を～］",
         "kana": "うちます［でんぽうを～］",
         "romaji": "uchimasu [denpowo~]",
-        "meaning": "send [a telegram]"
+        "meaning": "gửi(điện báo)"
       },
       {
         "kanji": "電報代",
@@ -10301,7 +10301,7 @@
         "kanji": "磨きます［歯を～］",
         "kana": "みがきます［はを～］",
         "romaji": "migakimasu [hawo~]",
-        "meaning": "brush [one's teeth], polish"
+        "meaning": "mài, đánh (răng)"
       },
       {
         "kanji": "組み立てます",
@@ -10319,19 +10319,19 @@
         "kanji": "気が つきます［忘れ物に～］",
         "kana": "きが つきます［わすれものに～］",
         "romaji": "kiga tsukimasu [wasuremononi~]",
-        "meaning": "notice, become aware of [things left behind]"
+        "meaning": "nhận thấy, phát hiện"
       },
       {
         "kanji": null,
         "kana": "つけます［しゅうゆを～］",
         "romaji": "tsukemasu [shuyuwo~]",
-        "meaning": "put [in soy sauce]"
+        "meaning": "chấm"
       },
       {
         "kanji": "見つかります［かぎが～］",
         "kana": "みつかります［かぎが～］",
         "romaji": "mitsukarimasu [kagiga~]",
-        "meaning": "[a key] be found"
+        "meaning": "được tìm thấy"
       },
       {
         "kanji": "質問します",
@@ -10355,7 +10355,7 @@
         "kanji": "［お］城",
         "kana": "［お］しろ",
         "romaji": "[o] shiro",
-        "meaning": "castle"
+        "meaning": "màu trắng"
       },
       {
         "kanji": "説明書",
@@ -10595,7 +10595,7 @@
         "kanji": null,
         "kana": "します［ネクタイを～］",
         "romaji": "shimasu [nekutaiwo~]",
-        "meaning": "put on, wear [a tie]"
+        "meaning": "đeo , thắt"
       },
       {
         "kanji": "細い",
@@ -10645,13 +10645,13 @@
         "kanji": "咲きます［花が～］",
         "kana": "さきます［はなが～］",
         "romaji": "sakimasu [hanaga~]",
-        "meaning": "[flowers] bloom"
+        "meaning": "nở (hoa)"
       },
       {
         "kanji": "変わります［色が～］",
         "kana": "かわります［いろが～］",
         "romaji": "kawarimasu [iroga~]",
-        "meaning": "[the color] change"
+        "meaning": "thay đổi, đổi"
       },
       {
         "kanji": "困ります",
@@ -10663,7 +10663,7 @@
         "kanji": "付けます［丸を～］",
         "kana": "つけます［まるを～］",
         "romaji": "tsukemasu [maruwo~]",
-        "meaning": "draw [a circle], mark [with a circle], add"
+        "meaning": "vẽ , đánh dấu"
       },
       {
         "kanji": "治ります［病気が～］",
@@ -10975,7 +10975,7 @@
         "kanji": "必要［な］",
         "kana": "ひつよう［な］",
         "romaji": "hitsuyo [na]",
-        "meaning": "necessary, essential"
+        "meaning": "cần thiết"
       },
       {
         "kanji": "拾います",
@@ -10987,13 +10987,13 @@
         "kanji": "かかります［電話が～］",
         "kana": "かかります［でんわが～］",
         "romaji": "kakarimasu [denwaga~]",
-        "meaning": "get through [on the telephone]"
+        "meaning": "có điện thoại"
       },
       {
         "kanji": "楽［な］",
         "kana": "らく［な］",
         "romaji": "raku [na]",
-        "meaning": "comfortable, easy"
+        "meaning": "thoải mái, nhàn hạ, dễ dàng"
       },
       {
         "kanji": "珍しい",
@@ -11059,7 +11059,7 @@
         "kanji": "これで 終わります。",
         "kana": "これで おわります。",
         "romaji": "korede owarimasu.",
-        "meaning": "We'll finish now."
+        "meaning": "đến đây là hết, chúng ta dừng ở đây"
       },
       {
         "kanji": "白馬",
@@ -11085,13 +11085,13 @@
         "kanji": "過ぎます［７時を～］",
         "kana": "すぎます［７じを～］",
         "romaji": "sugimasu [7jiwo~]",
-        "meaning": "pass [7 o'clock]"
+        "meaning": "quá"
       },
       {
         "kanji": "慣れます［仕事に～］",
         "kana": "なれます［しごとに～］",
         "romaji": "naremasu [shigotoni~]",
-        "meaning": "get accustomed to [one's job]"
+        "meaning": "làm quen, quen"
       },
       {
         "kanji": "腐ります［食べ物が～］",
@@ -11145,7 +11145,7 @@
         "kanji": "毎年",
         "kana": "まいとし（まいねん）",
         "romaji": "maitoshi (mainen)",
-        "meaning": "every year"
+        "meaning": "hàng năm"
       },
       {
         "kanji": null,
@@ -11211,7 +11211,7 @@
         "kanji": "特別［な］",
         "kana": "とくべつ［な］",
         "romaji": "tokubetsu [na]",
-        "meaning": "special"
+        "meaning": "đặc biệt"
       },
       {
         "kanji": null,
@@ -11313,19 +11313,19 @@
         "kanji": "届きます［荷物が～］",
         "kana": "とどきます［にもつが～］",
         "romaji": "todokimasu [nimotsuga~]",
-        "meaning": "[parcels] be delivered"
+        "meaning": "được gửi đến, được chuyển đến"
       },
       {
         "kanji": "出ます［試合に～］",
         "kana": "でます［しあいに～］",
         "romaji": "demasu [shiaini~]",
-        "meaning": "participate [in the game]"
+        "meaning": "tham gia, tham dự"
       },
       {
         "kanji": "打ちます［ワープロを～］",
         "kana": "うちます［ワープロを～］",
         "romaji": "uchimasu [wapurowo~]",
-        "meaning": "type [on a word processor]"
+        "meaning": "đánh"
       },
       {
         "kanji": "太ります",
@@ -11415,7 +11415,7 @@
         "kanji": "安全［な］",
         "kana": "あんぜん［な］",
         "romaji": "anzen [na]",
-        "meaning": "safe"
+        "meaning": "an toàn"
       },
       {
         "kanji": "地球",
@@ -11609,7 +11609,7 @@
         "kanji": null,
         "kana": "よかったですね。",
         "romaji": "yokattadesune.",
-        "meaning": "Sounds good."
+        "meaning": "may nhỉ"
       },
       {
         "kanji": null,
@@ -11723,7 +11723,7 @@
         "kanji": "豪華［な］",
         "kana": "ごうか［な］",
         "romaji": "goka [na]",
-        "meaning": "gorgeous"
+        "meaning": "hào hoa,sang trọng"
       },
       {
         "kanji": "彫刻",
@@ -11783,7 +11783,7 @@
         "kanji": "一匹も いません。",
         "kana": "いっぴき もいません。",
         "romaji": "ippiki moimasen.",
-        "meaning": "There is not a single (mouse)."
+        "meaning": "không có con nào cả"
       },
       {
         "kanji": "東照宮",
@@ -11941,19 +11941,19 @@
         "kanji": "入れます［電源を～］",
         "kana": "いれます［でんげんを～］",
         "romaji": "iremasu [dengenwo~]",
-        "meaning": "turn on [the power switch]"
+        "meaning": "bật"
       },
       {
         "kanji": "切ります［電源を～］",
         "kana": "きります［でんげんを～］",
         "romaji": "kirimasu [dengenwo~]",
-        "meaning": "turn off [the power switch]"
+        "meaning": "tắt"
       },
       {
         "kanji": "掛けます［かぎを～］",
         "kana": "かけます［かぎを～］",
         "romaji": "kakemasu [kagiwo~]",
-        "meaning": "lock"
+        "meaning": "khóa"
       },
       {
         "kanji": null,
@@ -12151,7 +12151,7 @@
         "kanji": "押します［はんこを～］",
         "kana": "おします［はんこを～］",
         "romaji": "oshimasu [hankowo~]",
-        "meaning": "affix [a seal], stamp"
+        "meaning": "đóng(dấu)"
       },
       {
         "kanji": "双子",
@@ -12211,7 +12211,7 @@
         "kanji": "大好き［な］",
         "kana": "だいすき［な］",
         "romaji": "daisuki [na]",
-        "meaning": "like very much"
+        "meaning": "rất thích"
       },
       {
         "kanji": "－点",
@@ -12235,7 +12235,7 @@
         "kanji": "不思議［な］",
         "kana": "ふしぎ［な］",
         "romaji": "fushigi [na]",
-        "meaning": "mysterious, strange"
+        "meaning": "bí ẩn , kỳ thú, khó hiểu."
       },
       {
         "kanji": "年齢",
@@ -12279,19 +12279,19 @@
         "kanji": "答えます［質問に～］",
         "kana": "こたえます［しつもんに～］",
         "romaji": "kotaemasu [shitsumonni~]",
-        "meaning": "answer [a question]"
+        "meaning": "trả lời"
       },
       {
         "kanji": "倒れます［ビルが～］",
         "kana": "たおれます［ビルが～］",
         "romaji": "taoremasu [biruga~]",
-        "meaning": "[a building] fall down"
+        "meaning": "đổ"
       },
       {
         "kanji": "通ります［道を～］",
         "kana": "とおります［みちを～］",
         "romaji": "torimasu [michiwo~]",
-        "meaning": "pass [along a street]"
+        "meaning": "đi qua"
       },
       {
         "kanji": "死にます",
@@ -12345,13 +12345,13 @@
         "kanji": "複雑［な］",
         "kana": "ふくざつ［な］",
         "romaji": "fukuzatsu [na]",
-        "meaning": "complicated, complex"
+        "meaning": "phức tạp"
       },
       {
         "kanji": "邪魔［な］",
         "kana": "じゃま［な］",
         "romaji": "jama [na]",
-        "meaning": "obstructive, in the way"
+        "meaning": "cản trở, chiếm diện tích"
       },
       {
         "kanji": "硬い",
@@ -12441,7 +12441,7 @@
         "kanji": "［お］見合い",
         "kana": "［お］みあい",
         "romaji": "[o] miai",
-        "meaning": "a meeting arranged with a view to marriage"
+        "meaning": "nam nữ làm quen qua giới thiệu, làm mối"
       },
       {
         "kanji": "操作",
@@ -12501,13 +12501,13 @@
         "kanji": "お疲れ様でした。",
         "kana": "おつかれさまでした。",
         "romaji": "otsukaresamadeshita.",
-        "meaning": "Thank you for your hard work. (used to express appreciation for a colleague's or subordinate's work)"
+        "meaning": "chắc anh/chị đã mệt vì làm việc"
       },
       {
         "kanji": "伺います。",
         "kana": "うかがいます。",
         "romaji": "ukagaimasu.",
-        "meaning": "I'm coming. (humble equivalent of いきます)"
+        "meaning": "tôi đến thăm"
       },
       {
         "kanji": "途中で",
@@ -12585,19 +12585,19 @@
         "kanji": "焼けます［うちが～］",
         "kana": "やけます［うちが～］",
         "romaji": "yakemasu [uchiga~]",
-        "meaning": "[a house] burn down"
+        "meaning": "nướng"
       },
       {
         "kanji": "焼けます［パンが～］",
         "kana": "やけます［パンが～］",
         "romaji": "yakemasu [panga~]",
-        "meaning": "[bread] be baked"
+        "meaning": "nướng"
       },
       {
         "kanji": "焼けます［肉が～］",
         "kana": "やけます［にくが～］",
         "romaji": "yakemasu [nikuga~]",
-        "meaning": "[meat] be roasted, be grilled"
+        "meaning": "nướng"
       },
       {
         "kanji": "遅刻します",
@@ -12653,7 +12653,7 @@
         "kanji": "合います［サイズが～］",
         "kana": "あいます［サイズが～］",
         "romaji": "aimasu [saizuga~]",
-        "meaning": "[the size] fit"
+        "meaning": "vừa , hợp"
       },
       {
         "kanji": "出発します",
@@ -12695,7 +12695,7 @@
         "kanji": "必要［な］",
         "kana": "ひつよう［な］",
         "romaji": "hitsuyo [na]",
-        "meaning": "necessary"
+        "meaning": "cần thiết"
       },
       {
         "kanji": "天気予報",
@@ -12893,7 +12893,7 @@
         "kanji": null,
         "kana": "どうでしょうか。",
         "romaji": "dodeshoka.",
-        "meaning": "How is ～? (polite equivalent of どうですか)"
+        "meaning": "thế nào?(cách nói lịch sự của どうですか）"
       },
       {
         "kanji": null,
@@ -13007,7 +13007,7 @@
         "kanji": "危険［な］",
         "kana": "きけん［な］",
         "romaji": "kiken [na]",
-        "meaning": "dangerous"
+        "meaning": "nguy hiểm"
       },
       {
         "kanji": "宇宙",
@@ -13147,7 +13147,7 @@
         "kanji": "お祝い",
         "kana": "おいわい",
         "romaji": "oiwai",
-        "meaning": "celebration, gift (～を します : celebrate)"
+        "meaning": "mừng, quà mừng (～をします：mừng)"
       },
       {
         "kanji": "お年玉",
@@ -13495,7 +13495,7 @@
         "kanji": "申し訳 ありません。",
         "kana": "もうしわけ ありません。",
         "romaji": "moshiwake arimasen.",
-        "meaning": "I'm sorry./Excuse me."
+        "meaning": "Xin lỗi"
       },
       {
         "kanji": "預かります",
@@ -13997,49 +13997,49 @@
         "kanji": "増えます［輸出が～］",
         "kana": "ふえます［ゆしゅつが～］",
         "romaji": "fuemasu [yushutsuga~]",
-        "meaning": "[exports] increase"
+        "meaning": "tăng, tăng lên [xuất khẩu ~]"
       },
       {
         "kanji": "減ります［輸出が～］",
         "kana": "へります［ゆしゅつが～］",
         "romaji": "herimasu [yushutsuga~]",
-        "meaning": "[exports] decrease"
+        "meaning": "giảm, giảm xuống [xuất khẩu ~]"
       },
       {
         "kanji": "上がります［値段が～］",
         "kana": "あがります［ねだんが～］",
         "romaji": "agarimasu [nedanga~]",
-        "meaning": "[the price] rise"
+        "meaning": "tăng, tăng lên [giá ~]"
       },
       {
         "kanji": "下がります［値段が～］",
         "kana": "さがります［ねだんが～］",
         "romaji": "sagarimasu [nedanga~]",
-        "meaning": "[the price] fall, drop"
+        "meaning": "giảm, giảm xuống [giá ~]"
       },
       {
         "kanji": "切れます［ひもが～］",
         "kana": "きれます［ひもが～］",
         "romaji": "kiremasu [himoga~]",
-        "meaning": "[a string] break, snap"
+        "meaning": "đứt [sợi dây bị ~]"
       },
       {
         "kanji": null,
         "kana": "とれます［ボタンが～］",
         "romaji": "toremasu [botanga~]",
-        "meaning": "[a button] come off"
+        "meaning": "tuột [cái cúc bị ~]"
       },
       {
         "kanji": "落ちます［荷物が～］",
         "kana": "おちます［にもつ～］",
         "romaji": "ochimasu [nimotsu~]",
-        "meaning": "[baggage] fall down"
+        "meaning": "rơi [hành lý bị ~]"
       },
       {
         "kanji": null,
         "kana": "なくなります［ガソリンが～］",
         "romaji": "nakunarimasu [gasoringa~]",
-        "meaning": "[petrol, gasoline] run out, be lost"
+        "meaning": "mất, hết (xăng)"
       },
       {
         "kanji": "変［な］",
@@ -14051,7 +14051,7 @@
         "kanji": "幸せ［な］",
         "kana": "しあわせ［な］",
         "romaji": "shiawase [na]",
-        "meaning": "happy"
+        "meaning": "hạnh phúc"
       },
       {
         "kanji": "楽［な］",
@@ -14233,13 +14233,13 @@
         "kanji": "乾きます［シャツが～］",
         "kana": "かわきます［シャツが～］",
         "romaji": "kawakimasu [shatsuga~]",
-        "meaning": "[a shirt] dry"
+        "meaning": "khô"
       },
       {
         "kanji": "濡れる［シャツが～］",
         "kana": "ぬれます［シャツが～］",
         "romaji": "nuremasu [shatsuga~]",
-        "meaning": "[a shirt] get wet"
+        "meaning": "ướt"
       },
       {
         "kanji": "滑べります",
@@ -14251,7 +14251,7 @@
         "kanji": "起きます［事故が～］",
         "kana": "おきます［じこが～］",
         "romaji": "okimasu [jikoga~]",
-        "meaning": "[an accident] happen"
+        "meaning": "xảy ra [tai nạn ~]"
       },
       {
         "kanji": "調節します",
@@ -14377,7 +14377,7 @@
         "kanji": null,
         "kana": "どう なさいますか。",
         "romaji": "do nasaimasuka.",
-        "meaning": "What can I do for you? (respectful)"
+        "meaning": "tôi có thể giúp gì cho ông?"
       },
       {
         "kanji": null,
@@ -14395,7 +14395,7 @@
         "kanji": null,
         "kana": "どういうふうに なさいますか。",
         "romaji": "doiufuni nasaimasuka.",
-        "meaning": "How would you like it done? (respectful)"
+        "meaning": "Anh/chị định ~ như thế nào?"
       },
       {
         "kanji": null,
@@ -14407,13 +14407,13 @@
         "kanji": null,
         "kana": "～みたいに して ください。",
         "romaji": "~mitaini shite kudasai.",
-        "meaning": "Do it like ～."
+        "meaning": "xin làm giống như"
       },
       {
         "kanji": null,
         "kana": "これで よろしいでしょうか。",
         "romaji": "korede yoroshiideshoka.",
-        "meaning": "Would this be all right? (polite)"
+        "meaning": "thế này được chưa ạ?"
       },
       {
         "kanji": "［どうも］お疲れさまでした。",
@@ -14601,7 +14601,7 @@
         "kanji": "以上です。",
         "kana": "いじょうです。",
         "romaji": "ijodesu.",
-        "meaning": "That's all"
+        "meaning": "xin hết"
       },
       {
         "kanji": "係員",
@@ -14691,7 +14691,7 @@
         "kanji": "あいます［事故に～］",
         "kana": "あいます［じこに～］",
         "romaji": "aimasu [jikoni~]",
-        "meaning": "encounter [an accident]"
+        "meaning": "gặp (tai nạn)"
       },
       {
         "kanji": "用意します",
@@ -14709,7 +14709,7 @@
         "kanji": "贈り物",
         "kana": "おくりもの",
         "romaji": "okurimono",
-        "meaning": "gift, present (～を します : give a present)"
+        "meaning": "quà tặng (tặng quà)"
       },
       {
         "kanji": "間違い電話",
@@ -14733,7 +14733,7 @@
         "kanji": "［－円］札",
         "kana": "［－えん］さつ",
         "romaji": "[-en] satsu",
-        "meaning": "[－ yen] note, bill"
+        "meaning": "tờ tiền giấy [-yên]"
       },
       {
         "kanji": null,
@@ -14765,7 +14765,7 @@
         "kanji": "出ます［バスが～］",
         "kana": "でます［バスが～］",
         "romaji": "demasu [basuga~]",
-        "meaning": "[a bus] leave, depart"
+        "meaning": "[sách] được xuất bản"
       },
       {
         "kanji": "届きます［荷物が～］",
@@ -14822,7 +14822,7 @@
         "meaning": "nguyên nhân"
       },
       {
-        "kanji": null,
+        "kanji": "此方",
         "kana": "こちら",
         "romaji": "kochira",
         "meaning": "chỗ (chúng tôi), phía (chúng tôi)"
@@ -14885,7 +14885,7 @@
         "kanji": "どちら様でしょうか。",
         "kana": "どちらさまでしょうか。",
         "romaji": "dochirasamadeshoka.",
-        "meaning": "Who is this, please?"
+        "meaning": "vị nào đấy ạ ?"
       },
       {
         "kanji": "お待たせしました。",
@@ -14975,7 +14975,7 @@
         "kanji": "今 いいでしょうか。",
         "kana": "いま いいでしょうか。",
         "romaji": "ima iideshoka.",
-        "meaning": "May I bother you now?"
+        "meaning": "bây giờ (tôi) có thể làm phiền anh/chị được không?"
       },
       {
         "kanji": "知識",
@@ -14993,7 +14993,7 @@
         "kanji": "手に入ります［情報が～］",
         "kana": "てにはいります［じょうほうが～］",
         "romaji": "tenihairimasu [johoga~]",
-        "meaning": "[information] come in, reach"
+        "meaning": "có,được [thông tin]"
       },
       {
         "kanji": null,
@@ -15035,7 +15035,7 @@
         "kanji": "出ます［本が～］",
         "kana": "でます［ほんが～］",
         "romaji": "demasu [honga~]",
-        "meaning": "[a book] be published"
+        "meaning": "[sách] được xuất bản"
       }
     ],
     "47": [
@@ -15061,31 +15061,31 @@
         "kanji": "集まります［人が～］",
         "kana": "あつまります［ひとが～］",
         "romaji": "atsumarimasu [hitoga~]",
-        "meaning": "[people] gather"
+        "meaning": "tập hợp, tập trung [ người ~]"
       },
       {
         "kanji": "別れます［人が～］",
         "kana": "わかれます［ひとが～］",
         "romaji": "wakaremasu [hitoga~]",
-        "meaning": "[people] part, separate"
+        "meaning": "chia tay [ người ~]"
       },
       {
         "kanji": "します［音／声が～］",
         "kana": "します［おと／こえが～］",
         "romaji": "shimasu [oto/koega~]",
-        "meaning": "[sound/voice] be heard"
+        "meaning": "có [~ mùi ]"
       },
       {
         "kanji": "します［味が～］",
         "kana": "します［あじが～］",
         "romaji": "shimasu [ajiga~]",
-        "meaning": "taste"
+        "meaning": "có [~ mùi ]"
       },
       {
         "kanji": null,
         "kana": "します［においが～］",
         "romaji": "shimasu [nioiga~]",
-        "meaning": "smell"
+        "meaning": "có [~ mùi ]"
       },
       {
         "kanji": "厳しい",
@@ -15259,7 +15259,7 @@
         "kanji": "さします［傘を～］",
         "kana": "さします［かさを～］",
         "romaji": "sashimasu [kasawo~]",
-        "meaning": "put up [an umbrella]"
+        "meaning": "dương che [ dù ]"
       },
       {
         "kanji": "天気予報",
@@ -15307,7 +15307,7 @@
         "kanji": "比べます［男性と～］",
         "kana": "くらべます［だんせいと～］",
         "romaji": "kurabemasu [danseito~]",
-        "meaning": "compare [with men]"
+        "meaning": "so sánh [với nam giới ~]"
       },
       {
         "kanji": "博士",
@@ -15369,7 +15369,7 @@
         "kanji": "嫌［な］",
         "kana": "いや［な］",
         "romaji": "iya [na]",
-        "meaning": "unwilling, reluctant"
+        "meaning": "không thích, ngán"
       },
       {
         "kanji": "塾",
@@ -15429,7 +15429,7 @@
         "kanji": null,
         "kana": "かまいません。",
         "romaji": "kamaimasen.",
-        "meaning": "It's all right./I don't mind."
+        "meaning": "được rồi,không sao, không có gì đâu"
       },
       {
         "kanji": "楽しみます",
@@ -15593,13 +15593,13 @@
         "kanji": "勤めます［会社に～］",
         "kana": "つとめます［かいしゃに～］",
         "romaji": "tsutomemasu [kaishani~]",
-        "meaning": "work [for a company]"
+        "meaning": "làm việc [ công ty ~]"
       },
       {
         "kanji": "掛けます［いすに～］",
         "kana": "かけます［いすに～］",
         "romaji": "kakemasu [isuni~]",
-        "meaning": "sit on [a chair]"
+        "meaning": "ngồi xuống [ ghế]"
       },
       {
         "kanji": "過ごします",
@@ -15707,13 +15707,13 @@
         "kanji": "よろしく お伝え ください。",
         "kana": "よろしく おつたえ ください。",
         "romaji": "yoroshiku otsutae kudasai.",
-        "meaning": "Give my best regards./Please say hello."
+        "meaning": "cho tôi gửi lời hỏi thăm"
       },
       {
         "kanji": "失礼いたします。",
         "kana": "しつれいいたします。",
         "romaji": "shitsureiitashimasu.",
-        "meaning": "Goodbye. (humble equivalent of しつれいします)"
+        "meaning": "xin chào (dạng khiêm tốn củaしつれいします)"
       },
       {
         "kanji": "ひまわり小学校",
@@ -15803,7 +15803,7 @@
         "kanji": "寄ります［銀行に～］",
         "kana": "よります［ぎんこうに～］",
         "romaji": "yorimasu [ginkoni~]",
-        "meaning": "drop into [a bank]"
+        "meaning": "ghé vào (ngân hàng )"
       },
       {
         "kanji": "灰皿",
@@ -16087,7 +16087,7 @@
         "kanji": "かないます［夢が～］",
         "kana": "かないます［ゆめが～］",
         "romaji": "kanaimasu [yumega~]",
-        "meaning": "[dream] be realized, come true"
+        "meaning": "(giấc mơ)thành hiện thực,linh ứng"
       },
       {
         "kanji": "応援します",
@@ -16117,7 +16117,7 @@
         "kanji": "お元気で いらっしゃいますか。",
         "kana": "おげんきで いらっしゃいますか。",
         "romaji": "ogenkide irasshaimasuka.",
-        "meaning": "How are you doing? (respectful equivalent of おげんきですか)"
+        "meaning": "anh/chị có khỏe không?(cách nói tôn kính của おげんきですか。)"
       },
       {
         "kanji": "迷惑を かけます",
@@ -16201,7 +16201,7 @@
         "kanji": "撮ります［ビデオに～］",
         "kana": "とります［ビデオに～］",
         "romaji": "torimasu [bideoni~]",
-        "meaning": "record [on video], video"
+        "meaning": "thu , quay"
       },
       {
         "kanji": "自然",
@@ -16219,7 +16219,7 @@
         "kanji": null,
         "kana": "ひとこと よろしいでしょうか。",
         "romaji": "hitokoto yoroshiideshoka.",
-        "meaning": "May I say one word?"
+        "meaning": "cho tôi nói một lời"
       },
       {
         "kanji": "協力します",
@@ -16243,7 +16243,7 @@
         "kanji": "［お］城",
         "kana": "［お］しろ",
         "romaji": "[o] shiro",
-        "meaning": "castle"
+        "meaning": "thành trì"
       },
       {
         "kanji": "敬具",
@@ -16384,9 +16384,20 @@
       },
       {
         "pattern": "~さい",
-        "meaning": "~さい",
-        "explanation": "",
-        "examples": []
+        "meaning": "~ tuổi (hậu tố chỉ tuổi)",
+        "explanation": "Đứng sau số để chỉ tuổi. Viết bằng kanji là 歳.\n\nChú ý: Khi hỏi tuổi trang trọng dùng おいくつですか.",
+        "examples": [
+          {
+            "jp": "わたしは 20さいです。",
+            "romaji": "",
+            "vi": "Tôi 20 tuổi."
+          },
+          {
+            "jp": "お子さんは なんさいですか。",
+            "romaji": "",
+            "vi": "Con bạn mấy tuổi?"
+          }
+        ]
       }
     ],
     "2": [

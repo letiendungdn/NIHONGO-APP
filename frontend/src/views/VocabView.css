@@ -38,6 +38,132 @@
   font-weight: 500;
 }
 
+.vocab-body-layout {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.vocab-word-list {
+  width: 280px;
+  flex-shrink: 0;
+  max-height: 520px;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  border-radius: 1rem;
+  background: var(--surface-color);
+}
+
+.vocab-word-list-title {
+  margin: 0 0 0.75rem;
+  padding: 0 0.25rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.vocab-word-list-search {
+  width: 100%;
+  margin-bottom: 0.75rem;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  background: var(--bg-color);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.875rem;
+  outline: none;
+}
+
+.vocab-word-list-search:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.15);
+}
+
+.vocab-word-list-search::placeholder {
+  color: var(--text-secondary);
+}
+
+.vocab-word-list-warning {
+  margin: 0 0 0.5rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 0.4rem;
+  background: rgba(234, 179, 8, 0.12);
+  color: #fbbf24;
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.vocab-word-list-empty {
+  padding: 1rem 0.5rem;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.vocab-word-list-items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  flex: 1;
+  scrollbar-width: thin;
+}
+
+.vocab-word-list-item {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1.75rem 1fr;
+  grid-template-rows: auto auto;
+  gap: 0.1rem 0.5rem;
+  padding: 0.55rem 0.65rem;
+  border: none;
+  border-radius: 0.5rem;
+  background: transparent;
+  color: var(--text-primary);
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.vocab-word-list-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.vocab-word-list-item.active {
+  background: rgba(239, 68, 68, 0.12);
+  box-shadow: inset 3px 0 0 var(--primary-color);
+}
+
+.vocab-word-list-num {
+  grid-row: 1 / span 2;
+  align-self: center;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.vocab-word-list-jp {
+  font-size: 0.95rem;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.vocab-word-list-meaning {
+  grid-column: 2;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .vocab-main-layout {
   display: flex;
   flex-direction: row;
@@ -45,7 +171,8 @@
   justify-content: center;
   gap: 2rem;
   width: 100%;
-  max-width: 900px;
+  flex: 1;
+  min-width: 0;
 }
 
 /* Flashcard 3D effect setup */
@@ -133,6 +260,28 @@
 
 .stroke-order-sidepanel h3 {
   font-size: 1.25rem;
+  color: var(--text-secondary);
+}
+
+.stroke-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.stroke-section + .stroke-section {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.stroke-section-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
   color: var(--text-secondary);
 }
 
@@ -321,6 +470,16 @@
 }
 
 @media (max-width: 800px) {
+  .vocab-body-layout {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .vocab-word-list {
+    width: 100%;
+    max-height: 200px;
+  }
+
   .vocab-main-layout {
     flex-direction: column;
     align-items: center;

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { getStrokeText } from './japanese';
+import { getStrokeText, shouldShowKanaStroke } from './japanese';
 
 describe('getStrokeText', () => {
   it('giữ lại hiragana', () => {
@@ -25,5 +25,20 @@ describe('getStrokeText', () => {
 
   it('xử lý mixed text', () => {
     expect(getStrokeText('食べる (taberu)')).toBe('食べる');
+  });
+});
+
+describe('shouldShowKanaStroke', () => {
+  it('true khi kanji và kana khác nhau', () => {
+    expect(shouldShowKanaStroke('私', 'わたし')).toBe(true);
+  });
+
+  it('false khi chỉ có kana', () => {
+    expect(shouldShowKanaStroke(null, 'わたし')).toBe(false);
+  });
+
+  it('false khi kanji và kana cùng nội dung viết', () => {
+    expect(shouldShowKanaStroke('先生', 'せんせい')).toBe(true);
+    expect(shouldShowKanaStroke('食べる', '食べる')).toBe(false);
   });
 });

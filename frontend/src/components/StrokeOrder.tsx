@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import HanziWriter from 'hanzi-writer';
 import { getStrokeText } from '../utils/japanese';
 
 function extractSvgMarkup(svgText: string): string {
@@ -10,6 +9,100 @@ function extractSvgMarkup(svgText: string): string {
   const end = svgText.lastIndexOf('</svg>');
   if (end === -1) return svgText.slice(start);
   return svgText.slice(start, end + '</svg>'.length);
+}
+
+function kanjiVgUrl(char: string): string {
+  const hex = char.charCodeAt(0).toString(16).padStart(5, '0');
+  return `https://raw.githubusercontent.com/KanjiVG/kanjivg/master/kanji/${hex}.svg`;
+}
+
+function mountKanjiVgSvg(
+  charDiv: HTMLDivElement,
+  char: string,
+  svgText: string,
+  width: number,
+  height: number,
+) {
+  const svgWrapper = document.createElement('div');
+  svgWrapper.innerHTML = extractSvgMarkup(svgText);
+  svgWrapper.style.width = `${width}px`;
+  svgWrapper.style.height = `${height}px`;
+  svgWrapper.style.position = 'relative';
+
+  const svgEl = svgWrapper.querySelector('svg');
+  if (!svgEl) {
+    charDiv.textContent = char;
+    charDiv.style.fontSize = '3rem';
+    charDiv.style.fontFamily = 'var(--font-jp)';
+    return;
+  }
+
+  svgEl.style.width = '100%';
+  svgEl.style.height = '100%';
+
+  const pathsGroup = svgEl.querySelector('[id*="StrokePaths"]');
+  const numbersGroup = svgEl.querySelector('[id*="StrokeNumbers"]');
+
+  if (!pathsGroup) {
+    charDiv.appendChild(svgWrapper);
+    return;
+  }
+
+  const bgPaths = Array.from(pathsGroup.querySelectorAll('path'));
+  bgPaths.forEach((path) => {
+    path.style.stroke = '#334155';
+    path.style.strokeWidth = '4';
+    path.style.fill = 'none';
+  });
+
+  const fgPathsGroup = pathsGroup.cloneNode(true) as Element;
+  const fgPaths = Array.from(fgPathsGroup.querySelectorAll('path'));
+
+  fgPaths.forEach((path) => {
+    path.style.stroke = '#ef4444';
+    path.style.strokeWidth = '4';
+    path.style.fill = 'none';
+    path.style.strokeLinecap = 'round';
+    path.style.strokeLinejoin = 'round';
+
+    const length = path.getTotalLength();
+    path.style.strokeDasharray = `${length + 1}`;
+    path.style.strokeDashoffset = `${length + 1}`;
+  });
+
+  svgEl.appendChild(fgPathsGroup);
+
+  if (numbersGroup) {
+    Array.from(numbersGroup.querySelectorAll('text')).forEach((el) => {
+      (el as SVGTextElement).style.fill = 'rgba(248, 250, 252, 0.4)';
+    });
+  }
+
+  const animateStrokes = () => {
+    fgPaths.forEach((path) => {
+      path.style.transition = 'none';
+      const length = path.getTotalLength();
+      path.style.strokeDashoffset = `${length + 1}`;
+    });
+
+    svgEl.getBoundingClientRect();
+
+    let delay = 0.5;
+    fgPaths.forEach((path) => {
+      path.style.transition = `stroke-dashoffset 0.6s ease-in-out ${delay}s`;
+      path.style.strokeDashoffset = '0';
+      delay += 0.8;
+    });
+  };
+
+  charDiv.style.cursor = 'pointer';
+  charDiv.addEventListener('click', (e) => {
+    e.stopPropagation();
+    animateStrokes();
+  });
+
+  charDiv.appendChild(svgWrapper);
+  setTimeout(animateStrokes, 100);
 }
 
 interface Props {
@@ -41,118 +134,17 @@ export default function StrokeOrder({ text, width = 100, height = 100 }: Props) 
       charDiv.style.margin = '0 5px';
       containerRef.current?.appendChild(charDiv);
 
-      const isKana =
-        (char >= '\u3040' && char <= '\u309F') ||
-        (char >= '\u30A0' && char <= '\u30FF');
-
-      if (isKana) {
-        const hex = char.charCodeAt(0).toString(16).padStart(5, '0');
-        fetch(
-          `https://raw.githubusercontent.com/KanjiVG/kanjivg/master/kanji/${hex}.svg`,
-        )
-          .then((res) => {
-            if (!res.ok) throw new Error('SVG not found');
-            return res.text();
-          })
-          .then((svgText) => {
-            const svgWrapper = document.createElement('div');
-            svgWrapper.innerHTML = extractSvgMarkup(svgText);
-            svgWrapper.style.width = `${width}px`;
-            svgWrapper.style.height = `${height}px`;
-            svgWrapper.style.position = 'relative';
-
-            const svgEl = svgWrapper.querySelector('svg');
-            if (svgEl) {
-              svgEl.style.width = '100%';
-              svgEl.style.height = '100%';
-
-              const pathsGroup = svgEl.querySelector('[id*="StrokePaths"]');
-              const numbersGroup = svgEl.querySelector('[id*="StrokeNumbers"]');
-
-              if (pathsGroup) {
-                const bgPaths = Array.from(pathsGroup.querySelectorAll('path'));
-                bgPaths.forEach((path) => {
-                  path.style.stroke = '#334155';
-                  path.style.strokeWidth = '4';
-                  path.style.fill = 'none';
-                });
-
-                const fgPathsGroup = pathsGroup.cloneNode(true) as Element;
-                const fgPaths = Array.from(fgPathsGroup.querySelectorAll('path'));
-
-                fgPaths.forEach((path) => {
-                  path.style.stroke = '#ef4444';
-                  path.style.strokeWidth = '4';
-                  path.style.fill = 'none';
-                  path.style.strokeLinecap = 'round';
-                  path.style.strokeLinejoin = 'round';
-
-                  const length = path.getTotalLength();
-                  path.style.strokeDasharray = `${length + 1}`;
-                  path.style.strokeDashoffset = `${length + 1}`;
-                });
-
-                svgEl.appendChild(fgPathsGroup);
-
-                if (numbersGroup) {
-                  Array.from(numbersGroup.querySelectorAll('text')).forEach((el) => {
-                    (el as SVGTextElement).style.fill = 'rgba(248, 250, 252, 0.4)';
-                  });
-                }
-
-                const animateStrokes = () => {
-                  fgPaths.forEach((path) => {
-                    path.style.transition = 'none';
-                    const length = path.getTotalLength();
-                    path.style.strokeDashoffset = `${length + 1}`;
-                  });
-
-                  svgEl.getBoundingClientRect();
-
-                  let delay = 0.5;
-                  fgPaths.forEach((path) => {
-                    path.style.transition = `stroke-dashoffset 0.6s ease-in-out ${delay}s`;
-                    path.style.strokeDashoffset = '0';
-                    delay += 0.8;
-                  });
-                };
-
-                charDiv.style.cursor = 'pointer';
-                charDiv.addEventListener('click', (e) => {
-                  e.stopPropagation();
-                  animateStrokes();
-                });
-
-                setTimeout(animateStrokes, 100);
-              }
-            }
-            charDiv.appendChild(svgWrapper);
-          })
-          .catch(() => {
-            charDiv.textContent = char;
-            charDiv.style.fontSize = '3rem';
-            charDiv.style.fontFamily = 'var(--font-jp)';
-          });
-      } else {
-        const writer = HanziWriter.create(charDiv, char, {
-          width,
-          height,
-          padding: 5,
-          strokeAnimationSpeed: 1.5,
-          delayBetweenStrokes: 150,
-          showOutline: true,
-          strokeColor: '#ef4444',
-          outlineColor: '#334155',
-          drawingColor: '#f8fafc',
+      fetch(kanjiVgUrl(char))
+        .then((res) => {
+          if (!res.ok) throw new Error('SVG not found');
+          return res.text();
+        })
+        .then((svgText) => mountKanjiVgSvg(charDiv, char, svgText, width, height))
+        .catch(() => {
+          charDiv.textContent = char;
+          charDiv.style.fontSize = '3rem';
+          charDiv.style.fontFamily = 'var(--font-jp)';
         });
-
-        charDiv.addEventListener('click', (e) => {
-          e.stopPropagation();
-          writer.animateCharacter();
-        });
-
-        setTimeout(() => writer.animateCharacter(), 500);
-      }
     });
   }, [writableText, width, height]);
 

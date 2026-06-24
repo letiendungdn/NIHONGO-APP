@@ -14,26 +14,46 @@ import type {
   Vocabulary,
 } from '../types/api';
 
-function unwrapList<T>(res: PaginatedResponse<T> | T[] | null | undefined): T[] {
-  if (Array.isArray(res)) return res;
-  if (res && Array.isArray(res.data)) return res.data;
-  return [];
+async function fetchPaginatedAll<T>(
+  buildPath: (page: number, limit: number) => string,
+  pageSize = 100,
+): Promise<T[]> {
+  const all: T[] = [];
+  let page = 1;
+  let total = Number.POSITIVE_INFINITY;
+
+  while (all.length < total) {
+    const res = await apiRequest<PaginatedResponse<T> | T[]>(
+      buildPath(page, pageSize),
+    );
+
+    if (Array.isArray(res)) return res;
+
+    const batch = res?.data ?? [];
+    total = res?.total ?? batch.length;
+    all.push(...batch);
+
+    if (batch.length === 0 || all.length >= total) break;
+    page += 1;
+  }
+
+  return all;
 }
 
 export function fetchLessons() {
   return apiRequest<Lesson[]>('/lessons');
 }
 
-export function fetchVocabularies(lessonNumber: number, page = 1, limit = 200) {
-  return apiRequest<PaginatedResponse<Vocabulary> | Vocabulary[]>(
+export function fetchVocabularies(lessonNumber: number) {
+  return fetchPaginatedAll<Vocabulary>((page, limit) =>
     `/vocabularies?lessonNumber=${lessonNumber}&page=${page}&limit=${limit}`,
-  ).then(unwrapList);
+  );
 }
 
-export function fetchGrammars(lessonNumber: number, page = 1, limit = 200) {
-  return apiRequest<PaginatedResponse<Grammar> | Grammar[]>(
+export function fetchGrammars(lessonNumber: number) {
+  return fetchPaginatedAll<Grammar>((page, limit) =>
     `/grammars?lessonNumber=${lessonNumber}&page=${page}&limit=${limit}`,
-  ).then(unwrapList);
+  );
 }
 
 export function fetchExercises(lessonNumber: number) {

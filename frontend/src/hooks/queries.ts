@@ -15,7 +15,7 @@ import { getStoredToken } from '../lib/api-client';
 
 export const queryKeys = {
   lessons: ['lessons'] as const,
-  vocabularies: (lesson: number) => ['vocabularies', lesson] as const,
+  vocabularies: (lesson: number) => ['vocabularies', lesson, 'vi'] as const,
   grammars: (lesson: number) => ['grammars', lesson] as const,
   exercises: (lesson: number) => ['exercises', lesson] as const,
   kanjiLessons: ['kanji-lessons'] as const,

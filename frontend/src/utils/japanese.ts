@@ -12,3 +12,13 @@ export function getStrokeText(text: string): string {
     })
     .join('');
 }
+
+/** Kanji và kana khác nhau (vd. 私 vs わたし) → cần vẽ cả hai */
+export function shouldShowKanaStroke(
+  kanji: string | null | undefined,
+  kana: string,
+): boolean {
+  const kanjiStroke = kanji ? getStrokeText(kanji) : '';
+  const kanaStroke = getStrokeText(kana);
+  return Boolean(kanjiStroke && kanaStroke && kanjiStroke !== kanaStroke);
+}

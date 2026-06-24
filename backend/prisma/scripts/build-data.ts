@@ -66,6 +66,165 @@ function normalizeKanaKey(kana: string): string {
     .trim();
 }
 
+/** Minna gốc để hiragana cho từ sớm — bổ sung kanji chuẩn khi thiếu */
+const KANJI_SUPPLEMENT: Record<string, string> = {
+  わたし: '私',
+  わたしたち: '私たち',
+  'だれ（どなた）': '誰（どなた）',
+  これ: '此れ',
+  それ: '其れ',
+  あれ: '彼れ',
+  ここ: '此処',
+  そこ: '其処',
+  あそこ: '彼処',
+  どこ: '何処',
+  こちら: '此方',
+  そちら: '其方',
+  あちら: '彼方',
+  どちら: '何方',
+  かぎ: '鍵',
+  かばん: '鞄',
+  いす: '椅子',
+  うち: '家',
+  たばこ: '煙草',
+};
+
+/** Nghĩa tiếng Việt khi nguồn chỉ có tiếng Anh hoặc thiếu */
+const MEANING_VI_SUPPLEMENT: Record<string, string> = {
+  '－さい': 'tuổi (hậu tố đứng sau số)',
+  '－歳': 'tuổi (hậu tố đứng sau số)',
+  あなた: 'anh/chị, bạn',
+  しゃいん: 'nhân viên công ty ～',
+  おいくつ: 'mấy tuổi (lịch sự)',
+  '～から きました。': 'đến từ ～',
+  'こちらは ～さんです。': 'đây là ngài ～',
+  'はじめまして。': 'chào lần đầu gặp nhau',
+  '［どうぞ］よろしく［おねがいします］。': 'rất hân hạnh được làm quen',
+  'a fictitious institute': 'học viện giả định (trong sách)',
+  'fictitious companies': 'công ty giả định (trong sách)',
+  'a fictitious hospital': 'bệnh viện giả định (trong sách)',
+  'fictitious universities': 'trường đại học giả định (trong sách)',
+};
+
+function isLikelyEnglish(text: string): boolean {
+  if (!text) return false;
+  if (
+    /[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]/i.test(
+      text,
+    )
+  ) {
+    return false;
+  }
+  return /^[A-Za-z0-9\s.,!?'"()\-–—/～~:;[\]]+$/.test(text.trim());
+}
+
+function expandKanaLookupKeys(kana: string): string[] {
+  const keys = new Set<string>();
+  const add = (value: string) => {
+    const key = normalizeKanaKey(value);
+    if (key) keys.add(key);
+  };
+
+  add(kana);
+  add(kana.replace(/[。．？?！!]/g, ''));
+  add(kana.replace(/[［\[][^\]］]*[\]］]/g, ''));
+
+  const paren = kana.match(/^([^（(]+)[（(]([^)）]+)[)）]/);
+  if (paren) {
+    add(paren[1]);
+    add(paren[2]);
+  }
+
+  const beforeParen = kana.split(/[（(]/)[0];
+  if (beforeParen) add(beforeParen);
+
+  return [...keys];
+}
+
+function resolveMeaningVi(kana: string, vi: string, en: string, fr: string): string {
+  const supplement =
+    MEANING_VI_SUPPLEMENT[kana] ?? MEANING_VI_SUPPLEMENT[normalizeKanaKey(kana)];
+  if (supplement) return supplement;
+
+  if (vi && vi !== en && vi !== fr && !isLikelyEnglish(vi)) return vi;
+
+  const enSupplement = MEANING_VI_SUPPLEMENT[en] ?? MEANING_VI_SUPPLEMENT[vi];
+  if (enSupplement) return enSupplement;
+
+  return vi || en || fr;
+}
+
+/** Ngữ pháp thiếu nghĩa từ nguồn scrape */
+const GRAMMAR_MEANING_SUPPLEMENT: Record<
+  string,
+  Pick<GrammarItem, 'meaning' | 'explanation' | 'examples'>
+> = {
+  '~さい': {
+    meaning: '~ tuổi (hậu tố chỉ tuổi)',
+    explanation:
+      'Đứng sau số để chỉ tuổi. Viết bằng kanji là 歳.\n\nChú ý: Khi hỏi tuổi trang trọng dùng おいくつですか.',
+    examples: [
+      { jp: 'わたしは 20さいです。', romaji: '', vi: 'Tôi 20 tuổi.' },
+      { jp: 'お子さんは なんさいですか。', romaji: '', vi: 'Con bạn mấy tuổi?' },
+    ],
+  },
+};
+
+function enrichGrammarItems(
+  items: GrammarItem[],
+  vocab: VocabItem[],
+): GrammarItem[] {
+  const vocabByKana = new Map(
+    vocab.map((v) => [normalizeKanaKey(v.kana), v] as const),
+  );
+
+  return items.map((item) => {
+    const supplement = GRAMMAR_MEANING_SUPPLEMENT[item.pattern];
+    if (supplement) {
+      return {
+        ...item,
+        meaning: supplement.meaning,
+        explanation: supplement.explanation ?? item.explanation,
+        examples:
+          supplement.examples && supplement.examples.length > 0
+            ? supplement.examples
+            : item.examples,
+      };
+    }
+
+    if (item.meaning !== item.pattern) return item;
+
+    if (item.pattern.startsWith('~')) {
+      const suffix = item.pattern.slice(1);
+      const vocabMatch =
+        vocabByKana.get(normalizeKanaKey(`－${suffix}`)) ??
+        vocabByKana.get(normalizeKanaKey(`～${suffix}`));
+
+      if (vocabMatch?.meaning) {
+        const label = vocabMatch.meaning
+          .replace(/^[－~]\s*(years old|an\(s\))\s*/i, '')
+          .trim();
+        return {
+          ...item,
+          meaning: label ? `${item.pattern} — ${label}` : vocabMatch.meaning,
+          explanation:
+            item.explanation ||
+            (vocabMatch.kanji ? `Kanji: ${vocabMatch.kanji}.` : ''),
+        };
+      }
+    }
+
+    return item;
+  });
+}
+
+function resolveKanji(kanji: string | null, kana: string): string | null {
+  if (kanji) return kanji;
+  return (
+    KANJI_SUPPLEMENT[kana] ?? KANJI_SUPPLEMENT[normalizeKanaKey(kana)] ?? null
+  );
+}
+
 function stripHtml(html: string): string {
   return html
     .replace(/<br\s*\/?>/gi, ' ')
@@ -236,7 +395,9 @@ function parseTailieuVietnamese(html: string): Map<string, string> {
     const kana = normalizeKanaKey(cells[0]);
     const meaning = cells[3];
     if (kana && meaning) {
-      map.set(kana, meaning);
+      for (const key of expandKanaLookupKeys(cells[0])) {
+        map.set(key, meaning);
+      }
     }
   }
 
@@ -257,14 +418,27 @@ function lookupVietnameseMeaning(
   viMap: Map<string, string>,
   fallbackEn: string,
 ): string {
-  const keys = [
-    normalizeKanaKey(kana),
-    normalizeKanaKey(kana.replace(/～/g, '')),
-    `～${normalizeKanaKey(kana).replace(/^～/, '')}`,
-  ];
+  for (const key of expandKanaLookupKeys(kana)) {
+    if (viMap.has(key)) return viMap.get(key)!;
+  }
 
-  for (const key of keys) {
-    if (key && viMap.has(key)) return viMap.get(key)!;
+  const bare = normalizeKanaKey(kana);
+  if (bare && !bare.startsWith('～')) {
+    const withTilde = `～${bare}`;
+    if (viMap.has(withTilde)) return viMap.get(withTilde)!;
+  }
+
+  const combined = kana.match(/^([^（(]+)[（(]([^)）]+)[)）]/);
+  if (combined) {
+    const mainKey = normalizeKanaKey(combined[1]);
+    const altKey = normalizeKanaKey(combined[2]);
+    const mainVi = viMap.get(mainKey);
+    const altVi = viMap.get(altKey);
+    if (mainVi && altVi) {
+      return `${mainVi} (${combined[2].trim()} là dạng lịch sự của ${combined[1].trim()})`;
+    }
+    if (mainVi) return mainVi;
+    if (altVi) return altVi;
   }
 
   const romajiKey = romaji.toLowerCase().replace(/\s+/g, '');
@@ -310,10 +484,10 @@ async function parseVocabFromYaml(): Promise<Record<number, VocabItem[]>> {
       if (vi !== (en || fr)) viMatched++;
 
       return {
-        kanji: normalizeKanji(item.kanji),
+        kanji: resolveKanji(normalizeKanji(item.kanji), kana),
         kana,
         romaji,
-        meaning: vi,
+        meaning: resolveMeaningVi(kana, vi, en, fr),
       };
     });
 
@@ -631,7 +805,10 @@ async function main() {
   console.log('Fetching grammar for 50 lessons...');
   const grammar: Record<number, GrammarItem[]> = {};
   for (let i = 1; i <= 50; i++) {
-    grammar[i] = await fetchGrammarForLesson(i);
+    grammar[i] = enrichGrammarItems(
+      await fetchGrammarForLesson(i),
+      vocab[i] || [],
+    );
     process.stdout.write(`  Bài ${i}: ${grammar[i].length} mẫu ngữ pháp\n`);
   }
 
@@ -646,7 +823,31 @@ async function main() {
   console.log(`\nSaved → ${OUTPUT_PATH}`);
 }
 
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+async function refreshVocabOnly() {
+  console.log('Cập nhật nghĩa tiếng Việt cho từ vựng...');
+  const vocab = await parseVocabFromYaml();
+  const bundle = JSON.parse(fs.readFileSync(OUTPUT_PATH, 'utf8')) as Bundle;
+  bundle.vocab = Object.fromEntries(
+    Object.entries(vocab).map(([lesson, items]) => [String(lesson), items]),
+  );
+  fs.writeFileSync(OUTPUT_PATH, JSON.stringify(bundle, null, 2), 'utf8');
+  const enLeft = Object.values(bundle.vocab)
+    .flat()
+    .filter((v) => isLikelyEnglish(v.meaning)).length;
+  console.log(`\nSaved → ${OUTPUT_PATH}`);
+  console.log(`Còn ${enLeft} mục có nghĩa tiếng Anh.`);
+}
+
+const isVocabOnly = process.argv.includes('--vocab-only');
+
+if (isVocabOnly) {
+  refreshVocabOnly().catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
+} else {
+  main().catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
+}

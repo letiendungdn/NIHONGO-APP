@@ -1,27 +1,61 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { playAudio } from '../utils/speech';
 import LessonSelector from '../components/LessonSelector';
 import PlayAllButton from '../components/PlayAllButton';
 import { usePlayAll } from '../hooks/usePlayAll';
-import { useVocabulariesQuery } from '../hooks/queries';
+import { useLessonsQuery, useVocabulariesQuery } from '../hooks/queries';
 import StrokeOrder from '../components/StrokeOrder';
-import { getStrokeText } from '../utils/japanese';
+import { getStrokeText, shouldShowKanaStroke } from '../utils/japanese';
 import './VocabView.css';
+
+function matchesVocabSearch(
+  vocab: { kanji: string | null; kana: string; romaji: string; meaning: string },
+  query: string,
+): boolean {
+  const haystack = [vocab.kanji, vocab.kana, vocab.romaji, vocab.meaning]
+    .filter(Boolean)
+    .join(' ')
+    .toLowerCase();
+  return haystack.includes(query);
+}
 
 export default function VocabView() {
   const [currentLesson, setCurrentLesson] = useState(1);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const { data: lessons = [] } = useLessonsQuery();
   const { data: lessonVocab = [], isLoading: loading } = useVocabulariesQuery(currentLesson);
   const { isPlayingAll, startPlayAll, stopPlayAll } = usePlayAll();
+  const listItemRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  const expectedCount =
+    lessons.find((l) => l.lessonNumber === currentLesson)?._count?.vocabularies ?? null;
+  const isListIncomplete =
+    expectedCount != null && lessonVocab.length > 0 && lessonVocab.length < expectedCount;
+
+  const filteredVocab = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    return lessonVocab
+      .map((vocab, index) => ({ vocab, index }))
+      .filter(({ vocab }) => !q || matchesVocabSearch(vocab, q));
+  }, [lessonVocab, searchQuery]);
 
   useEffect(() => {
     stopPlayAll();
     setCurrentIndex(0);
     setIsFlipped(false);
+    setSearchQuery('');
   }, [currentLesson, stopPlayAll]);
+
+  useEffect(() => {
+    listItemRefs.current[currentIndex]?.scrollIntoView({
+      block: 'nearest',
+      behavior: 'smooth',
+    });
+  }, [currentIndex, currentLesson, searchQuery]);
 
   const currentVocab = lessonVocab[currentIndex];
 
@@ -58,6 +92,13 @@ export default function VocabView() {
     );
   };
 
+  const handleSelectWord = (index: number) => {
+    if (index === currentIndex) return;
+    stopPlayAll();
+    setIsFlipped(false);
+    setCurrentIndex(index);
+  };
+
   return (
     <div className="container vocab-view">
       <div className="vocab-header">
@@ -81,7 +122,57 @@ export default function VocabView() {
           <p>Đang tải dữ liệu...</p>
         </div>
       ) : lessonVocab.length > 0 && currentVocab ? (
-        <div className="vocab-main-layout">
+        <div className="vocab-body-layout">
+          <aside className="vocab-word-list glass-panel">
+            <h3 className="vocab-word-list-title">
+              Danh sách từ
+              {searchQuery.trim()
+                ? ` (${filteredVocab.length}/${lessonVocab.length})`
+                : ` (${lessonVocab.length})`}
+            </h3>
+            <input
+              type="search"
+              className="vocab-word-list-search"
+              placeholder="Tìm kanji, kana, romaji, nghĩa..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              aria-label="Tìm từ vựng"
+            />
+            {isListIncomplete && (
+              <p className="vocab-word-list-warning" role="status">
+                Đang hiển thị {lessonVocab.length}/{expectedCount} từ — hãy refresh trang.
+              </p>
+            )}
+            <ul className="vocab-word-list-items">
+              {filteredVocab.length === 0 ? (
+                <li className="vocab-word-list-empty">Không tìm thấy từ phù hợp.</li>
+              ) : (
+                filteredVocab.map(({ vocab, index }) => (
+                  <li key={vocab.id}>
+                    <button
+                      ref={(el) => {
+                        listItemRefs.current[index] = el;
+                      }}
+                      type="button"
+                      className={`vocab-word-list-item ${
+                        index === currentIndex ? 'active' : ''
+                      }`}
+                      onClick={() => handleSelectWord(index)}
+                      aria-current={index === currentIndex ? 'true' : undefined}
+                    >
+                      <span className="vocab-word-list-num">{index + 1}</span>
+                      <span className="vocab-word-list-jp japanese-text">
+                        {vocab.kanji || vocab.kana}
+                      </span>
+                      <span className="vocab-word-list-meaning">{vocab.meaning}</span>
+                    </button>
+                  </li>
+                ))
+              )}
+            </ul>
+          </aside>
+
+          <div className="vocab-main-layout">
           <div className="flashcard-container">
             <div
               className={`flashcard ${isFlipped ? 'flipped' : ''}`}
@@ -124,14 +215,36 @@ export default function VocabView() {
 
           <div className="stroke-order-sidepanel glass-panel">
             <h3>Cách viết chữ:</h3>
-            <p className="stroke-kanji">
-              {getStrokeText(currentVocab.kanji || currentVocab.kana) ||
-                currentVocab.kana}
-            </p>
-            <div className="stroke-drawing-box">
-              <StrokeOrder text={currentVocab.kanji || currentVocab.kana} />
-            </div>
+            {shouldShowKanaStroke(currentVocab.kanji, currentVocab.kana) ? (
+              <>
+                <div className="stroke-section">
+                  <p className="stroke-section-label">Kanji</p>
+                  <p className="stroke-kanji">{getStrokeText(currentVocab.kanji!)}</p>
+                  <div className="stroke-drawing-box">
+                    <StrokeOrder text={currentVocab.kanji!} />
+                  </div>
+                </div>
+                <div className="stroke-section">
+                  <p className="stroke-section-label">Kana</p>
+                  <p className="stroke-kanji">{getStrokeText(currentVocab.kana)}</p>
+                  <div className="stroke-drawing-box">
+                    <StrokeOrder text={currentVocab.kana} width={80} height={80} />
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <p className="stroke-kanji">
+                  {getStrokeText(currentVocab.kanji || currentVocab.kana) ||
+                    currentVocab.kana}
+                </p>
+                <div className="stroke-drawing-box">
+                  <StrokeOrder text={currentVocab.kanji || currentVocab.kana} />
+                </div>
+              </>
+            )}
           </div>
+        </div>
         </div>
       ) : (
         <div className="empty-state">
