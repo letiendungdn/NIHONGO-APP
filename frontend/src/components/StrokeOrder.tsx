@@ -1,0 +1,186 @@
+'use client';
+
+import { useEffect, useRef } from 'react';
+import HanziWriter from 'hanzi-writer';
+import { getStrokeText } from '../utils/japanese';
+
+function extractSvgMarkup(svgText: string): string {
+  const start = svgText.indexOf('<svg');
+  if (start === -1) return svgText;
+  const end = svgText.lastIndexOf('</svg>');
+  if (end === -1) return svgText.slice(start);
+  return svgText.slice(start, end + '</svg>'.length);
+}
+
+interface Props {
+  text: string;
+  width?: number;
+  height?: number;
+}
+
+export default function StrokeOrder({ text, width = 100, height = 100 }: Props) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const writableText = getStrokeText(text);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    containerRef.current.innerHTML = '';
+
+    if (!writableText) {
+      containerRef.current.innerHTML =
+        '<p style="color: var(--text-secondary); font-size: 0.9rem;">Không có hướng dẫn viết cho mục này.</p>';
+      return;
+    }
+
+    const chars = [...writableText];
+
+    chars.forEach((char) => {
+      const charDiv = document.createElement('div');
+      charDiv.style.display = 'inline-block';
+      charDiv.style.margin = '0 5px';
+      containerRef.current?.appendChild(charDiv);
+
+      const isKana =
+        (char >= '\u3040' && char <= '\u309F') ||
+        (char >= '\u30A0' && char <= '\u30FF');
+
+      if (isKana) {
+        const hex = char.charCodeAt(0).toString(16).padStart(5, '0');
+        fetch(
+          `https://raw.githubusercontent.com/KanjiVG/kanjivg/master/kanji/${hex}.svg`,
+        )
+          .then((res) => {
+            if (!res.ok) throw new Error('SVG not found');
+            return res.text();
+          })
+          .then((svgText) => {
+            const svgWrapper = document.createElement('div');
+            svgWrapper.innerHTML = extractSvgMarkup(svgText);
+            svgWrapper.style.width = `${width}px`;
+            svgWrapper.style.height = `${height}px`;
+            svgWrapper.style.position = 'relative';
+
+            const svgEl = svgWrapper.querySelector('svg');
+            if (svgEl) {
+              svgEl.style.width = '100%';
+              svgEl.style.height = '100%';
+
+              const pathsGroup = svgEl.querySelector('[id*="StrokePaths"]');
+              const numbersGroup = svgEl.querySelector('[id*="StrokeNumbers"]');
+
+              if (pathsGroup) {
+                const bgPaths = Array.from(pathsGroup.querySelectorAll('path'));
+                bgPaths.forEach((path) => {
+                  path.style.stroke = '#334155';
+                  path.style.strokeWidth = '4';
+                  path.style.fill = 'none';
+                });
+
+                const fgPathsGroup = pathsGroup.cloneNode(true) as Element;
+                const fgPaths = Array.from(fgPathsGroup.querySelectorAll('path'));
+
+                fgPaths.forEach((path) => {
+                  path.style.stroke = '#ef4444';
+                  path.style.strokeWidth = '4';
+                  path.style.fill = 'none';
+                  path.style.strokeLinecap = 'round';
+                  path.style.strokeLinejoin = 'round';
+
+                  const length = path.getTotalLength();
+                  path.style.strokeDasharray = `${length + 1}`;
+                  path.style.strokeDashoffset = `${length + 1}`;
+                });
+
+                svgEl.appendChild(fgPathsGroup);
+
+                if (numbersGroup) {
+                  Array.from(numbersGroup.querySelectorAll('text')).forEach((el) => {
+                    (el as SVGTextElement).style.fill = 'rgba(248, 250, 252, 0.4)';
+                  });
+                }
+
+                const animateStrokes = () => {
+                  fgPaths.forEach((path) => {
+                    path.style.transition = 'none';
+                    const length = path.getTotalLength();
+                    path.style.strokeDashoffset = `${length + 1}`;
+                  });
+
+                  svgEl.getBoundingClientRect();
+
+                  let delay = 0.5;
+                  fgPaths.forEach((path) => {
+                    path.style.transition = `stroke-dashoffset 0.6s ease-in-out ${delay}s`;
+                    path.style.strokeDashoffset = '0';
+                    delay += 0.8;
+                  });
+                };
+
+                charDiv.style.cursor = 'pointer';
+                charDiv.addEventListener('click', (e) => {
+                  e.stopPropagation();
+                  animateStrokes();
+                });
+
+                setTimeout(animateStrokes, 100);
+              }
+            }
+            charDiv.appendChild(svgWrapper);
+          })
+          .catch(() => {
+            charDiv.textContent = char;
+            charDiv.style.fontSize = '3rem';
+            charDiv.style.fontFamily = 'var(--font-jp)';
+          });
+      } else {
+        const writer = HanziWriter.create(charDiv, char, {
+          width,
+          height,
+          padding: 5,
+          strokeAnimationSpeed: 1.5,
+          delayBetweenStrokes: 150,
+          showOutline: true,
+          strokeColor: '#ef4444',
+          outlineColor: '#334155',
+          drawingColor: '#f8fafc',
+        });
+
+        charDiv.addEventListener('click', (e) => {
+          e.stopPropagation();
+          writer.animateCharacter();
+        });
+
+        setTimeout(() => writer.animateCharacter(), 500);
+      }
+    });
+  }, [writableText, width, height]);
+
+  return (
+    <div
+      className="stroke-order-wrapper"
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      }}
+    >
+      <div
+        ref={containerRef}
+        className="stroke-order-container"
+        title="Nhấn vào chữ để xem lại"
+      />
+      {writableText && (
+        <p
+          style={{
+            fontSize: '0.85rem',
+            color: 'var(--text-secondary)',
+            marginTop: '0.5rem',
+          }}
+        >
+          (Nhấn vào chữ để xem lại)
+        </p>
+      )}
+    </div>
+  );
+}

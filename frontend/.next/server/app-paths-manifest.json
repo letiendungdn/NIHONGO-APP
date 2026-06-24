@@ -1,0 +1,7 @@
+{
+  "/admin/login/page": "app/admin/login/page.js",
+  "/(main)/page": "app/(main)/page.js",
+  "/(main)/kana/page": "app/(main)/kana/page.js",
+  "/(main)/vocab/page": "app/(main)/vocab/page.js",
+  "/admin/(protected)/page": "app/admin/(protected)/page.js"
+}

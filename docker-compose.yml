@@ -1,0 +1,112 @@
+version: '3.9'
+
+services:
+  nats:
+    image: nats:2-alpine
+    container_name: nihongo-nats
+    restart: unless-stopped
+    ports:
+      - '4222:4222'
+      - '8222:8222'
+    command: ['--http_port', '8222']
+
+  redis:
+    image: redis:7-alpine
+    container_name: nihongo-redis
+    restart: unless-stopped
+    ports:
+      - '6379:6379'
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: nihongo-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: nihongo
+      POSTGRES_PASSWORD: nihongo
+      POSTGRES_DB: nihongo
+    ports:
+      - '5433:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U nihongo -d nihongo']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  content-service:
+    build:
+      context: ./backend
+      dockerfile: apps/content-service/Dockerfile
+    container_name: nihongo-content
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://nihongo:nihongo@postgres:5432/nihongo
+      NATS_URL: nats://nats:4222
+    depends_on:
+      postgres:
+        condition: service_healthy
+      nats:
+        condition: service_started
+
+  exam-service:
+    build:
+      context: ./backend
+      dockerfile: apps/exam-service/Dockerfile
+    container_name: nihongo-exam
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://nihongo:nihongo@postgres:5432/nihongo
+      NATS_URL: nats://nats:4222
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      postgres:
+        condition: service_healthy
+      nats:
+        condition: service_started
+      redis:
+        condition: service_healthy
+
+  api-gateway:
+    build:
+      context: ./backend
+      dockerfile: apps/api-gateway/Dockerfile
+    container_name: nihongo-gateway
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    environment:
+      PORT: 3000
+      NATS_URL: nats://nats:4222
+      DATABASE_URL: postgresql://nihongo:nihongo@postgres:5432/nihongo
+      JWT_SECRET: ${JWT_SECRET:-change-me-in-production}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost:5173}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@nihongo.local}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin123}
+    depends_on:
+      - nats
+      - content-service
+      - exam-service
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: nihongo-frontend
+    restart: unless-stopped
+    ports:
+      - '5173:5173'
+    environment:
+      API_URL: http://api-gateway:3000
+    depends_on:
+      - api-gateway
+
+volumes:
+  postgres_data:

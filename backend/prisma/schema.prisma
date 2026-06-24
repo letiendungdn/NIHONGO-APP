@@ -1,0 +1,181 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Lesson {
+  id           Int          @id @default(autoincrement())
+  lessonNumber Int          @unique
+  title        String?
+  vocabularies Vocabulary[]
+  grammars     Grammar[]
+  exercises    Exercise[]
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+}
+
+model Vocabulary {
+  id        Int      @id @default(autoincrement())
+  kanji     String?
+  kana      String
+  romaji    String
+  meaning   String
+  lessonId  Int
+  lesson    Lesson   @relation(fields: [lessonId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Grammar {
+  id          Int       @id @default(autoincrement())
+  pattern     String
+  meaning     String
+  explanation String?
+  lessonId    Int
+  lesson      Lesson    @relation(fields: [lessonId], references: [id])
+  examples    Example[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Example {
+  id        Int      @id @default(autoincrement())
+  jp        String
+  romaji    String
+  en        String?
+  vi        String?
+  grammarId Int
+  grammar   Grammar  @relation(fields: [grammarId], references: [id], onDelete: Cascade)
+}
+
+model Exercise {
+  id        Int      @id @default(autoincrement())
+  type      String   // "multiple_choice" or "fill_in_blank"
+  question  String
+  options   String?  // JSON stringified array of options if multiple choice
+  answer    String
+  lessonId  Int
+  lesson    Lesson   @relation(fields: [lessonId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model KanjiLesson {
+  id           Int          @id @default(autoincrement())
+  lessonNumber Int          @unique
+  title        String?
+  jlptLevel    String?
+  entries      KanjiEntry[]
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  @@index([lessonNumber])
+}
+
+model KanjiEntry {
+  id          Int          @id @default(autoincrement())
+  character   String
+  hanViet     String?
+  onyomi      String?
+  kunyomi     String?
+  meaningVi   String
+  mnemonicJp  String?
+  mnemonicVi  String?
+  imageUrl    String?
+  sortOrder   Int          @default(0)
+  lessonId    Int
+  lesson      KanjiLesson  @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  vocabularies KanjiVocab[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([lessonId])
+  @@index([character])
+}
+
+model KanjiVocab {
+  id           Int        @id @default(autoincrement())
+  word         String
+  reading      String
+  meaningVi    String
+  kanjiEntryId Int
+  kanjiEntry   KanjiEntry @relation(fields: [kanjiEntryId], references: [id], onDelete: Cascade)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@index([kanjiEntryId])
+}
+
+model User {
+  id            Int            @id @default(autoincrement())
+  email         String         @unique
+  passwordHash  String
+  role          Role           @default(USER)
+  name          String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  examResults   ExamResult[]
+  reviewLogs    ReviewLog[]
+  listeningLogs ListeningLog[]
+
+  @@index([role])
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model ExamResult {
+  id            Int      @id @default(autoincrement())
+  userId        Int?
+  user          User?    @relation(fields: [userId], references: [id])
+  examId        String
+  level         String
+  title         String
+  correctCount  Int
+  total         Int
+  percent       Int
+  passed        Boolean
+  sectionScores Json
+  submittedAt   DateTime @default(now())
+
+  @@index([userId])
+  @@index([level])
+}
+
+model ReviewLog {
+  id             Int       @id @default(autoincrement())
+  userId         Int
+  user           User      @relation(fields: [userId], references: [id])
+  kana           String
+  kanji          String?
+  meaning        String
+  lessonNumber   Int
+  wrongCount     Int       @default(1)
+  reviewStreak   Int       @default(0)
+  mastered       Boolean   @default(false)
+  lastReviewedAt DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@unique([userId, kana, lessonNumber])
+  @@index([userId, mastered])
+}
+
+model ListeningLog {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  date      String
+  seconds   Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, date])
+  @@index([userId])
+}
