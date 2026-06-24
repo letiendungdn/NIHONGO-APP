@@ -22,6 +22,7 @@ function mountKanjiVgSvg(
   svgText: string,
   width: number,
   height: number,
+  onCharClick?: (char: string) => void,
 ) {
   const svgWrapper = document.createElement('div');
   svgWrapper.innerHTML = extractSvgMarkup(svgText);
@@ -99,6 +100,7 @@ function mountKanjiVgSvg(
   charDiv.addEventListener('click', (e) => {
     e.stopPropagation();
     animateStrokes();
+    onCharClick?.(char);
   });
 
   charDiv.appendChild(svgWrapper);
@@ -109,10 +111,20 @@ interface Props {
   text: string;
   width?: number;
   height?: number;
+  compact?: boolean;
+  onCharClick?: (char: string, index: number) => void;
 }
 
-export default function StrokeOrder({ text, width = 100, height = 100 }: Props) {
+export default function StrokeOrder({
+  text,
+  width = 100,
+  height = 100,
+  compact = false,
+  onCharClick,
+}: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const onCharClickRef = useRef(onCharClick);
+  onCharClickRef.current = onCharClick;
   const writableText = getStrokeText(text);
 
   useEffect(() => {
@@ -128,22 +140,31 @@ export default function StrokeOrder({ text, width = 100, height = 100 }: Props) 
 
     const chars = [...writableText];
 
-    chars.forEach((char) => {
+    chars.forEach((char, index) => {
       const charDiv = document.createElement('div');
       charDiv.style.display = 'inline-block';
       charDiv.style.margin = '0 5px';
       containerRef.current?.appendChild(charDiv);
+
+      const handleCharClick = () => onCharClickRef.current?.(char, index);
 
       fetch(kanjiVgUrl(char))
         .then((res) => {
           if (!res.ok) throw new Error('SVG not found');
           return res.text();
         })
-        .then((svgText) => mountKanjiVgSvg(charDiv, char, svgText, width, height))
+        .then((svgText) =>
+          mountKanjiVgSvg(charDiv, char, svgText, width, height, handleCharClick),
+        )
         .catch(() => {
           charDiv.textContent = char;
           charDiv.style.fontSize = '3rem';
           charDiv.style.fontFamily = 'var(--font-jp)';
+          charDiv.style.cursor = 'pointer';
+          charDiv.addEventListener('click', (e) => {
+            e.stopPropagation();
+            handleCharClick();
+          });
         });
     });
   }, [writableText, width, height]);
@@ -160,9 +181,9 @@ export default function StrokeOrder({ text, width = 100, height = 100 }: Props) 
       <div
         ref={containerRef}
         className="stroke-order-container"
-        title="Nhấn vào chữ để xem lại"
+        title={onCharClick ? 'Nhấn vào chữ để xem lại và nghe phát âm' : 'Nhấn vào chữ để xem lại'}
       />
-      {writableText && (
+      {writableText && !compact && (
         <p
           style={{
             fontSize: '0.85rem',
@@ -170,7 +191,9 @@ export default function StrokeOrder({ text, width = 100, height = 100 }: Props) 
             marginTop: '0.5rem',
           }}
         >
-          (Nhấn vào chữ để xem lại)
+          {onCharClick
+            ? '(Nhấn vào chữ để xem lại và nghe phát âm)'
+            : '(Nhấn vào chữ để xem lại)'}
         </p>
       )}
     </div>

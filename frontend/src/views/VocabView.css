@@ -292,6 +292,21 @@
   margin-bottom: 0.5rem;
 }
 
+.stroke-kanji-btn {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+}
+
+.stroke-kanji-btn:hover {
+  opacity: 0.85;
+  transform: scale(1.02);
+}
+
 .stroke-drawing-box {
   width: 100%;
   display: flex;

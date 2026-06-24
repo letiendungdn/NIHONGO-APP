@@ -2,7 +2,17 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
+import {
+  jlptDaNangBriefing,
+  jlptDaNangExamDay,
+  jlptDaNangFees,
+  jlptDaNangOrganizer,
+  jlptDaNangSessions,
+  jlptDaNangVenues,
+} from '../data/jlptDaNangSchedule';
 import { examScheduleNote, jlptLevels, studyTips } from '../data/jlptRoadmap';
+import { useJlptDaNangScheduleQuery } from '../hooks/queries';
+import type { JlptAnnouncement, JlptDaNangSchedule } from '../types/api';
 import './JlptRoadmapView.css';
 
 const STORAGE_KEY = 'nihongo-jlpt-progress';
@@ -21,9 +31,59 @@ function saveProgress(progress: ProgressRecord): void {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
 }
 
+const ANNOUNCEMENT_KIND_LABEL: Record<JlptAnnouncement['kind'], string> = {
+  exam: 'Kỳ thi',
+  registration: 'Đăng ký',
+  fee: 'Lệ phí',
+  other: 'Thông báo',
+};
+
+function buildFallbackSchedule(): JlptDaNangSchedule {
+  return {
+    source: 'fallback',
+    fetchedAt: new Date().toISOString(),
+    organizer: {
+      ...jlptDaNangOrganizer,
+      registrationPortal: 'http://jlpt.ufl.udn.vn/',
+    },
+    fees: jlptDaNangFees,
+    venues: jlptDaNangVenues,
+    examDay: jlptDaNangExamDay,
+    briefing: jlptDaNangBriefing,
+    announcements: jlptDaNangSessions
+      .filter((s) => s.announcementUrl)
+      .map((s) => ({
+        title: s.label,
+        url: s.announcementUrl!,
+        updatedAt: null,
+        examDate: s.examDate.replace(/^Chủ nhật,\s*/i, '').replace(/\s*\(dự kiến\)/i, ''),
+        kind: 'exam' as const,
+      })),
+  };
+}
+
+function formatFetchedAt(iso: string): string {
+  return new Date(iso).toLocaleString('vi-VN', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
+
 export default function JlptRoadmapView() {
   const [activeId, setActiveId] = useState('n5');
   const [progress, setProgress] = useState(loadProgress);
+  const {
+    data: scheduleData,
+    isLoading: scheduleLoading,
+    isError: scheduleError,
+    refetch: refetchSchedule,
+    isFetching: scheduleFetching,
+  } = useJlptDaNangScheduleQuery();
+
+  const schedule = scheduleData ?? (scheduleError ? buildFallbackSchedule() : null);
 
   const level = jlptLevels.find((l) => l.id === activeId) ?? jlptLevels[0];
 
@@ -69,6 +129,145 @@ export default function JlptRoadmapView() {
           ))}
         </div>
       </header>
+
+      <section className="jlpt-section jlpt-schedule glass-panel">
+        <div className="jlpt-schedule-toolbar">
+          <h3>📍 Lịch thi JLPT tại Đà Nẵng</h3>
+          {schedule && (
+            <div className="jlpt-sync-meta">
+              <span
+                className={`jlpt-sync-badge ${schedule.source === 'live' ? 'live' : 'fallback'}`}
+              >
+                {schedule.source === 'live' ? 'Đồng bộ UFL' : 'Dữ liệu dự phòng'}
+              </span>
+              <span className="jlpt-sync-time">
+                Cập nhật: {formatFetchedAt(schedule.fetchedAt)}
+              </span>
+              <button
+                type="button"
+                className="btn btn-sm btn-outline"
+                onClick={() => refetchSchedule()}
+                disabled={scheduleFetching}
+              >
+                {scheduleFetching ? 'Đang tải…' : 'Làm mới'}
+              </button>
+            </div>
+          )}
+        </div>
+
+        <p className="jlpt-schedule-intro">
+          Điểm thi do{' '}
+          <strong>{schedule?.organizer.shortName ?? jlptDaNangOrganizer.shortName}</strong> tổ chức
+          — 2 kỳ/năm (tháng 7 & 12). Thông báo JLPT được tự động lấy từ website UFL (không có API
+          chính thức).
+        </p>
+
+        {scheduleLoading && !schedule && (
+          <p className="jlpt-schedule-loading">Đang đồng bộ thông báo từ UFL…</p>
+        )}
+
+        {schedule && schedule.announcements.length > 0 && (
+          <div className="jlpt-announcements">
+            <h4>Thông báo JLPT mới nhất</h4>
+            <ul className="jlpt-announcement-list">
+              {schedule.announcements.map((item) => (
+                <li key={item.url} className={`jlpt-announcement jlpt-announcement-${item.kind}`}>
+                  <div className="jlpt-announcement-head">
+                    <span className="jlpt-announcement-kind">
+                      {ANNOUNCEMENT_KIND_LABEL[item.kind]}
+                    </span>
+                    {item.examDate && (
+                      <span className="jlpt-announcement-date">Ngày thi: {item.examDate}</span>
+                    )}
+                  </div>
+                  <a href={item.url} target="_blank" rel="noreferrer" className="jlpt-announcement-title">
+                    {item.title}
+                  </a>
+                  {item.updatedAt && (
+                    <span className="jlpt-announcement-updated">Cập nhật: {item.updatedAt}</span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {schedule && (
+          <div className="jlpt-schedule-grid">
+            <div className="jlpt-schedule-block">
+              <h4>Địa điểm thi theo cấp độ</h4>
+              <ul className="jlpt-venue-list">
+                {schedule.venues.map((venue) => (
+                  <li key={venue.address}>
+                    <strong>{venue.levels}</strong>
+                    <span>
+                      {venue.address}, {venue.district}
+                    </span>
+                    {venue.note && <small>{venue.note}</small>}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="jlpt-schedule-block">
+              <h4>Giờ thi trong ngày</h4>
+              <ul className="jlpt-examday-list">
+                {schedule.examDay.map((slot) => (
+                  <li key={`${slot.levels}-${slot.venue}`}>
+                    <strong>{slot.levels}</strong>
+                    <span>
+                      Có mặt {slot.arriveAt} · Thi {slot.startAt}
+                    </span>
+                    <small>{slot.venue}</small>
+                  </li>
+                ))}
+              </ul>
+              <p className="jlpt-briefing-note">{schedule.briefing}</p>
+            </div>
+
+            <div className="jlpt-schedule-block">
+              <h4>Lệ phí & liên hệ</h4>
+              <ul className="jlpt-fee-list">
+                <li>
+                  <span>Hồ sơ</span>
+                  <strong>{schedule.fees.formFee}</strong>
+                </li>
+                <li>
+                  <span>Lệ phí thi</span>
+                  <strong>{schedule.fees.examFee}</strong>
+                </li>
+              </ul>
+              <p className="jlpt-fee-note">{schedule.fees.note}</p>
+              <address className="jlpt-contact">
+                <span>{schedule.organizer.address}</span>
+                <a href={`tel:${schedule.organizer.phone.replace(/\s/g, '')}`}>
+                  {schedule.organizer.phone}
+                </a>
+                <a href={`mailto:${schedule.organizer.email}`}>{schedule.organizer.email}</a>
+              </address>
+            </div>
+          </div>
+        )}
+
+        <div className="jlpt-schedule-actions">
+          <a
+            href={schedule?.organizer.website ?? jlptDaNangOrganizer.website}
+            target="_blank"
+            rel="noreferrer"
+            className="btn btn-outline jlpt-official-link"
+          >
+            Website UFL ↗
+          </a>
+          <a
+            href={schedule?.organizer.registrationPortal ?? 'http://jlpt.ufl.udn.vn/'}
+            target="_blank"
+            rel="noreferrer"
+            className="btn btn-outline jlpt-official-link"
+          >
+            Cổng đăng ký JLPT ↗
+          </a>
+        </div>
+      </section>
 
       <section className="jlpt-overview glass-panel">
         <div className="jlpt-overview-top">

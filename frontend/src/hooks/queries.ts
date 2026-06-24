@@ -4,6 +4,7 @@ import {
   fetchAuthMe,
   fetchExercises,
   fetchGrammars,
+  fetchJlptDaNangSchedule,
   fetchKanjiEntries,
   fetchKanjiLessons,
   fetchLessons,
@@ -22,6 +23,7 @@ export const queryKeys = {
   kanjiEntries: (lesson: number) => ['kanji', lesson] as const,
   listeningPlaylist: (from: number, to: number) => ['listening-playlist', from, to] as const,
   mockExamTemplates: ['mock-exam-templates'] as const,
+  jlptDaNangSchedule: ['jlpt-da-nang-schedule'] as const,
   authMe: ['auth', 'me'] as const,
   adminStats: ['admin', 'stats'] as const,
 };
@@ -93,6 +95,15 @@ export function useMockExamTemplatesQuery() {
     queryKey: queryKeys.mockExamTemplates,
     queryFn: fetchMockExamTemplates,
     staleTime: STALE_5M,
+  });
+}
+
+export function useJlptDaNangScheduleQuery() {
+  return useQuery({
+    queryKey: queryKeys.jlptDaNangSchedule,
+    queryFn: fetchJlptDaNangSchedule,
+    staleTime: 30 * 60 * 1000,
+    refetchOnWindowFocus: true,
   });
 }
 

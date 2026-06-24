@@ -4,6 +4,7 @@ import type {
   AuthUser,
   Exercise,
   Grammar,
+  JlptDaNangSchedule,
   KanjiEntry,
   KanjiLesson,
   Lesson,
@@ -76,6 +77,10 @@ export function fetchListeningPlaylist(lessonFrom = 1, lessonTo = 25, limit = 12
 
 export function fetchMockExamTemplates() {
   return apiRequest<MockExamTemplate[]>('/mock-exams');
+}
+
+export function fetchJlptDaNangSchedule() {
+  return apiRequest<JlptDaNangSchedule>('/jlpt/da-nang/schedule');
 }
 
 export function startMockExam(level: string) {

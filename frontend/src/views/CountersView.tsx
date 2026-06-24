@@ -3,8 +3,10 @@
 import { useState } from 'react';
 import { playAudio } from '../utils/speech';
 import PlayAllButton from '../components/PlayAllButton';
+import StrokeOrder from '../components/StrokeOrder';
 import { usePlayAll } from '../hooks/usePlayAll';
 import { counterCategories } from '../data/japaneseCounters';
+import { getStrokeText } from '../utils/japanese';
 import './CountersView.css';
 
 interface CounterItem {
@@ -13,6 +15,20 @@ interface CounterItem {
   romaji: string;
   vi: string;
   kanji?: string;
+}
+
+function strokeSize(text: string): { width: number; height: number } {
+  const len = [...getStrokeText(text)].length;
+  if (len <= 1) return { width: 64, height: 64 };
+  if (len === 2) return { width: 48, height: 48 };
+  return { width: 36, height: 36 };
+}
+
+function getWritableText(item: CounterItem): string | null {
+  const kanjiText = item.kanji ? getStrokeText(item.kanji) : '';
+  if (kanjiText) return kanjiText;
+  const kanaText = getStrokeText(item.kana);
+  return kanaText || null;
 }
 
 export default function CountersView() {
@@ -60,25 +76,52 @@ export default function CountersView() {
       </div>
 
       <div className="counters-grid">
-        {(category.items as CounterItem[]).map((item) => (
-          <button
-            key={`${category.id}-${item.n}-${item.kana}`}
-            type="button"
-            className="counter-card glass-panel"
-            onClick={() => playAudio(item.kana)}
-          >
-            <span className="counter-num">{item.n}</span>
-            {item.kanji && (
-              <span className="counter-kanji japanese-text">{item.kanji}</span>
-            )}
-            <span className="counter-kana japanese-text">{item.kana}</span>
-            <span className="counter-romaji">{item.romaji}</span>
-            <span className="counter-vi">{item.vi}</span>
-            <span className="counter-audio" aria-hidden>
-              🔊
-            </span>
-          </button>
-        ))}
+        {(category.items as CounterItem[]).map((item) => {
+          const writableText = getWritableText(item);
+          const strokeDims = writableText ? strokeSize(writableText) : null;
+
+          return (
+            <div
+              key={`${category.id}-${item.n}-${item.kana}`}
+              className="counter-card glass-panel"
+              role="button"
+              tabIndex={0}
+              onClick={() => playAudio(item.kana)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  playAudio(item.kana);
+                }
+              }}
+            >
+              <span className="counter-num">{item.n}</span>
+              {writableText && strokeDims ? (
+                <div
+                  className="counter-stroke"
+                  onClick={(e) => e.stopPropagation()}
+                  onKeyDown={(e) => e.stopPropagation()}
+                >
+                  <StrokeOrder
+                    text={writableText}
+                    width={strokeDims.width}
+                    height={strokeDims.height}
+                    compact
+                  />
+                </div>
+              ) : (
+                item.kanji && (
+                  <span className="counter-kanji japanese-text">{item.kanji}</span>
+                )
+              )}
+              <span className="counter-kana japanese-text">{item.kana}</span>
+              <span className="counter-romaji">{item.romaji}</span>
+              <span className="counter-vi">{item.vi}</span>
+              <span className="counter-audio" aria-hidden>
+                🔊
+              </span>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

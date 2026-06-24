@@ -134,6 +134,47 @@ export interface PaginatedResponse<T> {
   limit: number;
 }
 
+export interface JlptAnnouncement {
+  title: string;
+  url: string;
+  updatedAt: string | null;
+  examDate: string | null;
+  kind: 'exam' | 'registration' | 'fee' | 'other';
+}
+
+export interface JlptDaNangSchedule {
+  source: 'live' | 'fallback';
+  fetchedAt: string;
+  organizer: {
+    name: string;
+    shortName: string;
+    address: string;
+    phone: string;
+    email: string;
+    website: string;
+    registrationPortal: string;
+  };
+  fees: {
+    formFee: string;
+    examFee: string;
+    note: string;
+  };
+  venues: Array<{
+    address: string;
+    district: string;
+    levels: string;
+    note?: string;
+  }>;
+  examDay: Array<{
+    levels: string;
+    arriveAt: string;
+    startAt: string;
+    venue: string;
+  }>;
+  briefing: string;
+  announcements: JlptAnnouncement[];
+}
+
 export interface ApiErrorBody {
   message?: string | string[];
   statusCode?: number;

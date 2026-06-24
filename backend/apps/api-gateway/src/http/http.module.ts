@@ -8,6 +8,8 @@ import { ListeningController } from './listening.controller';
 import { MockExamsController } from './mock-exams.controller';
 import { ProgressController } from './progress.controller';
 import { ImportController } from './import.controller';
+import { JlptScheduleController } from './jlpt-schedule.controller';
+import { JlptScheduleService } from './jlpt-schedule.service';
 
 @Module({
   controllers: [
@@ -20,6 +22,8 @@ import { ImportController } from './import.controller';
     MockExamsController,
     ProgressController,
     ImportController,
+    JlptScheduleController,
   ],
+  providers: [JlptScheduleService],
 })
 export class HttpModule {}

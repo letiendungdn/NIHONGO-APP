@@ -93,7 +93,7 @@
 
 .counters-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
   gap: 1rem;
   width: 100%;
 }
@@ -110,6 +110,26 @@
   text-align: center;
   color: var(--text-primary);
   transition: transform var(--transition-fast), border-color var(--transition-fast);
+}
+
+.counter-stroke {
+  margin-top: 0.25rem;
+  min-height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.counter-stroke .stroke-order-wrapper {
+  gap: 0;
+}
+
+.counter-stroke .stroke-order-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.15rem;
 }
 
 .counter-card:hover {

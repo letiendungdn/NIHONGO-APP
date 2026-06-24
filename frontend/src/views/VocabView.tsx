@@ -59,6 +59,12 @@ export default function VocabView() {
 
   const currentVocab = lessonVocab[currentIndex];
 
+  useEffect(() => {
+    if (isPlayingAll || !currentVocab?.kana) return undefined;
+    const timer = setTimeout(() => playAudio(currentVocab.kana), 200);
+    return () => clearTimeout(timer);
+  }, [currentIndex, currentLesson, currentVocab?.kana, isPlayingAll]);
+
   const handleNext = () => {
     if (!lessonVocab.length) return;
     setIsFlipped(false);
@@ -78,6 +84,15 @@ export default function VocabView() {
   const handlePronounce = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (currentVocab) playAudio(currentVocab.kana);
+  };
+
+  const handleStrokeCharClick = (char: string) => {
+    playAudio(char);
+  };
+
+  const handleStrokeTextClick = (text: string) => {
+    const strokeText = getStrokeText(text);
+    if (strokeText) playAudio(strokeText);
   };
 
   const handlePlayAll = () => {
@@ -219,27 +234,56 @@ export default function VocabView() {
               <>
                 <div className="stroke-section">
                   <p className="stroke-section-label">Kanji</p>
-                  <p className="stroke-kanji">{getStrokeText(currentVocab.kanji!)}</p>
+                  <button
+                    type="button"
+                    className="stroke-kanji stroke-kanji-btn"
+                    onClick={() => handleStrokeTextClick(currentVocab.kanji!)}
+                  >
+                    {getStrokeText(currentVocab.kanji!)}
+                  </button>
                   <div className="stroke-drawing-box">
-                    <StrokeOrder text={currentVocab.kanji!} />
+                    <StrokeOrder
+                      text={currentVocab.kanji!}
+                      onCharClick={handleStrokeCharClick}
+                    />
                   </div>
                 </div>
                 <div className="stroke-section">
                   <p className="stroke-section-label">Kana</p>
-                  <p className="stroke-kanji">{getStrokeText(currentVocab.kana)}</p>
+                  <button
+                    type="button"
+                    className="stroke-kanji stroke-kanji-btn"
+                    onClick={() => handleStrokeTextClick(currentVocab.kana)}
+                  >
+                    {getStrokeText(currentVocab.kana)}
+                  </button>
                   <div className="stroke-drawing-box">
-                    <StrokeOrder text={currentVocab.kana} width={80} height={80} />
+                    <StrokeOrder
+                      text={currentVocab.kana}
+                      width={80}
+                      height={80}
+                      onCharClick={handleStrokeCharClick}
+                    />
                   </div>
                 </div>
               </>
             ) : (
               <>
-                <p className="stroke-kanji">
+                <button
+                  type="button"
+                  className="stroke-kanji stroke-kanji-btn"
+                  onClick={() =>
+                    handleStrokeTextClick(currentVocab.kanji || currentVocab.kana)
+                  }
+                >
                   {getStrokeText(currentVocab.kanji || currentVocab.kana) ||
                     currentVocab.kana}
-                </p>
+                </button>
                 <div className="stroke-drawing-box">
-                  <StrokeOrder text={currentVocab.kanji || currentVocab.kana} />
+                  <StrokeOrder
+                    text={currentVocab.kanji || currentVocab.kana}
+                    onCharClick={handleStrokeCharClick}
+                  />
                 </div>
               </>
             )}
