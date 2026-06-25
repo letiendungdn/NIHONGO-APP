@@ -285,3 +285,55 @@ export interface AnalyticsData {
 export function fetchAnalytics(token: string) {
   return apiRequest<AnalyticsData>('/analytics', { token });
 }
+
+// ─── Daily notes ─────────────────────────────────────────────
+
+export interface DailyNoteRow {
+  date: string;
+  content: string;
+  updatedAt: string;
+}
+
+export function fetchDailyNotes(token: string) {
+  return apiRequest<DailyNoteRow[]>('/progress/notes', { token });
+}
+
+export function upsertDailyNote(token: string, date: string, content: string) {
+  return apiRequest<DailyNoteRow>('/progress/notes', {
+    method: 'PUT',
+    token,
+    body: JSON.stringify({ date, content }),
+  });
+}
+
+// ─── Daily goals ─────────────────────────────────────────────
+
+export interface DailyGoalItemRow {
+  id: string;
+  kind: string;
+  label: string;
+  done: boolean;
+  target?: number;
+}
+
+export interface DailyGoalsRow {
+  date: string;
+  items: DailyGoalItemRow[];
+  updatedAt: string;
+}
+
+export function fetchDailyGoals(token: string) {
+  return apiRequest<DailyGoalsRow[]>('/progress/goals', { token });
+}
+
+export function upsertDailyGoals(
+  token: string,
+  date: string,
+  items: DailyGoalItemRow[],
+) {
+  return apiRequest<DailyGoalsRow>('/progress/goals', {
+    method: 'PUT',
+    token,
+    body: JSON.stringify({ date, items }),
+  });
+}

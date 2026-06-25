@@ -9,6 +9,7 @@ const navItems = [
   { href: '/kana', label: 'Kana' },
   { href: '/pronunciation', label: 'Phát âm' },
   { href: '/daily-listening', label: 'Nghe' },
+  { href: '/notes', label: 'Hằng ngày' },
   { href: '/vocab', label: 'Vocabulary' },
   { href: '/vocab-review', label: 'Từ sai' },
   { href: '/grammar', label: 'Grammar' },

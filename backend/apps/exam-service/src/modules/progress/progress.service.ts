@@ -1,7 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@app/prisma';
 import { SrsCardRepository } from '@app/prisma/srs-card.repository';
-import { LogListeningDto, SyncReviewDto } from '@app/contracts';
+import {
+  LogListeningDto,
+  SyncReviewDto,
+  UpsertDailyGoalsDto,
+  UpsertDailyNoteDto,
+} from '@app/contracts';
 
 function fallbackContentId(kana: string, lessonNumber: number): number {
   let hash = lessonNumber * 9973;
@@ -124,5 +129,47 @@ export class ProgressService {
       examHistory: examResults,
       listeningHistory: listeningLogs,
     };
+  }
+
+  async upsertDailyNote(userId: number, dto: UpsertDailyNoteDto) {
+    return this.prisma.dailyNote.upsert({
+      where: { userId_date: { userId, date: dto.date } },
+      create: { userId, date: dto.date, content: dto.content },
+      update: { content: dto.content },
+    });
+  }
+
+  listDailyNotes(userId: number, limit = 90) {
+    return this.prisma.dailyNote.findMany({
+      where: { userId },
+      orderBy: { date: 'desc' },
+      take: limit,
+      select: {
+        date: true,
+        content: true,
+        updatedAt: true,
+      },
+    });
+  }
+
+  upsertDailyGoals(userId: number, dto: UpsertDailyGoalsDto) {
+    return this.prisma.dailyGoal.upsert({
+      where: { userId_date: { userId, date: dto.date } },
+      create: { userId, date: dto.date, items: dto.items },
+      update: { items: dto.items },
+    });
+  }
+
+  listDailyGoals(userId: number, limit = 90) {
+    return this.prisma.dailyGoal.findMany({
+      where: { userId },
+      orderBy: { date: 'desc' },
+      take: limit,
+      select: {
+        date: true,
+        items: true,
+        updatedAt: true,
+      },
+    });
   }
 }

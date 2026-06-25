@@ -48,4 +48,8 @@ export const PROGRESS_PATTERNS = {
   LOG_LISTENING: 'progress.listening.log',
   GET_LISTENING_LOGS: 'progress.listening.get',
   GET_ANALYTICS: 'progress.analytics.get',
+  UPSERT_DAILY_NOTE: 'progress.notes.upsert',
+  GET_DAILY_NOTES: 'progress.notes.list',
+  UPSERT_DAILY_GOALS: 'progress.goals.upsert',
+  GET_DAILY_GOALS: 'progress.goals.list',
 } as const;

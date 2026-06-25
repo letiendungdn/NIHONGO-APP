@@ -6,6 +6,8 @@ import {
   LogListeningDto,
   PROGRESS_PATTERNS,
   SyncReviewDto,
+  UpsertDailyNoteDto,
+  UpsertDailyGoalsDto,
 } from '@app/contracts';
 import { MockExamsService } from './modules/mock-exams/mock-exams.service';
 import { ProgressService } from './modules/progress/progress.service';
@@ -69,6 +71,30 @@ export class ExamMsController {
   @MessagePattern(PROGRESS_PATTERNS.GET_ANALYTICS)
   getAnalytics(@Payload() data: { userId: number }) {
     return this.progressService.getAnalytics(data.userId);
+  }
+
+  @MessagePattern(PROGRESS_PATTERNS.UPSERT_DAILY_NOTE)
+  upsertDailyNote(
+    @Payload() data: { userId: number; dto: UpsertDailyNoteDto },
+  ) {
+    return this.progressService.upsertDailyNote(data.userId, data.dto);
+  }
+
+  @MessagePattern(PROGRESS_PATTERNS.GET_DAILY_NOTES)
+  getDailyNotes(@Payload() data: { userId: number; limit?: number }) {
+    return this.progressService.listDailyNotes(data.userId, data.limit);
+  }
+
+  @MessagePattern(PROGRESS_PATTERNS.UPSERT_DAILY_GOALS)
+  upsertDailyGoals(
+    @Payload() data: { userId: number; dto: UpsertDailyGoalsDto },
+  ) {
+    return this.progressService.upsertDailyGoals(data.userId, data.dto);
+  }
+
+  @MessagePattern(PROGRESS_PATTERNS.GET_DAILY_GOALS)
+  getDailyGoals(@Payload() data: { userId: number; limit?: number }) {
+    return this.progressService.listDailyGoals(data.userId, data.limit);
   }
 
   @EventPattern(EXAM_EVENTS.EXAM_SUBMITTED)

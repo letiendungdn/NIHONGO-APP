@@ -476,6 +476,8 @@ model User {
   srsCards      SrsCard[]
   listeningLogs ListeningLog[]
   studySessions StudySession[]
+  dailyNotes    DailyNote[]
+  dailyGoals    DailyGoal[]
 
   @@index([role])
 }
@@ -652,4 +654,32 @@ model StudySession {
 
   @@unique([userId, date])
   @@index([userId])
+}
+
+// Ghi chú học tập hằng ngày
+model DailyNote {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date      String
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, date])
+  @@index([userId, date])
+}
+
+// Mục tiêu học tập hằng ngày (danh sách checkbox JSON)
+model DailyGoal {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date      String
+  items     Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, date])
+  @@index([userId, date])
 }

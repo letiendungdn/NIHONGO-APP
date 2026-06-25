@@ -66,3 +66,49 @@ export class LogListeningDto {
   @Min(0)
   seconds: number;
 }
+
+export class UpsertDailyNoteDto {
+  @ApiProperty({ example: '2026-06-26' })
+  @IsString()
+  date: string;
+
+  @ApiProperty()
+  @IsString()
+  content: string;
+}
+
+export class DailyGoalItemDto {
+  @ApiProperty()
+  @IsString()
+  id: string;
+
+  @ApiProperty()
+  @IsString()
+  kind: string;
+
+  @ApiProperty()
+  @IsString()
+  label: string;
+
+  @ApiProperty()
+  @IsBoolean()
+  done: boolean;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  target?: number;
+}
+
+export class UpsertDailyGoalsDto {
+  @ApiProperty({ example: '2026-06-26' })
+  @IsString()
+  date: string;
+
+  @ApiProperty({ type: [DailyGoalItemDto] })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => DailyGoalItemDto)
+  items: DailyGoalItemDto[];
+}
