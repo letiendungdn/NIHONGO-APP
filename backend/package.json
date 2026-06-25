@@ -6,10 +6,8 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build:data": "ts-node prisma/scripts/build-data.ts",
-    "refresh:vocab-vi": "ts-node prisma/scripts/build-data.ts --vocab-only",
-    "build:kll": "ts-node prisma/scripts/build-kll-data.ts",
     "seed:minna": "ts-node prisma/seed-minna.ts",
+    "seed:reference": "ts-node prisma/seed-reference.ts",
     "seed:kll": "ts-node prisma/seed-kll.ts",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start api-gateway",

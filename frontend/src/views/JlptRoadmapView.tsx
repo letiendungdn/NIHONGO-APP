@@ -3,16 +3,12 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import {
-  jlptDaNangBriefing,
-  jlptDaNangExamDay,
-  jlptDaNangFees,
-  jlptDaNangOrganizer,
-  jlptDaNangSessions,
-  jlptDaNangVenues,
-} from '../data/jlptDaNangSchedule';
-import { examScheduleNote, jlptLevels, studyTips } from '../data/jlptRoadmap';
-import { useJlptDaNangScheduleQuery } from '../hooks/queries';
+  useJlptDaNangScheduleQuery,
+  useJlptDaNangStaticQuery,
+  useJlptRoadmapQuery,
+} from '../hooks/queries';
 import type { JlptAnnouncement, JlptDaNangSchedule } from '../types/api';
+import type { JlptDaNangSchedulePayload } from '../types/reference';
 import './JlptRoadmapView.css';
 
 const STORAGE_KEY = 'nihongo-jlpt-progress';
@@ -38,19 +34,19 @@ const ANNOUNCEMENT_KIND_LABEL: Record<JlptAnnouncement['kind'], string> = {
   other: 'Thông báo',
 };
 
-function buildFallbackSchedule(): JlptDaNangSchedule {
+function buildFallbackSchedule(staticData: JlptDaNangSchedulePayload): JlptDaNangSchedule {
   return {
     source: 'fallback',
     fetchedAt: new Date().toISOString(),
     organizer: {
-      ...jlptDaNangOrganizer,
+      ...staticData.organizer,
       registrationPortal: 'http://jlpt.ufl.udn.vn/',
     },
-    fees: jlptDaNangFees,
-    venues: jlptDaNangVenues,
-    examDay: jlptDaNangExamDay,
-    briefing: jlptDaNangBriefing,
-    announcements: jlptDaNangSessions
+    fees: staticData.fees,
+    venues: staticData.venues,
+    examDay: staticData.examDay,
+    briefing: staticData.briefing,
+    announcements: staticData.sessions
       .filter((s) => s.announcementUrl)
       .map((s) => ({
         title: s.label,
@@ -73,6 +69,12 @@ function formatFetchedAt(iso: string): string {
 }
 
 export default function JlptRoadmapView() {
+  const { data: roadmap, isLoading: roadmapLoading } = useJlptRoadmapQuery();
+  const { data: staticSchedule } = useJlptDaNangStaticQuery();
+  const jlptLevels = roadmap?.levels ?? [];
+  const studyTips = roadmap?.studyTips ?? [];
+  const examScheduleNote = roadmap?.examScheduleNote ?? '';
+
   const [activeId, setActiveId] = useState('n5');
   const [progress, setProgress] = useState(loadProgress);
   const {
@@ -83,12 +85,14 @@ export default function JlptRoadmapView() {
     isFetching: scheduleFetching,
   } = useJlptDaNangScheduleQuery();
 
-  const schedule = scheduleData ?? (scheduleError ? buildFallbackSchedule() : null);
+  const schedule =
+    scheduleData ??
+    (scheduleError && staticSchedule ? buildFallbackSchedule(staticSchedule) : null);
 
   const level = jlptLevels.find((l) => l.id === activeId) ?? jlptLevels[0];
 
   const allTaskIds = useMemo(
-    () => level.phases.flatMap((p) => p.tasks.map((t) => t.id)),
+    () => level?.phases.flatMap((p) => p.tasks.map((t) => t.id)) ?? [],
     [level],
   );
 
@@ -105,13 +109,21 @@ export default function JlptRoadmapView() {
     setProgress((prev) => ({ ...prev, [taskId]: !prev[taskId] }));
   };
 
+  if (roadmapLoading || !level) {
+    return (
+      <div className="container jlpt-roadmap">
+        <p style={{ textAlign: 'center', padding: '2rem' }}>Đang tải lộ trình JLPT...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="container jlpt-roadmap">
       <header className="jlpt-header">
         <h2 className="view-title">Lộ trình luyện thi JLPT</h2>
         <p className="jlpt-subtitle">
-          Lộ trình gắn với tài liệu có sẵn trong app: Minna no Nihongo, Kanji Look and Learn,
-          Quiz và bài luyện bổ trợ.
+          Lộ trình gắn Minna, Kanji KLL trong app — kèm sách luyện thi N5: Shin Nihongo no Kiso,
+          Shin Kanzen Master, Sō-Matome (文法 · 語彙 · 漢字) và đề Choukai / Dokkai.
         </p>
 
         <div className="jlpt-level-tabs">
@@ -157,7 +169,7 @@ export default function JlptRoadmapView() {
 
         <p className="jlpt-schedule-intro">
           Điểm thi do{' '}
-          <strong>{schedule?.organizer.shortName ?? jlptDaNangOrganizer.shortName}</strong> tổ chức
+          <strong>{schedule?.organizer.shortName ?? staticSchedule?.organizer.shortName}</strong> tổ chức
           — 2 kỳ/năm (tháng 7 & 12). Thông báo JLPT được tự động lấy từ website UFL (không có API
           chính thức).
         </p>
@@ -251,7 +263,7 @@ export default function JlptRoadmapView() {
 
         <div className="jlpt-schedule-actions">
           <a
-            href={schedule?.organizer.website ?? jlptDaNangOrganizer.website}
+            href={schedule?.organizer.website ?? staticSchedule?.organizer.website}
             target="_blank"
             rel="noreferrer"
             className="btn btn-outline jlpt-official-link"
@@ -299,7 +311,7 @@ export default function JlptRoadmapView() {
       </section>
 
       <section className="jlpt-section">
-        <h3>📚 Tài liệu trong app</h3>
+        <h3>📚 Tài liệu & sách luyện thi</h3>
         <div className="jlpt-materials">
           {level.materials.map((mat) => (
             <article key={mat.title} className="jlpt-material-card glass-panel">

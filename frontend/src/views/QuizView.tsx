@@ -10,6 +10,7 @@ import './QuizView.css';
 
 function parseOptions(options: Exercise['options']): string[] {
   if (!options) return [];
+  if (Array.isArray(options)) return options;
   try {
     const parsed = JSON.parse(options) as unknown;
     return Array.isArray(parsed) ? parsed.map(String) : [];

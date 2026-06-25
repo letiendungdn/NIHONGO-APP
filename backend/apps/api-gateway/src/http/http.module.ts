@@ -10,6 +10,7 @@ import { ProgressController } from './progress.controller';
 import { ImportController } from './import.controller';
 import { JlptScheduleController } from './jlpt-schedule.controller';
 import { JlptScheduleService } from './jlpt-schedule.service';
+import { ReferenceController } from './reference.controller';
 
 @Module({
   controllers: [
@@ -23,6 +24,7 @@ import { JlptScheduleService } from './jlpt-schedule.service';
     ProgressController,
     ImportController,
     JlptScheduleController,
+    ReferenceController,
   ],
   providers: [JlptScheduleService],
 })

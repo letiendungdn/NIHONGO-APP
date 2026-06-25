@@ -36,6 +36,18 @@ enum ContentType {
   KANJI
 }
 
+enum KanaScript {
+  HIRAGANA
+  KATAKANA
+}
+
+enum JlptSessionStatus {
+  REGISTRATION_OPEN
+  REGISTRATION_CLOSED
+  UPCOMING
+  PAST
+}
+
 // ─────────────────────────────────────────────
 // Content
 // ─────────────────────────────────────────────
@@ -106,20 +118,282 @@ model Example {
 }
 
 model Exercise {
-  id          Int          @id @default(autoincrement())
+  id          Int              @id @default(autoincrement())
   type        ExerciseType
   question    String
-  options     Json?
   answer      String
   explanation String?
   audioUrl    String?
-  difficulty  Int          @default(1)
+  difficulty  Int              @default(1)
   lessonId    Int
-  lesson      Lesson       @relation(fields: [lessonId], references: [id])
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  lesson      Lesson           @relation(fields: [lessonId], references: [id])
+  optionsList ExerciseOption[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
 
   @@index([lessonId])
+}
+
+model ExerciseOption {
+  id         Int      @id @default(autoincrement())
+  exerciseId Int
+  exercise   Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+  text       String
+  sortOrder  Int      @default(0)
+
+  @@index([exerciseId, sortOrder])
+}
+
+// ─────────────────────────────────────────────
+// Kana charts
+// ─────────────────────────────────────────────
+
+model KanaSection {
+  id        Int         @id @default(autoincrement())
+  script    KanaScript
+  slug      String
+  title     String
+  subtitle  String?
+  columns   Int         @default(5)
+  sortOrder Int         @default(0)
+  cells     KanaCell[]
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  @@unique([script, slug])
+  @@index([script, sortOrder])
+}
+
+model KanaCell {
+  id        Int         @id @default(autoincrement())
+  sectionId Int
+  section   KanaSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  rowIndex  Int
+  colIndex  Int
+  kana      String      @default("")
+  romaji    String      @default("")
+
+  @@unique([sectionId, rowIndex, colIndex])
+  @@index([sectionId])
+}
+
+// ─────────────────────────────────────────────
+// Japanese counters
+// ─────────────────────────────────────────────
+
+model CounterCategory {
+  id        Int           @id @default(autoincrement())
+  slug      String        @unique
+  label     String
+  hint      String
+  sortOrder Int           @default(0)
+  items     CounterItem[]
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+model CounterItem {
+  id            Int             @id @default(autoincrement())
+  categoryId    Int
+  category      CounterCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  displayNumber String
+  kanji         String?
+  kana          String
+  romaji        String
+  meaningVi     String
+  sortOrder     Int             @default(0)
+
+  @@index([categoryId, sortOrder])
+}
+
+// ─────────────────────────────────────────────
+// Daily listening
+// ─────────────────────────────────────────────
+
+model ListeningConfig {
+  id          Int @id @default(1)
+  goalMinutes Int @default(15)
+}
+
+model PodcastResource {
+  id          Int      @id @default(autoincrement())
+  externalKey String   @unique
+  title       String
+  description String
+  url         String
+  level       String
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model ListeningPreset {
+  id          Int      @id @default(autoincrement())
+  externalKey String   @unique
+  label       String
+  lessonFrom  Int
+  lessonTo    Int
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ─────────────────────────────────────────────
+// JLPT Đà Nẵng (static fallback)
+// ─────────────────────────────────────────────
+
+model JlptOrganizer {
+  id               Int      @id @default(1)
+  name             String
+  shortName        String
+  address          String
+  phone            String
+  email            String
+  website          String
+  announcementsUrl String
+  updatedAt        DateTime @updatedAt
+}
+
+model JlptExamFeeInfo {
+  id      Int    @id @default(1)
+  formFee String
+  examFee String
+  note    String
+}
+
+model JlptExamBriefing {
+  id   Int    @id @default(1)
+  text String
+}
+
+model JlptExamSession {
+  id                 Int               @id @default(autoincrement())
+  externalKey        String            @unique
+  label              String
+  examDate           String
+  registrationPeriod String
+  status             JlptSessionStatus
+  statusLabel        String
+  announcementUrl    String?
+  sortOrder          Int               @default(0)
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+}
+
+model JlptExamVenue {
+  id        Int      @id @default(autoincrement())
+  address   String
+  district  String
+  levels    String
+  note      String?
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model JlptExamDaySlot {
+  id        Int      @id @default(autoincrement())
+  levels    String
+  arriveAt  String
+  startAt   String
+  venue     String
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ─────────────────────────────────────────────
+// JLPT roadmap
+// ─────────────────────────────────────────────
+
+model JlptRoadmapMeta {
+  id               Int    @id @default(1)
+  examScheduleNote String
+}
+
+model StudyTip {
+  id        Int      @id @default(autoincrement())
+  text      String
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model JlptRoadmapLevel {
+  id           Int                      @id @default(autoincrement())
+  externalKey  String                   @unique
+  label        String
+  badge        String
+  color        String
+  duration     String
+  vocabTarget  String
+  kanjiTarget  String
+  passScore    String
+  summary      String
+  sortOrder    Int                      @default(0)
+  examSections JlptRoadmapExamSection[]
+  materials    JlptRoadmapMaterial[]
+  phases       JlptRoadmapPhase[]
+  createdAt    DateTime                 @default(now())
+  updatedAt    DateTime                 @updatedAt
+}
+
+model JlptRoadmapExamSection {
+  id        Int              @id @default(autoincrement())
+  levelId   Int
+  level     JlptRoadmapLevel @relation(fields: [levelId], references: [id], onDelete: Cascade)
+  name      String
+  points    Int
+  time      String
+  sortOrder Int              @default(0)
+
+  @@index([levelId, sortOrder])
+}
+
+model JlptRoadmapMaterial {
+  id            Int              @id @default(autoincrement())
+  levelId       Int
+  level         JlptRoadmapLevel @relation(fields: [levelId], references: [id], onDelete: Cascade)
+  title         String
+  description   String
+  scope         String
+  inAppPath     String?
+  inAppLabel    String?
+  externalUrl   String?
+  externalLabel String?
+  sortOrder     Int              @default(0)
+
+  @@index([levelId, sortOrder])
+}
+
+model JlptRoadmapPhase {
+  id          Int               @id @default(autoincrement())
+  levelId     Int
+  level       JlptRoadmapLevel  @relation(fields: [levelId], references: [id], onDelete: Cascade)
+  externalKey String
+  title       String
+  subtitle    String
+  sortOrder   Int               @default(0)
+  tasks       JlptRoadmapTask[]
+
+  @@unique([levelId, externalKey])
+  @@index([levelId, sortOrder])
+}
+
+model JlptRoadmapTask {
+  id            Int              @id @default(autoincrement())
+  phaseId       Int
+  phase         JlptRoadmapPhase @relation(fields: [phaseId], references: [id], onDelete: Cascade)
+  externalKey   String
+  text          String
+  inAppPath     String?
+  inAppLabel    String?
+  externalUrl   String?
+  externalLabel String?
+  sortOrder     Int              @default(0)
+
+  @@unique([phaseId, externalKey])
+  @@index([phaseId, sortOrder])
 }
 
 // ─────────────────────────────────────────────

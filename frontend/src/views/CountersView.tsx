@@ -5,17 +5,10 @@ import { playAudio } from '../utils/speech';
 import PlayAllButton from '../components/PlayAllButton';
 import StrokeOrder from '../components/StrokeOrder';
 import { usePlayAll } from '../hooks/usePlayAll';
-import { counterCategories } from '../data/japaneseCounters';
+import { useJapaneseCountersQuery } from '../hooks/queries';
+import type { CounterItem } from '../types/reference';
 import { getStrokeText } from '../utils/japanese';
 import './CountersView.css';
-
-interface CounterItem {
-  n: number | string;
-  kana: string;
-  romaji: string;
-  vi: string;
-  kanji?: string;
-}
 
 function strokeSize(text: string): { width: number; height: number } {
   const len = [...getStrokeText(text)].length;
@@ -32,10 +25,22 @@ function getWritableText(item: CounterItem): string | null {
 }
 
 export default function CountersView() {
-  const [activeId, setActiveId] = useState(counterCategories[0].id);
+  const { data, isLoading } = useJapaneseCountersQuery();
+  const counterCategories = data?.categories ?? [];
+  const [activeId, setActiveId] = useState('');
   const { isPlayingAll, startPlayAll, stopPlayAll } = usePlayAll();
 
-  const category = counterCategories.find((c) => c.id === activeId) ?? counterCategories[0];
+  const resolvedActiveId = activeId || counterCategories[0]?.id || '';
+  const category =
+    counterCategories.find((c) => c.id === resolvedActiveId) ?? counterCategories[0];
+
+  if (isLoading || !category) {
+    return (
+      <div className="container counters-view">
+        <p style={{ textAlign: 'center', padding: '2rem' }}>Đang tải dữ liệu đếm số...</p>
+      </div>
+    );
+  }
 
   const handlePlayAll = () => {
     startPlayAll(category.items.map((item) => item.kana));
@@ -54,7 +59,7 @@ export default function CountersView() {
             <button
               key={cat.id}
               type="button"
-              className={`btn tab-btn ${activeId === cat.id ? 'active' : ''}`}
+              className={`btn tab-btn ${resolvedActiveId === cat.id ? 'active' : ''}`}
               onClick={() => {
                 stopPlayAll();
                 setActiveId(cat.id);

@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { playAudio } from '../utils/speech';
 import PlayAllButton from '../components/PlayAllButton';
 import { usePlayAll } from '../hooks/usePlayAll';
-import { HIRAGANA_SECTIONS, KATAKANA_SECTIONS } from '../data/kanaCharts';
+import { useKanaChartsQuery } from '../hooks/queries';
 import StrokeOrder from '../components/StrokeOrder';
 import './KanaView.css';
 
@@ -13,9 +13,13 @@ export default function KanaView() {
   const [playAudioEnabled, setPlayAudioEnabled] = useState(true);
   const [selectedKana, setSelectedKana] = useState<string | null>(null);
   const [playingKana, setPlayingKana] = useState<string | null>(null);
+  const { data: kanaCharts, isLoading } = useKanaChartsQuery();
   const { isPlayingAll, startPlayAll, stopPlayAll } = usePlayAll();
 
-  const currentSections = activeTab === 'hiragana' ? HIRAGANA_SECTIONS : KATAKANA_SECTIONS;
+  const currentSections =
+    activeTab === 'hiragana'
+      ? (kanaCharts?.hiraganaSections ?? [])
+      : (kanaCharts?.katakanaSections ?? []);
 
   const kanaList = useMemo(
     () =>
@@ -64,6 +68,10 @@ export default function KanaView() {
 
   return (
     <div className="container kana-view">
+      {isLoading ? (
+        <p style={{ textAlign: 'center', padding: '2rem' }}>Đang tải bảng kana...</p>
+      ) : (
+        <>
       <div className="kana-header">
         <h2 className="view-title">Kana Alphabet</h2>
         <div className="tab-buttons">
@@ -144,6 +152,8 @@ export default function KanaView() {
           </div>
         )}
       </div>
+        </>
+      )}
     </div>
   );
 }

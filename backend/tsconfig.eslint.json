@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "apps/**/*.ts",
+    "libs/**/*.ts",
+    "test/**/*.ts",
+    "prisma/**/*.ts"
+  ],
+  "exclude": ["**/dist/**", "node_modules"]
+}

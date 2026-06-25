@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { ListeningPlaylistItem } from '../types/api';
 import {
-  GOAL_SECONDS,
+  DEFAULT_GOAL_SECONDS,
   formatListeningTime,
   loadListeningStats,
   saveListeningMinutes,
@@ -33,7 +33,7 @@ export function usePodcastTimer(): PodcastTimerReturn {
   }, [isRunning]);
 
   useEffect(() => {
-    if (elapsed >= GOAL_SECONDS && isRunning) {
+    if (elapsed >= DEFAULT_GOAL_SECONDS && isRunning) {
       setGoalReached(true);
       saveListeningMinutes(elapsed);
       setIsRunning(false);
@@ -57,7 +57,7 @@ export function usePodcastTimer(): PodcastTimerReturn {
   };
 
   const complete = () => {
-    saveListeningMinutes(Math.max(elapsed, GOAL_SECONDS));
+    saveListeningMinutes(Math.max(elapsed, DEFAULT_GOAL_SECONDS));
     setGoalReached(true);
     setIsRunning(false);
   };
@@ -66,12 +66,12 @@ export function usePodcastTimer(): PodcastTimerReturn {
     isRunning,
     elapsed,
     goalReached,
-    goalSeconds: GOAL_SECONDS,
+    goalSeconds: DEFAULT_GOAL_SECONDS,
     start,
     pause,
     reset,
     complete,
-    progressPct: Math.min(100, Math.round((elapsed / GOAL_SECONDS) * 100)),
+    progressPct: Math.min(100, Math.round((elapsed / DEFAULT_GOAL_SECONDS) * 100)),
     formatTime: formatListeningTime,
   };
 }
@@ -113,7 +113,7 @@ export function useMinnaListeningPlayer(
   }, [isRunning]);
 
   useEffect(() => {
-    if (elapsed >= GOAL_SECONDS && isRunning && !goalReached) {
+    if (elapsed >= DEFAULT_GOAL_SECONDS && isRunning && !goalReached) {
       setGoalReached(true);
       saveListeningMinutes(elapsed);
       stopAudio();
@@ -198,12 +198,12 @@ export function useMinnaListeningPlayer(
     elapsed,
     currentIndex,
     goalReached,
-    goalSeconds: GOAL_SECONDS,
+    goalSeconds: DEFAULT_GOAL_SECONDS,
     startSession,
     pauseSession,
     resumeSession,
     stopSession,
-    progressPct: Math.min(100, Math.round((elapsed / GOAL_SECONDS) * 100)),
+    progressPct: Math.min(100, Math.round((elapsed / DEFAULT_GOAL_SECONDS) * 100)),
     formatTime: formatListeningTime,
   };
 }

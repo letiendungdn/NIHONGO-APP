@@ -34,11 +34,11 @@ describe('MockExamsService', () => {
   const cacheStore = new Map<string, unknown>();
 
   const mockCache = {
-    get: jest.fn(async (key: string) => cacheStore.get(key)),
-    set: jest.fn(async (key: string, value: unknown) => {
+    get: jest.fn((key: string) => cacheStore.get(key)),
+    set: jest.fn((key: string, value: unknown) => {
       cacheStore.set(key, value);
     }),
-    del: jest.fn(async (key: string) => {
+    del: jest.fn((key: string) => {
       cacheStore.delete(key);
     }),
   };
@@ -99,9 +99,21 @@ describe('MockExamsService', () => {
     it('calculates section scores correctly', async () => {
       const result = await service.submit('exam-1', { q1: 'A', q2: 'wrong' });
       const vocab = result.sectionScores.find((s) => s.sectionId === 'vocab');
-      const grammar = result.sectionScores.find((s) => s.sectionId === 'grammar');
-      expect(vocab).toEqual({ sectionId: 'vocab', sectionName: 'Từ vựng', correct: 1, total: 1 });
-      expect(grammar).toEqual({ sectionId: 'grammar', sectionName: 'Ngữ pháp', correct: 0, total: 1 });
+      const grammar = result.sectionScores.find(
+        (s) => s.sectionId === 'grammar',
+      );
+      expect(vocab).toEqual({
+        sectionId: 'vocab',
+        sectionName: 'Từ vựng',
+        correct: 1,
+        total: 1,
+      });
+      expect(grammar).toEqual({
+        sectionId: 'grammar',
+        sectionName: 'Ngữ pháp',
+        correct: 0,
+        total: 1,
+      });
     });
 
     it('marks exam as passed when percent >= threshold', async () => {

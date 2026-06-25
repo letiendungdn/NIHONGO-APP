@@ -1,5 +1,10 @@
 let playSessionId = 0;
 
+/** Chuỗi tiếng Nhật cho TTS (bỏ khoảng trắng thừa). */
+export function speechTextFromJapanese(jp: string): string {
+  return jp.replace(/\s+/g, '').replace(/…/g, '');
+}
+
 export const stopAudio = (): void => {
   playSessionId += 1;
   if (typeof window !== 'undefined' && 'speechSynthesis' in window) {

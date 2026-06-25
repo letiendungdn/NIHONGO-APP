@@ -3,13 +3,11 @@ import { RpcException } from '@nestjs/microservices';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import type { Cache } from 'cache-manager';
 import type { ExerciseType } from '@prisma/client';
-import { Prisma } from '@prisma/client';
 import {
   sample,
   shuffle,
   speechTextFromJapanese,
   normalizeAnswer,
-  parseJsonArray,
 } from '@app/common';
 import { PrismaService } from '@app/prisma';
 import { randomUUID } from 'crypto';
@@ -17,13 +15,10 @@ import { randomUUID } from 'crypto';
 const SESSION_TTL_MS = 3 * 60 * 60 * 1000;
 const sessionKey = (examId: string) => `mock-exam:${examId}`;
 
-function exerciseOptions(raw: Prisma.JsonValue | null): string[] {
-  if (raw == null) return [];
-  if (typeof raw === 'string') return parseJsonArray(raw);
-  if (Array.isArray(raw)) {
-    return raw.filter((value): value is string => typeof value === 'string');
-  }
-  return [];
+function exerciseOptions(exercise: {
+  optionsList?: { text: string }[];
+}): string[] {
+  return exercise.optionsList?.map((o) => o.text) ?? [];
 }
 
 function toQuestionType(
@@ -156,6 +151,7 @@ export class MockExamsService {
     const exercises = lessonIds.length
       ? await this.prisma.exercise.findMany({
           where: { lessonId: { in: lessonIds } },
+          include: { optionsList: { orderBy: { sortOrder: 'asc' } } },
         })
       : [];
 
@@ -257,7 +253,7 @@ export class MockExamsService {
         'multiple_choice',
         ex.question,
         ex.answer,
-        shuffle(exerciseOptions(ex.options)),
+        shuffle(exerciseOptions(ex)),
         lessonById.get(ex.lessonId),
       );
     }
@@ -270,9 +266,7 @@ export class MockExamsService {
         type,
         ex.question,
         ex.answer,
-        type === 'multiple_choice'
-          ? shuffle(exerciseOptions(ex.options))
-          : undefined,
+        type === 'multiple_choice' ? shuffle(exerciseOptions(ex)) : undefined,
         lessonById.get(ex.lessonId),
       );
     }

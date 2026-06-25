@@ -41,7 +41,7 @@ export interface Exercise {
   id: number;
   type: 'multiple_choice' | 'fill_in_blank' | string;
   question: string;
-  options: string | null;
+  options: string[] | null;
   answer: string;
   lessonId: number;
 }

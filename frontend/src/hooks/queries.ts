@@ -5,6 +5,11 @@ import {
   fetchExercises,
   fetchGrammars,
   fetchJlptDaNangSchedule,
+  fetchDailyListeningConfig,
+  fetchJapaneseCounters,
+  fetchJlptRoadmap,
+  fetchJlptDaNangScheduleStatic,
+  fetchKanaCharts,
   fetchKanjiEntries,
   fetchKanjiLessons,
   fetchLessons,
@@ -24,6 +29,11 @@ export const queryKeys = {
   listeningPlaylist: (from: number, to: number) => ['listening-playlist', from, to] as const,
   mockExamTemplates: ['mock-exam-templates'] as const,
   jlptDaNangSchedule: ['jlpt-da-nang-schedule'] as const,
+  kanaCharts: ['reference', 'kana-charts'] as const,
+  japaneseCounters: ['reference', 'japanese-counters'] as const,
+  dailyListeningConfig: ['reference', 'daily-listening'] as const,
+  jlptRoadmap: ['reference', 'jlpt-roadmap'] as const,
+  jlptDaNangStatic: ['reference', 'jlpt-danang-schedule'] as const,
   authMe: ['auth', 'me'] as const,
   adminStats: ['admin', 'stats'] as const,
 };
@@ -104,6 +114,46 @@ export function useJlptDaNangScheduleQuery() {
     queryFn: fetchJlptDaNangSchedule,
     staleTime: 30 * 60 * 1000,
     refetchOnWindowFocus: true,
+  });
+}
+
+export function useKanaChartsQuery() {
+  return useQuery({
+    queryKey: queryKeys.kanaCharts,
+    queryFn: fetchKanaCharts,
+    staleTime: STALE_5M,
+  });
+}
+
+export function useJapaneseCountersQuery() {
+  return useQuery({
+    queryKey: queryKeys.japaneseCounters,
+    queryFn: fetchJapaneseCounters,
+    staleTime: STALE_5M,
+  });
+}
+
+export function useDailyListeningConfigQuery() {
+  return useQuery({
+    queryKey: queryKeys.dailyListeningConfig,
+    queryFn: fetchDailyListeningConfig,
+    staleTime: STALE_5M,
+  });
+}
+
+export function useJlptRoadmapQuery() {
+  return useQuery({
+    queryKey: queryKeys.jlptRoadmap,
+    queryFn: fetchJlptRoadmap,
+    staleTime: STALE_5M,
+  });
+}
+
+export function useJlptDaNangStaticQuery() {
+  return useQuery({
+    queryKey: queryKeys.jlptDaNangStatic,
+    queryFn: fetchJlptDaNangScheduleStatic,
+    staleTime: STALE_5M,
   });
 }
 

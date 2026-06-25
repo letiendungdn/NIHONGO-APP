@@ -1,4 +1,5 @@
-import { GOAL_MINUTES, GOAL_SECONDS } from '../data/dailyListening';
+export const DEFAULT_GOAL_MINUTES = 15;
+export const DEFAULT_GOAL_SECONDS = DEFAULT_GOAL_MINUTES * 60;
 
 const STORAGE_KEY = 'nihongo-daily-listening';
 
@@ -30,19 +31,19 @@ export function loadListeningStats(): ListeningStats {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) {
-      return { minutesToday: 0, streak: 0, goalMinutes: GOAL_MINUTES };
+      return { minutesToday: 0, streak: 0, goalMinutes: DEFAULT_GOAL_MINUTES };
     }
     const data = JSON.parse(raw) as StoredListeningData;
     if (data.date !== todayKey()) {
-      return { minutesToday: 0, streak: data.streak ?? 0, goalMinutes: GOAL_MINUTES };
+      return { minutesToday: 0, streak: data.streak ?? 0, goalMinutes: DEFAULT_GOAL_MINUTES };
     }
     return {
       minutesToday: data.minutesToday ?? 0,
       streak: data.streak ?? 0,
-      goalMinutes: GOAL_MINUTES,
+      goalMinutes: DEFAULT_GOAL_MINUTES,
     };
   } catch {
-    return { minutesToday: 0, streak: 0, goalMinutes: GOAL_MINUTES };
+    return { minutesToday: 0, streak: 0, goalMinutes: DEFAULT_GOAL_MINUTES };
   }
 }
 
@@ -62,8 +63,8 @@ export function saveListeningMinutes(totalSeconds: number): StoredListeningData 
     prev.date === today ? Math.max(prev.minutesToday ?? 0, minutes) : minutes;
 
   let streak = prev.streak ?? 0;
-  const hitGoalToday = minutesToday >= GOAL_MINUTES;
-  const wasGoalBefore = prev.date === today && (prev.minutesToday ?? 0) >= GOAL_MINUTES;
+  const hitGoalToday = minutesToday >= DEFAULT_GOAL_MINUTES;
+  const wasGoalBefore = prev.date === today && (prev.minutesToday ?? 0) >= DEFAULT_GOAL_MINUTES;
 
   if (hitGoalToday && !wasGoalBefore) {
     if (prev.lastCompletedDate === yesterdayKey()) {
@@ -78,7 +79,7 @@ export function saveListeningMinutes(totalSeconds: number): StoredListeningData 
     minutesToday,
     streak,
     lastCompletedDate: hitGoalToday ? today : prev.lastCompletedDate,
-    goalMinutes: GOAL_MINUTES,
+    goalMinutes: DEFAULT_GOAL_MINUTES,
   };
 
   localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
@@ -90,5 +91,3 @@ export function formatListeningTime(seconds: number): string {
   const s = seconds % 60;
   return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
 }
-
-export { GOAL_SECONDS, GOAL_MINUTES };

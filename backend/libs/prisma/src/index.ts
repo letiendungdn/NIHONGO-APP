@@ -1,5 +1,6 @@
 export { PrismaModule } from './prisma.module';
 export { PrismaService } from './prisma.service';
+export { JlptSessionStatus, KanaScript } from '@prisma/client';
 export {
   SrsCardRepository,
   VOCABULARY_CONTENT_TYPE,

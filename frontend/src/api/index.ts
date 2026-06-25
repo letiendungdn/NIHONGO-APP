@@ -14,6 +14,14 @@ import type {
   PaginatedResponse,
   Vocabulary,
 } from '../types/api';
+import type {
+  DailyListeningPayload,
+  JapaneseCountersPayload,
+  JlptDaNangSchedulePayload,
+  JlptRoadmapPayload,
+  KanaChartsPayload,
+  ReferenceMeta,
+} from '../types/reference';
 
 async function fetchPaginatedAll<T>(
   buildPath: (page: number, limit: number) => string,
@@ -81,6 +89,34 @@ export function fetchMockExamTemplates() {
 
 export function fetchJlptDaNangSchedule() {
   return apiRequest<JlptDaNangSchedule>('/jlpt/da-nang/schedule');
+}
+
+export function fetchReferenceList() {
+  return apiRequest<ReferenceMeta[]>('/reference');
+}
+
+export function fetchReference<T>(slug: string) {
+  return apiRequest<T>(`/reference/${slug}`);
+}
+
+export function fetchKanaCharts() {
+  return fetchReference<KanaChartsPayload>('kana-charts');
+}
+
+export function fetchJapaneseCounters() {
+  return fetchReference<JapaneseCountersPayload>('japanese-counters');
+}
+
+export function fetchDailyListeningConfig() {
+  return fetchReference<DailyListeningPayload>('daily-listening');
+}
+
+export function fetchJlptRoadmap() {
+  return fetchReference<JlptRoadmapPayload>('jlpt-roadmap');
+}
+
+export function fetchJlptDaNangScheduleStatic() {
+  return fetchReference<JlptDaNangSchedulePayload>('jlpt-danang-schedule');
 }
 
 export function startMockExam(level: string) {

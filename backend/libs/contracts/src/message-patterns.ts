@@ -24,6 +24,8 @@ export const CONTENT_PATTERNS = {
   GET_KANJI_ENTRY: 'content.kanji-entries.findOne',
   GET_LISTENING_PLAYLIST: 'content.listening.playlist',
   IMPORT_VOCAB: 'content.import.vocab',
+  GET_REFERENCE_LIST: 'content.reference.findAll',
+  GET_REFERENCE: 'content.reference.findOne',
 } as const;
 
 export const EXAM_PATTERNS = {

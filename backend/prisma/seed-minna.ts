@@ -31,6 +31,25 @@ type Bundle = {
   exercises: Record<string, ExerciseItem[]>;
 };
 
+type PrismaExerciseType = 'MULTIPLE_CHOICE' | 'FILL_IN_BLANK' | 'LISTENING';
+
+const PRISMA_EXERCISE_TYPE: Record<string, PrismaExerciseType> = {
+  multiple_choice: 'MULTIPLE_CHOICE',
+  fill_in_blank: 'FILL_IN_BLANK',
+  listening: 'LISTENING',
+  MULTIPLE_CHOICE: 'MULTIPLE_CHOICE',
+  FILL_IN_BLANK: 'FILL_IN_BLANK',
+  LISTENING: 'LISTENING',
+};
+
+function toPrismaExerciseType(type: string): PrismaExerciseType {
+  const mapped = PRISMA_EXERCISE_TYPE[type];
+  if (!mapped) {
+    throw new Error(`Unknown exercise type: ${type}`);
+  }
+  return mapped;
+}
+
 export async function seedMinna(prisma: PrismaClient) {
   if (!fs.existsSync(bundlePath)) {
     throw new Error('Missing minna-bundle.json. Run: npm run build:data');
@@ -98,10 +117,17 @@ export async function seedMinna(prisma: PrismaClient) {
       await prisma.exercise.create({
         data: {
           lessonId: lesson.id,
-          type: exercise.type,
+          type: toPrismaExerciseType(exercise.type),
           question: exercise.question,
-          options: exercise.options ? JSON.stringify(exercise.options) : null,
           answer: exercise.answer,
+          optionsList: exercise.options?.length
+            ? {
+                create: exercise.options.map((text, sortOrder) => ({
+                  text,
+                  sortOrder,
+                })),
+              }
+            : undefined,
         },
       });
       totalExercises++;

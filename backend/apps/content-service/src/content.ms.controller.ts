@@ -18,6 +18,7 @@ import { ExercisesService } from './modules/exercises/exercises.service';
 import { KanjiService } from './modules/kanji/kanji.service';
 import { ListeningService } from './modules/listening/listening.service';
 import { ImportService } from './modules/import/import.service';
+import { ReferenceService } from './modules/reference/reference.service';
 
 @Controller()
 export class ContentMsController {
@@ -29,6 +30,7 @@ export class ContentMsController {
     private readonly kanjiService: KanjiService,
     private readonly listeningService: ListeningService,
     private readonly importService: ImportService,
+    private readonly referenceService: ReferenceService,
   ) {}
 
   @MessagePattern(CONTENT_PATTERNS.GET_LESSONS)
@@ -182,5 +184,15 @@ export class ContentMsController {
   @MessagePattern(CONTENT_PATTERNS.IMPORT_VOCAB)
   importVocab(@Payload() data: { lessonNumber: number; text: string }) {
     return this.importService.importVocabFromText(data.lessonNumber, data.text);
+  }
+
+  @MessagePattern(CONTENT_PATTERNS.GET_REFERENCE_LIST)
+  getReferenceList() {
+    return this.referenceService.findAll();
+  }
+
+  @MessagePattern(CONTENT_PATTERNS.GET_REFERENCE)
+  getReference(@Payload() data: { slug: string }) {
+    return this.referenceService.findBySlug(data.slug);
   }
 }

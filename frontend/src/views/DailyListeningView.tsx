@@ -2,31 +2,33 @@
 
 import { useEffect, useState } from 'react';
 import {
-  GOAL_MINUTES,
-  minnaListeningPresets,
-  n5Podcasts,
-} from '../data/dailyListening';
-import {
   loadListeningStats,
   useMinnaListeningPlayer,
   usePodcastTimer,
 } from '../hooks/useDailyListeningSession';
-import { useListeningPlaylistQuery } from '../hooks/queries';
+import { useDailyListeningConfigQuery, useListeningPlaylistQuery } from '../hooks/queries';
+import { DEFAULT_GOAL_MINUTES } from '../utils/dailyListeningProgress';
 import type { ListeningPlaylistItem } from '../types/api';
 import './DailyListeningView.css';
 
 export default function DailyListeningView() {
+  const { data: listeningConfig, isLoading: configLoading } = useDailyListeningConfigQuery();
+  const goalMinutes = listeningConfig?.goalMinutes ?? DEFAULT_GOAL_MINUTES;
+  const minnaListeningPresets = listeningConfig?.presets ?? [];
+  const n5Podcasts = listeningConfig?.podcasts ?? [];
+
   const [tab, setTab] = useState<'minna' | 'podcast'>('minna');
-  const [presetId, setPresetId] = useState(minnaListeningPresets[2].id);
+  const [presetId, setPresetId] = useState('');
   const [showMeaning, setShowMeaning] = useState(true);
   const [stats, setStats] = useState(loadListeningStats);
 
+  const resolvedPresetId = presetId || minnaListeningPresets[2]?.id || minnaListeningPresets[0]?.id || '';
   const preset =
-    minnaListeningPresets.find((p) => p.id === presetId) ?? minnaListeningPresets[2];
+    minnaListeningPresets.find((p) => p.id === resolvedPresetId) ?? minnaListeningPresets[0];
 
   const { data: playlistData, isLoading: loading } = useListeningPlaylistQuery(
-    preset.lessonFrom,
-    preset.lessonTo,
+    preset?.lessonFrom ?? 1,
+    preset?.lessonTo ?? 25,
   );
   const playlist: ListeningPlaylistItem[] = playlistData?.items ?? [];
 
@@ -46,19 +48,27 @@ export default function DailyListeningView() {
   const activeProgress = tab === 'minna' ? minna.progressPct : podcast.progressPct;
   const activeGoalReached = tab === 'minna' ? minna.goalReached : podcast.goalReached;
 
+  if (configLoading) {
+    return (
+      <div className="container daily-listening-view">
+        <p style={{ textAlign: 'center', padding: '2rem' }}>Đang tải cấu hình nghe...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="container daily-listening-view">
       <header className="dl-header">
         <h2 className="view-title">Nghe mỗi ngày · N5</h2>
         <p className="dl-subtitle">
-          Mục tiêu {GOAL_MINUTES} phút/ngày — audio Minna trong app hoặc podcast N5 bên ngoài.
+          Mục tiêu {goalMinutes} phút/ngày — audio Minna trong app hoặc podcast N5 bên ngoài.
         </p>
       </header>
 
       <section className="dl-stats glass-panel">
         <div className="dl-stat">
           <strong>Hôm nay</strong>
-          <span>{stats.minutesToday}/{GOAL_MINUTES} phút</span>
+          <span>{stats.minutesToday}/{goalMinutes} phút</span>
         </div>
         <div className="dl-stat">
           <strong>Streak</strong>
@@ -66,13 +76,13 @@ export default function DailyListeningView() {
         </div>
         <div className="dl-progress-ring" style={{ '--pct': activeProgress } as React.CSSProperties}>
           <span>{minna.formatTime(activeElapsed)}</span>
-          <small>/ {GOAL_MINUTES}:00</small>
+          <small>/ {goalMinutes}:00</small>
         </div>
       </section>
 
       {activeGoalReached && (
         <div className="dl-celebration glass-panel">
-          🎉 Đủ {GOAL_MINUTES} phút hôm nay! Tiếp tục nghe hoặc quay lại mai nhé.
+          🎉 Đủ {goalMinutes} phút hôm nay! Tiếp tục nghe hoặc quay lại mai nhé.
         </div>
       )}
 
@@ -99,7 +109,7 @@ export default function DailyListeningView() {
             <label>
               Chọn phạm vi:
               <select
-                value={presetId}
+                value={resolvedPresetId}
                 onChange={(e) => setPresetId(e.target.value)}
                 disabled={minna.isRunning}
                 className="select-input"
@@ -173,14 +183,14 @@ export default function DailyListeningView() {
       ) : (
         <div className="dl-podcast">
           <p className="dl-podcast-intro glass-panel">
-            Mở podcast bên dưới (tab mới), bật bộ đếm {GOAL_MINUTES} phút và nghe. App ghi nhận
+            Mở podcast bên dưới (tab mới), bật bộ đếm {goalMinutes} phút và nghe. App ghi nhận
             thời gian khi đủ mục tiêu.
           </p>
 
           <div className="dl-player-actions">
             {!podcast.isRunning && (
               <button type="button" className="btn btn-primary" onClick={podcast.start}>
-                ▶️ Bắt đầu đếm {GOAL_MINUTES} phút
+                ▶️ Bắt đầu đếm {goalMinutes} phút
               </button>
             )}
             {podcast.isRunning && (

@@ -5,9 +5,9 @@ import { playAudio, stopAudio } from '../utils/speech';
 import LessonSelector from '../components/LessonSelector';
 import PlayAllButton from '../components/PlayAllButton';
 import { usePlayAll } from '../hooks/usePlayAll';
-import { useVocabulariesQuery } from '../hooks/queries';
+import { useVocabulariesQuery, useKanaChartsQuery } from '../hooks/queries';
+import { flattenKanaSections, kanaChartToItems } from '../utils/kana';
 import { useAudioRecorder } from '../hooks/useAudioRecorder';
-import { HIRAGANA, KATAKANA, kanaChartToItems } from '../data/kanaCharts';
 import './PronunciationView.css';
 
 interface PronunciationItem {
@@ -33,10 +33,15 @@ export default function PronunciationView() {
   const { isPlayingAll, startPlayAll, stopPlayAll } = usePlayAll();
   const recorder = useAudioRecorder();
 
-  const kanaItems = useMemo(
-    () => kanaChartToItems(kanaType === 'hiragana' ? HIRAGANA : KATAKANA),
-    [kanaType],
-  );
+  const { data: kanaCharts } = useKanaChartsQuery();
+
+  const kanaItems = useMemo(() => {
+    const sections =
+      kanaType === 'hiragana'
+        ? (kanaCharts?.hiraganaSections ?? [])
+        : (kanaCharts?.katakanaSections ?? []);
+    return kanaChartToItems(flattenKanaSections(sections));
+  }, [kanaType, kanaCharts]);
 
   const vocabItems = useMemo<PronunciationItem[]>(
     () =>

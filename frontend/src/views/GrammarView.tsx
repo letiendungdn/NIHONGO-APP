@@ -1,13 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { playAudio } from '../utils/speech';
+import { playAudio, speechTextFromJapanese } from '../utils/speech';
 import LessonSelector from '../components/LessonSelector';
 import PlayAllButton from '../components/PlayAllButton';
-import RichHtml from '../components/RichHtml';
 import { usePlayAll } from '../hooks/usePlayAll';
 import { useGrammarsQuery } from '../hooks/queries';
-import { speechTextFromHtml } from '../utils/html';
 import './GrammarView.css';
 
 export default function GrammarView() {
@@ -20,7 +18,7 @@ export default function GrammarView() {
   }, [currentLesson, stopPlayAll]);
 
   const allExamples = lessonGrammar.flatMap((g) =>
-    (g.examples || []).map((ex) => speechTextFromHtml(ex.jp)).filter(Boolean),
+    (g.examples || []).map((ex) => speechTextFromJapanese(ex.jp)).filter(Boolean),
   );
 
   const handlePlayAll = () => {
@@ -58,22 +56,16 @@ export default function GrammarView() {
             <div key={grammar.id || index} className="grammar-card glass-panel">
               <div className="grammar-pattern-header">
                 <span className="grammar-index">{index + 1}</span>
-                <RichHtml
-                  tag="h3"
-                  className="grammar-pattern japanese-text"
-                  html={grammar.pattern}
-                />
+                <h3 className="grammar-pattern japanese-text">{grammar.pattern}</h3>
               </div>
 
               <div className="grammar-meaning">
-                <strong>Ý nghĩa:</strong>{' '}
-                <RichHtml html={grammar.meaning} />
+                <strong>Ý nghĩa:</strong> {grammar.meaning}
               </div>
 
               {grammar.explanation && (
-                <div className="grammar-explanation">
-                  <strong>Giải thích:</strong>{' '}
-                  <RichHtml html={grammar.explanation.replace(/\n\n/g, '<br /><br />')} />
+                <div className="grammar-explanation" style={{ whiteSpace: 'pre-wrap' }}>
+                  <strong>Giải thích:</strong> {grammar.explanation}
                 </div>
               )}
 
@@ -84,10 +76,10 @@ export default function GrammarView() {
                     {(grammar.examples || []).map((ex, exIndex) => (
                       <li key={exIndex} className="example-item">
                         <div className="example-jp">
-                          <RichHtml className="japanese-text" html={ex.jp} />
+                          <span className="japanese-text">{ex.jp}</span>
                           <button
                             className="btn-audio-small"
-                            onClick={() => playAudio(speechTextFromHtml(ex.jp))}
+                            onClick={() => playAudio(speechTextFromJapanese(ex.jp))}
                             title="Nghe phát âm"
                           >
                             🔊

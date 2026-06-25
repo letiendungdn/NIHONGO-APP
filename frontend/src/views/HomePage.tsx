@@ -55,7 +55,7 @@ const features = [
     to: '/jlpt',
     icon: '🎯',
     title: 'Lộ trình JLPT',
-    desc: 'Roadmap N5 → N4 → N3 với tài liệu Minna, Kanji KLL và checklist luyện thi.',
+    desc: 'Roadmap N5 → N4 → N3 với Minna, KLL, Shin Kanzen, Sō-Matome và đề Choukai/Dokkai.',
   },
   {
     to: '/mock-exam',
