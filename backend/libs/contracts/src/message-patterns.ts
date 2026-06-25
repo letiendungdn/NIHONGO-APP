@@ -26,6 +26,9 @@ export const CONTENT_PATTERNS = {
   IMPORT_VOCAB: 'content.import.vocab',
   GET_REFERENCE_LIST: 'content.reference.findAll',
   GET_REFERENCE: 'content.reference.findOne',
+  GET_READING_PASSAGES: 'content.reading.findAll',
+  GET_READING_PASSAGE: 'content.reading.findOne',
+  SUBMIT_READING: 'content.reading.submit',
 } as const;
 
 export const EXAM_PATTERNS = {
@@ -44,4 +47,5 @@ export const PROGRESS_PATTERNS = {
   GET_REVIEW_BANK: 'progress.review.get',
   LOG_LISTENING: 'progress.listening.log',
   GET_LISTENING_LOGS: 'progress.listening.get',
+  GET_ANALYTICS: 'progress.analytics.get',
 } as const;

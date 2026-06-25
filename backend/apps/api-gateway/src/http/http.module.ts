@@ -11,6 +11,9 @@ import { ImportController } from './import.controller';
 import { JlptScheduleController } from './jlpt-schedule.controller';
 import { JlptScheduleService } from './jlpt-schedule.service';
 import { ReferenceController } from './reference.controller';
+import { ReadingController } from './reading.controller';
+import { DictationController } from './dictation.controller';
+import { AnalyticsController } from './analytics.controller';
 
 @Module({
   controllers: [
@@ -25,6 +28,9 @@ import { ReferenceController } from './reference.controller';
     ImportController,
     JlptScheduleController,
     ReferenceController,
+    ReadingController,
+    DictationController,
+    AnalyticsController,
   ],
   providers: [JlptScheduleService],
 })

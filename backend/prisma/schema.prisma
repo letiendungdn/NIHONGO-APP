@@ -567,6 +567,79 @@ model ListeningLog {
   @@index([userId])
 }
 
+// ─────────────────────────────────────────────
+// Reading (đọc hiểu)
+// ─────────────────────────────────────────────
+
+model ReadingPassage {
+  id           Int               @id @default(autoincrement())
+  title        String
+  content      String            @db.Text
+  jlptLevel    JlptLevel?
+  source       String?
+  estimatedMin Int               @default(3)
+  sortOrder    Int               @default(0)
+  questions    ReadingQuestion[]
+  attempts     ReadingAttempt[]
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+
+  @@index([jlptLevel, sortOrder])
+}
+
+model ReadingQuestion {
+  id          Int                     @id @default(autoincrement())
+  passageId   Int
+  passage     ReadingPassage          @relation(fields: [passageId], references: [id], onDelete: Cascade)
+  question    String
+  answer      String
+  explanation String?
+  sortOrder   Int                     @default(0)
+  options     ReadingQuestionOption[]
+
+  @@index([passageId, sortOrder])
+}
+
+model ReadingQuestionOption {
+  id         Int             @id @default(autoincrement())
+  questionId Int
+  question   ReadingQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  text       String
+  sortOrder  Int             @default(0)
+
+  @@index([questionId, sortOrder])
+}
+
+model ReadingAttempt {
+  id          Int            @id @default(autoincrement())
+  userId      Int?
+  passageId   Int
+  passage     ReadingPassage @relation(fields: [passageId], references: [id], onDelete: Cascade)
+  correct     Int
+  total       Int
+  percent     Float
+  submittedAt DateTime       @default(now())
+
+  @@index([userId])
+  @@index([passageId])
+}
+
+// ─────────────────────────────────────────────
+// Dictation (nghe chép chính tả)
+// ─────────────────────────────────────────────
+
+model DictationAttempt {
+  id          Int      @id @default(autoincrement())
+  userId      Int?
+  vocabId     Int
+  userInput   String
+  correct     Boolean
+  createdAt   DateTime @default(now())
+
+  @@index([userId])
+  @@index([vocabId])
+}
+
 // Theo dõi thời gian học mỗi ngày
 model StudySession {
   id            Int      @id @default(autoincrement())

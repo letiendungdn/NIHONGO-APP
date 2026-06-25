@@ -19,6 +19,7 @@ import { KanjiService } from './modules/kanji/kanji.service';
 import { ListeningService } from './modules/listening/listening.service';
 import { ImportService } from './modules/import/import.service';
 import { ReferenceService } from './modules/reference/reference.service';
+import { ReadingService } from './modules/reading/reading.service';
 
 @Controller()
 export class ContentMsController {
@@ -31,6 +32,7 @@ export class ContentMsController {
     private readonly listeningService: ListeningService,
     private readonly importService: ImportService,
     private readonly referenceService: ReferenceService,
+    private readonly readingService: ReadingService,
   ) {}
 
   @MessagePattern(CONTENT_PATTERNS.GET_LESSONS)
@@ -194,5 +196,31 @@ export class ContentMsController {
   @MessagePattern(CONTENT_PATTERNS.GET_REFERENCE)
   getReference(@Payload() data: { slug: string }) {
     return this.referenceService.findBySlug(data.slug);
+  }
+
+  @MessagePattern(CONTENT_PATTERNS.GET_READING_PASSAGES)
+  getReadingPassages(@Payload() data: { jlptLevel?: string }) {
+    return this.readingService.findAll(data.jlptLevel);
+  }
+
+  @MessagePattern(CONTENT_PATTERNS.GET_READING_PASSAGE)
+  getReadingPassage(@Payload() data: { id: number }) {
+    return this.readingService.findOne(data.id);
+  }
+
+  @MessagePattern(CONTENT_PATTERNS.SUBMIT_READING)
+  submitReading(
+    @Payload()
+    data: {
+      passageId: number;
+      answers: Record<string, string>;
+      userId?: number;
+    },
+  ) {
+    return this.readingService.submit(
+      data.passageId,
+      data.answers,
+      data.userId,
+    );
   }
 }

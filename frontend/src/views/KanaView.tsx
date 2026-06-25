@@ -16,10 +16,13 @@ export default function KanaView() {
   const { data: kanaCharts, isLoading } = useKanaChartsQuery();
   const { isPlayingAll, startPlayAll, stopPlayAll } = usePlayAll();
 
-  const currentSections =
-    activeTab === 'hiragana'
-      ? (kanaCharts?.hiraganaSections ?? [])
-      : (kanaCharts?.katakanaSections ?? []);
+  const currentSections = useMemo(
+    () =>
+      activeTab === 'hiragana'
+        ? (kanaCharts?.hiraganaSections ?? [])
+        : (kanaCharts?.katakanaSections ?? []),
+    [activeTab, kanaCharts],
+  );
 
   const kanaList = useMemo(
     () =>

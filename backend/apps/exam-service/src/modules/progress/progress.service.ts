@@ -66,4 +66,63 @@ export class ProgressService {
       take: 90,
     });
   }
+
+  async getAnalytics(userId: number) {
+    const [studySessions, examResults, srsStats, listeningLogs] =
+      await Promise.all([
+        this.prisma.studySession.findMany({
+          where: { userId },
+          orderBy: { date: 'asc' },
+          take: 365,
+          select: { date: true, seconds: true, cardsReviewed: true },
+        }),
+        this.prisma.examResult.findMany({
+          where: { userId },
+          orderBy: { submittedAt: 'asc' },
+          select: {
+            submittedAt: true,
+            percent: true,
+            passed: true,
+            level: true,
+            title: true,
+          },
+        }),
+        this.prisma.srsCard.aggregate({
+          where: { userId },
+          _count: { id: true },
+          _sum: { correctCount: true, wrongCount: true },
+        }),
+        this.prisma.listeningLog.findMany({
+          where: { userId },
+          orderBy: { date: 'asc' },
+          take: 365,
+          select: { date: true, seconds: true },
+        }),
+      ]);
+
+    const masteredCount = await this.prisma.srsCard.count({
+      where: { userId, mastered: true },
+    });
+
+    const totalStudySeconds = studySessions.reduce((s, r) => s + r.seconds, 0);
+    const totalListeningSeconds = listeningLogs.reduce(
+      (s, r) => s + r.seconds,
+      0,
+    );
+
+    return {
+      overview: {
+        totalStudySeconds,
+        totalListeningSeconds,
+        totalCardsReviewed:
+          srsStats._sum.correctCount ?? 0 + (srsStats._sum.wrongCount ?? 0),
+        masteredVocab: masteredCount,
+        totalExams: examResults.length,
+        passedExams: examResults.filter((e) => e.passed).length,
+      },
+      studySessions,
+      examHistory: examResults,
+      listeningHistory: listeningLogs,
+    };
+  }
 }

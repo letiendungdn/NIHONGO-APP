@@ -189,3 +189,99 @@ export function fetchListeningProgress(token: string) {
     token,
   });
 }
+
+// ─── Reading ─────────────────────────────────────────────────
+
+export interface ReadingPassageSummary {
+  id: number;
+  title: string;
+  jlptLevel: string | null;
+  estimatedMin: number;
+  sortOrder: number;
+  _count: { questions: number };
+}
+
+export interface ReadingPassage {
+  id: number;
+  title: string;
+  content: string;
+  jlptLevel: string | null;
+  source: string | null;
+  estimatedMin: number;
+  questions: ReadingQuestion[];
+}
+
+export interface ReadingQuestion {
+  id: number;
+  question: string;
+  answer: string;
+  explanation: string | null;
+  sortOrder: number;
+  options: { id: number; text: string; sortOrder: number }[];
+}
+
+export interface ReadingResult {
+  correct: number;
+  total: number;
+  percent: number;
+  results: { questionId: number; correct: boolean; correctAnswer: string; explanation: string | null }[];
+}
+
+export function fetchReadingPassages(jlptLevel?: string) {
+  const q = jlptLevel ? `?jlptLevel=${jlptLevel}` : '';
+  return apiRequest<ReadingPassageSummary[]>(`/reading${q}`);
+}
+
+export function fetchReadingPassage(id: number) {
+  return apiRequest<ReadingPassage>(`/reading/${id}`);
+}
+
+export function submitReading(id: number, answers: Record<string, string>) {
+  return apiRequest<ReadingResult>(`/reading/${id}/submit`, {
+    method: 'POST',
+    body: JSON.stringify({ answers }),
+  });
+}
+
+// ─── Dictation ───────────────────────────────────────────────
+
+export interface DictationVocab {
+  id: number;
+  kanji: string | null;
+  kana: string;
+  romaji: string;
+  meaning: string;
+}
+
+export function fetchDictationVocab(lessonNumber?: number, limit = 20) {
+  const params = new URLSearchParams({ limit: String(limit) });
+  if (lessonNumber) params.set('lessonNumber', String(lessonNumber));
+  return apiRequest<DictationVocab[]>(`/dictation/vocab?${params}`);
+}
+
+export function recordDictationAttempt(vocabId: number, userInput: string, correct: boolean) {
+  return apiRequest<unknown>('/dictation/attempt', {
+    method: 'POST',
+    body: JSON.stringify({ vocabId, userInput, correct }),
+  });
+}
+
+// ─── Analytics ───────────────────────────────────────────────
+
+export interface AnalyticsData {
+  overview: {
+    totalStudySeconds: number;
+    totalListeningSeconds: number;
+    totalCardsReviewed: number;
+    masteredVocab: number;
+    totalExams: number;
+    passedExams: number;
+  };
+  studySessions: { date: string; seconds: number; cardsReviewed: number }[];
+  examHistory: { submittedAt: string; percent: number; passed: boolean; level: string; title: string }[];
+  listeningHistory: { date: string; seconds: number }[];
+}
+
+export function fetchAnalytics(token: string) {
+  return apiRequest<AnalyticsData>('/analytics', { token });
+}

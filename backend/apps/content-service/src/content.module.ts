@@ -10,6 +10,7 @@ import { KanjiModule } from './modules/kanji/kanji.module';
 import { ListeningModule } from './modules/listening/listening.module';
 import { ImportModule } from './modules/import/import.module';
 import { ReferenceModule } from './modules/reference/reference.module';
+import { ReadingModule } from './modules/reading/reading.module';
 import { ContentMsController } from './content.ms.controller';
 
 @Module({
@@ -24,6 +25,7 @@ import { ContentMsController } from './content.ms.controller';
     ListeningModule,
     ImportModule,
     ReferenceModule,
+    ReadingModule,
   ],
   controllers: [ContentMsController],
 })

@@ -17,6 +17,9 @@ const navItems = [
   { href: '/jlpt', label: 'JLPT' },
   { href: '/mock-exam', label: 'Thi thử' },
   { href: '/quiz', label: 'Quiz' },
+  { href: '/reading', label: 'Đọc hiểu' },
+  { href: '/dictation', label: 'Nghe chép' },
+  { href: '/analytics', label: 'Tiến độ' },
 ];
 
 function NavItem({ href, label, end }: { href: string; label: string; end?: boolean }) {

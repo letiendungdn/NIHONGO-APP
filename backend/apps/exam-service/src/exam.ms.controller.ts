@@ -66,6 +66,11 @@ export class ExamMsController {
     return this.progressService.getListeningHistory(data.userId);
   }
 
+  @MessagePattern(PROGRESS_PATTERNS.GET_ANALYTICS)
+  getAnalytics(@Payload() data: { userId: number }) {
+    return this.progressService.getAnalytics(data.userId);
+  }
+
   @EventPattern(EXAM_EVENTS.EXAM_SUBMITTED)
   onExamSubmitted(
     @Payload()
