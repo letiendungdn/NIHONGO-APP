@@ -6,7 +6,7 @@ import {
   LineChart, Line, CartesianGrid, Legend,
 } from 'recharts';
 import { fetchAnalytics } from '@/api';
-import { useAuthStore } from '@/store/auth';
+import { useAuth } from '@/hooks/useAuth';
 
 function fmtSeconds(s: number) {
   const h = Math.floor(s / 3600);
@@ -79,7 +79,7 @@ function StatCard({ label, value, sub }: { label: string; value: string; sub?: s
 }
 
 export default function AnalyticsPage() {
-  const token = useAuthStore((s) => s.token);
+  const { token } = useAuth();
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['analytics'],
