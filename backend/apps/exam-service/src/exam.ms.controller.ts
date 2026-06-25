@@ -38,11 +38,7 @@ export class ExamMsController {
       userId?: number;
     },
   ) {
-    return this.mockExamsService.submit(
-      data.examId,
-      data.answers,
-      data.userId,
-    );
+    return this.mockExamsService.submit(data.examId, data.answers, data.userId);
   }
 
   @MessagePattern(EXAM_PATTERNS.GET_HISTORY)

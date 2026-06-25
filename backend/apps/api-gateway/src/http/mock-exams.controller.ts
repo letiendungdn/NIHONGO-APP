@@ -13,7 +13,11 @@ import { ClientProxy } from '@nestjs/microservices';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { firstValueFrom } from 'rxjs';
 import { EXAM_PATTERNS } from '@app/contracts';
-import { OptionalJwtAuthGuard, Public, resolveMicroserviceError } from '@app/common';
+import {
+  OptionalJwtAuthGuard,
+  Public,
+  resolveMicroserviceError,
+} from '@app/common';
 import type { AuthUserPayload } from '@app/common';
 
 async function sendExam<T>(

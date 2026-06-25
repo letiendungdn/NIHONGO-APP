@@ -53,7 +53,9 @@ export class HealthController {
     }
 
     const status =
-      database === 'up' && content === 'up' && exam === 'up' ? 'ok' : 'degraded';
+      database === 'up' && content === 'up' && exam === 'up'
+        ? 'ok'
+        : 'degraded';
 
     return {
       status,

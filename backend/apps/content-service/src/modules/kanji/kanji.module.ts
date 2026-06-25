@@ -6,4 +6,3 @@ import { KanjiService } from './kanji.service';
   exports: [KanjiService],
 })
 export class KanjiModule {}
-

@@ -6,4 +6,3 @@ import { VocabulariesService } from './vocabularies.service';
   exports: [VocabulariesService],
 })
 export class VocabulariesModule {}
-

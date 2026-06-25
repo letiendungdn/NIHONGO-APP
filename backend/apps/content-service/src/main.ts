@@ -17,4 +17,4 @@ async function bootstrap() {
   console.log('Content service listening on NATS');
 }
 
-bootstrap();
+void bootstrap();

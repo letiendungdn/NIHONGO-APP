@@ -6,4 +6,3 @@ import { ExercisesService } from './exercises.service';
   exports: [ExercisesService],
 })
 export class ExercisesModule {}
-

@@ -1,4 +1,8 @@
-import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+import {
+  createParamDecorator,
+  ExecutionContext,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Role } from '@prisma/client';
 
 export interface AuthUserPayload {
@@ -8,9 +12,17 @@ export interface AuthUserPayload {
   name: string | null;
 }
 
+export interface AuthRequest {
+  user?: AuthUserPayload | null;
+}
+
 export const CurrentUser = createParamDecorator(
   (_data: unknown, ctx: ExecutionContext): AuthUserPayload => {
-    const request = ctx.switchToHttp().getRequest();
-    return request.user;
+    const request = ctx.switchToHttp().getRequest<AuthRequest>();
+    const user = request.user;
+    if (!user) {
+      throw new UnauthorizedException('Authenticated user not found');
+    }
+    return user;
   },
 );

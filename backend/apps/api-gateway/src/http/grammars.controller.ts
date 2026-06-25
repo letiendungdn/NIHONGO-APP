@@ -61,7 +61,10 @@ export class GrammarsController {
   @ApiOperation({ summary: 'Update grammar entry' })
   update(@Param('id') id: string, @Body() dto: UpdateGrammarDto) {
     return firstValueFrom(
-      this.contentClient.send(CONTENT_PATTERNS.UPDATE_GRAMMAR, { id: +id, dto }),
+      this.contentClient.send(CONTENT_PATTERNS.UPDATE_GRAMMAR, {
+        id: +id,
+        dto,
+      }),
     );
   }
 

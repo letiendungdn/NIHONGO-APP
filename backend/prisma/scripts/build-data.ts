@@ -54,9 +54,17 @@ async function fetchText(url: string): Promise<string | null> {
   }
 }
 
+function asString(value: unknown): string {
+  if (typeof value === 'string') return value;
+  if (typeof value === 'number' || typeof value === 'boolean')
+    return String(value);
+  return '';
+}
+
 function normalizeKanji(value: unknown): string | null {
-  if (value == null || value === '~' || value === '') return null;
-  return String(value);
+  if (value == null || value === '~') return null;
+  const text = asString(value);
+  return text === '' ? null : text;
 }
 
 function normalizeKanaKey(kana: string): string {
@@ -127,7 +135,7 @@ function expandKanaLookupKeys(kana: string): string[] {
 
   add(kana);
   add(kana.replace(/[。．？?！!]/g, ''));
-  add(kana.replace(/[［\[][^\]］]*[\]］]/g, ''));
+  add(kana.replace(/[［[][^\]］]*[\]］]/g, ''));
 
   const paren = kana.match(/^([^（(]+)[（(]([^)）]+)[)）]/);
   if (paren) {
@@ -141,9 +149,15 @@ function expandKanaLookupKeys(kana: string): string[] {
   return [...keys];
 }
 
-function resolveMeaningVi(kana: string, vi: string, en: string, fr: string): string {
+function resolveMeaningVi(
+  kana: string,
+  vi: string,
+  en: string,
+  fr: string,
+): string {
   const supplement =
-    MEANING_VI_SUPPLEMENT[kana] ?? MEANING_VI_SUPPLEMENT[normalizeKanaKey(kana)];
+    MEANING_VI_SUPPLEMENT[kana] ??
+    MEANING_VI_SUPPLEMENT[normalizeKanaKey(kana)];
   if (supplement) return supplement;
 
   if (vi && vi !== en && vi !== fr && !isLikelyEnglish(vi)) return vi;
@@ -165,7 +179,11 @@ const GRAMMAR_MEANING_SUPPLEMENT: Record<
       'Đứng sau số để chỉ tuổi. Viết bằng kanji là 歳.\n\nChú ý: Khi hỏi tuổi trang trọng dùng おいくつですか.',
     examples: [
       { jp: 'わたしは 20さいです。', romaji: '', vi: 'Tôi 20 tuổi.' },
-      { jp: 'お子さんは なんさいですか。', romaji: '', vi: 'Con bạn mấy tuổi?' },
+      {
+        jp: 'お子さんは なんさいですか。',
+        romaji: '',
+        vi: 'Con bạn mấy tuổi?',
+      },
     ],
   },
 };
@@ -469,8 +487,8 @@ async function parseVocabFromYaml(): Promise<Record<number, VocabItem[]>> {
       const meaningObj = item.meaning as Record<string, string> | undefined;
       const en = meaningObj?.en || '';
       const fr = meaningObj?.fr || '';
-      const kana = String(item.kana || '');
-      const romaji = String(item.romaji || '').replace(/[āēīōū]/g, (m) => {
+      const kana = asString(item.kana);
+      const romaji = asString(item.romaji).replace(/[āēīōū]/g, (m) => {
         const map: Record<string, string> = {
           ā: 'a',
           ē: 'e',

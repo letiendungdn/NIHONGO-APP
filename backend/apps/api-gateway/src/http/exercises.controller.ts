@@ -58,7 +58,10 @@ export class ExercisesController {
   @ApiOperation({ summary: 'Update exercise' })
   update(@Param('id') id: string, @Body() dto: UpdateExerciseDto) {
     return firstValueFrom(
-      this.contentClient.send(CONTENT_PATTERNS.UPDATE_EXERCISE, { id: +id, dto }),
+      this.contentClient.send(CONTENT_PATTERNS.UPDATE_EXERCISE, {
+        id: +id,
+        dto,
+      }),
     );
   }
 

@@ -1,57 +1,53 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@app/prisma';
+import { SrsCardRepository } from '@app/prisma/srs-card.repository';
 import { LogListeningDto, SyncReviewDto } from '@app/contracts';
+
+function fallbackContentId(kana: string, lessonNumber: number): number {
+  let hash = lessonNumber * 9973;
+  for (let i = 0; i < kana.length; i += 1) {
+    hash = (hash * 31 + kana.charCodeAt(i)) | 0;
+  }
+  return -Math.abs(hash || 1);
+}
 
 @Injectable()
 export class ProgressService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly srsCards: SrsCardRepository,
+  ) {}
 
   async syncReviewBank(userId: number, dto: SyncReviewDto) {
-    await this.prisma.$transaction(async (tx) => {
-      for (const item of dto.items) {
-        await tx.reviewLog.upsert({
-          where: {
-            userId_kana_lessonNumber: {
-              userId,
-              kana: item.kana,
-              lessonNumber: item.lessonNumber,
-            },
-          },
-          create: {
-            userId,
-            kana: item.kana,
-            kanji: item.kanji ?? null,
-            meaning: item.meaning,
-            lessonNumber: item.lessonNumber,
-            wrongCount: item.wrongCount,
-            reviewStreak: item.reviewStreak,
-            mastered: item.mastered,
-            lastReviewedAt: item.lastReviewedAt
-              ? new Date(item.lastReviewedAt)
-              : null,
-          },
-          update: {
-            kanji: item.kanji ?? null,
-            meaning: item.meaning,
-            wrongCount: item.wrongCount,
-            reviewStreak: item.reviewStreak,
-            mastered: item.mastered,
-            lastReviewedAt: item.lastReviewedAt
-              ? new Date(item.lastReviewedAt)
-              : null,
-          },
-        });
-      }
-    });
+    for (const item of dto.items) {
+      const vocabulary = await this.prisma.vocabulary.findFirst({
+        where: {
+          kana: item.kana,
+          lesson: { lessonNumber: item.lessonNumber },
+        },
+        select: { id: true },
+        orderBy: { id: 'asc' },
+      });
+
+      const contentId =
+        vocabulary?.id ?? fallbackContentId(item.kana, item.lessonNumber);
+      const lastReviewedAt = item.lastReviewedAt
+        ? new Date(item.lastReviewedAt)
+        : null;
+
+      await this.srsCards.upsertVocabularyReviewCard(
+        userId,
+        contentId,
+        item,
+        lastReviewedAt,
+      );
+    }
 
     return { synced: dto.items.length };
   }
 
   getReviewBank(userId: number) {
-    return this.prisma.reviewLog.findMany({
-      where: { userId },
-      orderBy: [{ mastered: 'asc' }, { wrongCount: 'desc' }],
-    });
+    return this.srsCards.findVocabularyReviewBank(userId);
   }
 
   async logListening(userId: number, dto: LogListeningDto) {

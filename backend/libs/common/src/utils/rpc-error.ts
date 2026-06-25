@@ -15,8 +15,7 @@ export function resolveMicroserviceError(
   if (typeof err.statusCode === 'number') {
     return {
       status: err.statusCode,
-      message:
-        typeof err.message === 'string' ? err.message : 'Request failed',
+      message: typeof err.message === 'string' ? err.message : 'Request failed',
     };
   }
 

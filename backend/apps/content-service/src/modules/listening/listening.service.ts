@@ -58,7 +58,8 @@ export class ListeningService {
       const lessonNumber = lessonById.get(grammar.lessonId) ?? 0;
       for (const example of grammar.examples) {
         if (!example.jp?.trim()) continue;
-        const meaning = example.vi?.trim() || example.en?.trim() || grammar.meaning;
+        const meaning =
+          example.vi?.trim() || example.en?.trim() || grammar.meaning;
         items.push({
           id: `s-${example.id}`,
           type: 'sentence',

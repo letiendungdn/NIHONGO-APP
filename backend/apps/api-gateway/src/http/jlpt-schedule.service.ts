@@ -45,7 +45,10 @@ export interface JlptDaNangScheduleResponse {
   announcements: JlptAnnouncement[];
 }
 
-const BASELINE: Omit<JlptDaNangScheduleResponse, 'source' | 'fetchedAt' | 'announcements'> = {
+const BASELINE: Omit<
+  JlptDaNangScheduleResponse,
+  'source' | 'fetchedAt' | 'announcements'
+> = {
   organizer: {
     name: 'Trường Đại học Ngoại ngữ – Đại học Đà Nẵng',
     shortName: 'UFL – ĐH Đà Nẵng',
@@ -75,8 +78,18 @@ const BASELINE: Omit<JlptDaNangScheduleResponse, 'source' | 'fetchedAt' | 'annou
     },
   ],
   examDay: [
-    { levels: 'N1, N2', arriveAt: '07:00', startAt: '08:00', venue: '131 Lương Nhữ Hộc' },
-    { levels: 'N3, N4', arriveAt: '12:30', startAt: '13:30', venue: '131 Lương Nhữ Hộc' },
+    {
+      levels: 'N1, N2',
+      arriveAt: '07:00',
+      startAt: '08:00',
+      venue: '131 Lương Nhữ Hộc',
+    },
+    {
+      levels: 'N3, N4',
+      arriveAt: '12:30',
+      startAt: '13:30',
+      venue: '131 Lương Nhữ Hộc',
+    },
     { levels: 'N5', arriveAt: '12:30', startAt: '13:30', venue: '41 Lê Duẩn' },
   ],
   briefing:
@@ -86,7 +99,10 @@ const BASELINE: Omit<JlptDaNangScheduleResponse, 'source' | 'fetchedAt' | 'annou
 @Injectable()
 export class JlptScheduleService {
   private readonly logger = new Logger(JlptScheduleService.name);
-  private cache: { expiresAt: number; data: JlptDaNangScheduleResponse } | null = null;
+  private cache: {
+    expiresAt: number;
+    data: JlptDaNangScheduleResponse;
+  } | null = null;
 
   async getDaNangSchedule(): Promise<JlptDaNangScheduleResponse> {
     if (this.cache && Date.now() < this.cache.expiresAt) {
@@ -142,7 +158,9 @@ export class JlptScheduleService {
     let match: RegExpExecArray | null;
     while ((match = blockPattern.exec(html)) !== null) {
       const [, href, rawTitle, rawUpdated] = match;
-      const title = this.decodeHtmlEntities(rawTitle.replace(/\s+/g, ' ').trim());
+      const title = this.decodeHtmlEntities(
+        rawTitle.replace(/\s+/g, ' ').trim(),
+      );
 
       if (!/JLPT/i.test(title)) continue;
 
@@ -164,7 +182,8 @@ export class JlptScheduleService {
 
   private classifyAnnouncement(title: string): JlptAnnouncement['kind'] {
     if (/lệ phí|le phi/i.test(title)) return 'fee';
-    if (/đăng ký|dang ky|nộp hồ sơ|nop ho so/i.test(title)) return 'registration';
+    if (/đăng ký|dang ky|nộp hồ sơ|nop ho so/i.test(title))
+      return 'registration';
     if (/kỳ thi|ky thi|ngày\s+\d/i.test(title)) return 'exam';
     return 'other';
   }

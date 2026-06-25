@@ -6,4 +6,3 @@ import { LessonsService } from './lessons.service';
   exports: [LessonsService],
 })
 export class LessonsModule {}
-

@@ -19,4 +19,4 @@ async function bootstrap() {
   console.log('Exam service listening on NATS');
 }
 
-bootstrap();
+void bootstrap();

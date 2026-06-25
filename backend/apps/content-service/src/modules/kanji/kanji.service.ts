@@ -18,9 +18,7 @@ export class KanjiService {
 
   findEntries(lessonNumber?: number) {
     return this.prisma.kanjiEntry.findMany({
-      where: lessonNumber
-        ? { lesson: { lessonNumber } }
-        : undefined,
+      where: lessonNumber ? { lesson: { lessonNumber } } : undefined,
       orderBy: [{ lesson: { lessonNumber: 'asc' } }, { sortOrder: 'asc' }],
       include: {
         lesson: {

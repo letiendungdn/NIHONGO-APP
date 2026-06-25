@@ -1,9 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@app/prisma';
-import {
-  CreateVocabularyDto,
-  UpdateVocabularyDto,
-} from '@app/contracts';
+import { CreateVocabularyDto, UpdateVocabularyDto } from '@app/contracts';
 
 @Injectable()
 export class VocabulariesService {

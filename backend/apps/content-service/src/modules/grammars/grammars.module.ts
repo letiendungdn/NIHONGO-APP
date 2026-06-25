@@ -6,4 +6,3 @@ import { GrammarsService } from './grammars.service';
   exports: [GrammarsService],
 })
 export class GrammarsModule {}
-

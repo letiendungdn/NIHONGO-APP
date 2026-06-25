@@ -2,12 +2,35 @@ import { Inject, Injectable } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import type { Cache } from 'cache-manager';
-import { sample, shuffle, speechTextFromJapanese, normalizeAnswer, parseJsonArray } from '@app/common';
+import type { ExerciseType } from '@prisma/client';
+import { Prisma } from '@prisma/client';
+import {
+  sample,
+  shuffle,
+  speechTextFromJapanese,
+  normalizeAnswer,
+  parseJsonArray,
+} from '@app/common';
 import { PrismaService } from '@app/prisma';
 import { randomUUID } from 'crypto';
 
 const SESSION_TTL_MS = 3 * 60 * 60 * 1000;
 const sessionKey = (examId: string) => `mock-exam:${examId}`;
+
+function exerciseOptions(raw: Prisma.JsonValue | null): string[] {
+  if (raw == null) return [];
+  if (typeof raw === 'string') return parseJsonArray(raw);
+  if (Array.isArray(raw)) {
+    return raw.filter((value): value is string => typeof value === 'string');
+  }
+  return [];
+}
+
+function toQuestionType(
+  type: ExerciseType,
+): 'multiple_choice' | 'fill_in_blank' {
+  return type === 'MULTIPLE_CHOICE' ? 'multiple_choice' : 'fill_in_blank';
+}
 
 export type MockExamLevel = 'n5' | 'n4';
 
@@ -136,9 +159,9 @@ export class MockExamsService {
         })
       : [];
 
-    const vocabPool = exercises.filter((e) => e.type === 'multiple_choice');
+    const vocabPool = exercises.filter((e) => e.type === 'MULTIPLE_CHOICE');
     const grammarPool = exercises.filter(
-      (e) => e.type === 'multiple_choice' || e.type === 'fill_in_blank',
+      (e) => e.type === 'MULTIPLE_CHOICE' || e.type === 'FILL_IN_BLANK',
     );
 
     const pickedVocab = sample(vocabPool, cfg.vocabCount);
@@ -234,20 +257,22 @@ export class MockExamsService {
         'multiple_choice',
         ex.question,
         ex.answer,
-        shuffle(parseJsonArray(ex.options)),
+        shuffle(exerciseOptions(ex.options)),
         lessonById.get(ex.lessonId),
       );
     }
 
     for (const ex of pickedGrammar) {
-      const type = ex.type as 'multiple_choice' | 'fill_in_blank';
+      const type = toQuestionType(ex.type);
       pushQuestion(
         'grammar',
         'Ngữ pháp',
         type,
         ex.question,
         ex.answer,
-        type === 'multiple_choice' ? shuffle(parseJsonArray(ex.options)) : undefined,
+        type === 'multiple_choice'
+          ? shuffle(exerciseOptions(ex.options))
+          : undefined,
         lessonById.get(ex.lessonId),
       );
     }
@@ -325,8 +350,7 @@ export class MockExamsService {
     if (!session) {
       throw new RpcException({
         statusCode: 404,
-        message:
-          'Phiên thi không tồn tại hoặc đã hết hạn. Hãy bắt đầu đề mới.',
+        message: 'Phiên thi không tồn tại hoặc đã hết hạn. Hãy bắt đầu đề mới.',
       });
     }
 
@@ -376,8 +400,17 @@ export class MockExamsService {
         total,
         percent,
         passed,
-        sectionScores,
         submittedAt,
+        sectionResults: {
+          create: sectionScores.map((section) => ({
+            section: section.sectionId,
+            correct: section.correct,
+            total: section.total,
+            percent: section.total
+              ? Math.round((section.correct / section.total) * 100)
+              : 0,
+          })),
+        },
       },
     });
 
@@ -437,7 +470,11 @@ export class MockExamsService {
       if (existing) {
         existing.count += 1;
       } else {
-        map.set(q.sectionId, { id: q.sectionId, name: q.sectionName, count: 1 });
+        map.set(q.sectionId, {
+          id: q.sectionId,
+          name: q.sectionName,
+          count: 1,
+        });
       }
     }
     return Array.from(map.values());
@@ -453,7 +490,9 @@ export class MockExamsService {
   ) {
     return picked.map((entry) => {
       const distractors = sample(
-        pool.filter((v) => v.kana !== entry.kana && v.meaning !== entry.meaning),
+        pool.filter(
+          (v) => v.kana !== entry.kana && v.meaning !== entry.meaning,
+        ),
         3,
       ).map((v) => v.meaning);
 

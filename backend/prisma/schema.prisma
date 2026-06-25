@@ -7,94 +7,163 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ─────────────────────────────────────────────
+// Enums
+// ─────────────────────────────────────────────
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum JlptLevel {
+  N5
+  N4
+  N3
+  N2
+  N1
+}
+
+enum ExerciseType {
+  MULTIPLE_CHOICE
+  FILL_IN_BLANK
+  LISTENING
+}
+
+enum ContentType {
+  VOCABULARY
+  GRAMMAR
+  KANJI
+}
+
+// ─────────────────────────────────────────────
+// Content
+// ─────────────────────────────────────────────
+
 model Lesson {
   id           Int          @id @default(autoincrement())
   lessonNumber Int          @unique
   title        String?
+  description  String?
+  jlptLevel    JlptLevel?
+  thumbnailUrl String?
   vocabularies Vocabulary[]
   grammars     Grammar[]
   exercises    Exercise[]
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
+
+  @@index([jlptLevel])
 }
 
 model Vocabulary {
-  id        Int      @id @default(autoincrement())
-  kanji     String?
-  kana      String
-  romaji    String
-  meaning   String
-  lessonId  Int
-  lesson    Lesson   @relation(fields: [lessonId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            Int        @id @default(autoincrement())
+  kanji         String?
+  kana          String
+  romaji        String
+  meaning       String
+  meaningEn     String?
+  partOfSpeech  String?
+  jlptLevel     JlptLevel?
+  pitchAccent   String?
+  audioUrl      String?
+  frequencyRank Int?
+  lessonId      Int
+  lesson        Lesson     @relation(fields: [lessonId], references: [id])
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  @@index([lessonId])
+  @@index([jlptLevel])
 }
 
 model Grammar {
-  id          Int       @id @default(autoincrement())
-  pattern     String
-  meaning     String
-  explanation String?
-  lessonId    Int
-  lesson      Lesson    @relation(fields: [lessonId], references: [id])
-  examples    Example[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id             Int        @id @default(autoincrement())
+  pattern        String
+  meaning        String
+  explanation    String?
+  jlptLevel      JlptLevel?
+  formalityLevel String?
+  lessonId       Int
+  lesson         Lesson     @relation(fields: [lessonId], references: [id])
+  examples       Example[]
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  @@index([lessonId])
+  @@index([jlptLevel])
 }
 
 model Example {
-  id        Int      @id @default(autoincrement())
+  id        Int     @id @default(autoincrement())
   jp        String
   romaji    String
   en        String?
   vi        String?
+  audioUrl  String?
   grammarId Int
-  grammar   Grammar  @relation(fields: [grammarId], references: [id], onDelete: Cascade)
+  grammar   Grammar @relation(fields: [grammarId], references: [id], onDelete: Cascade)
 }
 
 model Exercise {
-  id        Int      @id @default(autoincrement())
-  type      String   // "multiple_choice" or "fill_in_blank"
-  question  String
-  options   String?  // JSON stringified array of options if multiple choice
-  answer    String
-  lessonId  Int
-  lesson    Lesson   @relation(fields: [lessonId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          Int          @id @default(autoincrement())
+  type        ExerciseType
+  question    String
+  options     Json?
+  answer      String
+  explanation String?
+  audioUrl    String?
+  difficulty  Int          @default(1)
+  lessonId    Int
+  lesson      Lesson       @relation(fields: [lessonId], references: [id])
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([lessonId])
 }
+
+// ─────────────────────────────────────────────
+// Kanji
+// ─────────────────────────────────────────────
 
 model KanjiLesson {
   id           Int          @id @default(autoincrement())
   lessonNumber Int          @unique
   title        String?
-  jlptLevel    String?
+  jlptLevel    JlptLevel?
   entries      KanjiEntry[]
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
 
   @@index([lessonNumber])
+  @@index([jlptLevel])
 }
 
 model KanjiEntry {
-  id          Int          @id @default(autoincrement())
-  character   String
-  hanViet     String?
-  onyomi      String?
-  kunyomi     String?
-  meaningVi   String
-  mnemonicJp  String?
-  mnemonicVi  String?
-  imageUrl    String?
-  sortOrder   Int          @default(0)
-  lessonId    Int
-  lesson      KanjiLesson  @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  id           Int          @id @default(autoincrement())
+  character    String
+  hanViet      String?
+  onyomi       String?
+  kunyomi      String?
+  meaningVi    String
+  meaningEn    String?
+  mnemonicJp   String?
+  mnemonicVi   String?
+  imageUrl     String?
+  jlptLevel    JlptLevel?
+  strokeCount  Int?
+  frequency    Int?
+  grade        Int?
+  sortOrder    Int          @default(0)
+  lessonId     Int
+  lesson       KanjiLesson  @relation(fields: [lessonId], references: [id], onDelete: Cascade)
   vocabularies KanjiVocab[]
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
 
   @@index([lessonId])
   @@index([character])
+  @@index([jlptLevel])
 }
 
 model KanjiVocab {
@@ -110,71 +179,129 @@ model KanjiVocab {
   @@index([kanjiEntryId])
 }
 
+// ─────────────────────────────────────────────
+// Users
+// ─────────────────────────────────────────────
+
 model User {
-  id            Int            @id @default(autoincrement())
-  email         String         @unique
-  passwordHash  String
-  role          Role           @default(USER)
-  name          String?
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
+  id                Int            @id @default(autoincrement())
+  email             String         @unique
+  passwordHash      String
+  role              Role           @default(USER)
+  name              String?
+  avatarUrl         String?
+  nativeLanguage    String?        @default("vi")
+  targetJlptLevel   JlptLevel?
+  studyGoalMinutes  Int?           @default(30)
+  lastActiveAt      DateTime?
+  totalStudySeconds Int            @default(0)
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+
   examResults   ExamResult[]
-  reviewLogs    ReviewLog[]
+  srsCards      SrsCard[]
   listeningLogs ListeningLog[]
+  studySessions StudySession[]
 
   @@index([role])
 }
 
-enum Role {
-  USER
-  ADMIN
+// ─────────────────────────────────────────────
+// Progress & SRS
+// ─────────────────────────────────────────────
+
+// Thay thế ReviewLog — dùng thuật toán SM-2 cho Spaced Repetition
+model SrsCard {
+  id          Int         @id @default(autoincrement())
+  userId      Int
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contentType ContentType
+  contentId   Int
+
+  // Snapshot nhanh để hiển thị mà không cần join
+  kana        String
+  kanji       String?
+  meaning     String
+  lessonNumber Int
+
+  // SM-2 algorithm
+  easeFactor   Float     @default(2.5)
+  interval     Int       @default(0)
+  repetitions  Int       @default(0)
+  nextReviewAt DateTime?
+  lastReviewedAt DateTime?
+
+  // Statistics
+  wrongCount   Int       @default(0)
+  correctCount Int       @default(0)
+  reviewStreak Int       @default(0)
+  mastered     Boolean   @default(false)
+
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@unique([userId, contentType, contentId])
+  @@index([userId, mastered])
+  @@index([userId, nextReviewAt])
+  @@index([userId, contentType])
 }
 
 model ExamResult {
-  id            Int      @id @default(autoincrement())
-  userId        Int?
-  user          User?    @relation(fields: [userId], references: [id])
-  examId        String
-  level         String
-  title         String
-  correctCount  Int
-  total         Int
-  percent       Int
-  passed        Boolean
-  sectionScores Json
-  submittedAt   DateTime @default(now())
+  id           Int                 @id @default(autoincrement())
+  userId       Int?
+  user         User?               @relation(fields: [userId], references: [id], onDelete: SetNull)
+  examId       String
+  level        String
+  title        String
+  correctCount Int
+  total        Int
+  percent      Float
+  passed       Boolean
+  submittedAt  DateTime            @default(now())
+
+  sectionResults ExamSectionResult[]
 
   @@index([userId])
   @@index([level])
 }
 
-model ReviewLog {
-  id             Int       @id @default(autoincrement())
-  userId         Int
-  user           User      @relation(fields: [userId], references: [id])
-  kana           String
-  kanji          String?
-  meaning        String
-  lessonNumber   Int
-  wrongCount     Int       @default(1)
-  reviewStreak   Int       @default(0)
-  mastered       Boolean   @default(false)
-  lastReviewedAt DateTime?
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+// Thay thế sectionScores Json — chuẩn hóa từng section thành row riêng
+model ExamSectionResult {
+  id           Int        @id @default(autoincrement())
+  examResultId Int
+  examResult   ExamResult @relation(fields: [examResultId], references: [id], onDelete: Cascade)
+  section      String
+  correct      Int
+  total        Int
+  percent      Float
 
-  @@unique([userId, kana, lessonNumber])
-  @@index([userId, mastered])
+  @@index([examResultId])
 }
 
 model ListeningLog {
-  id        Int      @id @default(autoincrement())
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id])
-  date      String
-  seconds   Int      @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date       DateTime @db.Date
+  seconds    Int      @default(0)
+  lessonFrom Int?
+  lessonTo   Int?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([userId, date])
+  @@index([userId])
+}
+
+// Theo dõi thời gian học mỗi ngày
+model StudySession {
+  id            Int      @id @default(autoincrement())
+  userId        Int
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date          DateTime @db.Date
+  seconds       Int      @default(0)
+  cardsReviewed Int      @default(0)
+  createdAt     DateTime @default(now())
 
   @@unique([userId, date])
   @@index([userId])

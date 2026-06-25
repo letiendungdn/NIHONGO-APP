@@ -59,7 +59,11 @@ export class ContentMsController {
   @MessagePattern(CONTENT_PATTERNS.GET_VOCABULARIES)
   getVocabularies(
     @Payload()
-    data: { lessonNumber?: number; page?: number; limit?: number },
+    data: {
+      lessonNumber?: number;
+      page?: number;
+      limit?: number;
+    },
   ) {
     return this.vocabulariesService.findAll(
       data.lessonNumber,
@@ -91,7 +95,11 @@ export class ContentMsController {
   @MessagePattern(CONTENT_PATTERNS.GET_GRAMMARS)
   getGrammars(
     @Payload()
-    data: { lessonNumber?: number; page?: number; limit?: number },
+    data: {
+      lessonNumber?: number;
+      page?: number;
+      limit?: number;
+    },
   ) {
     return this.grammarsService.findAll(
       data.lessonNumber,

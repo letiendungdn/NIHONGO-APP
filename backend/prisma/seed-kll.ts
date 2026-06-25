@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, JlptLevel } from '@prisma/client';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -59,7 +59,7 @@ export async function seedKll(prisma: PrismaClient) {
       data: {
         lessonNumber: lessonData.lessonNumber,
         title: lessonData.title,
-        jlptLevel: lessonData.jlptLevel,
+        jlptLevel: lessonData.jlptLevel as JlptLevel,
       },
     });
 
