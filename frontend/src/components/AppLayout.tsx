@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type { ReactNode } from 'react';
 
+const englishAppUrl = process.env.NEXT_PUBLIC_ENGLISH_APP_URL ?? 'http://localhost:3001';
+
 const navItems = [
   { href: '/', label: 'Home', end: true },
   { href: '/kana', label: 'Kana' },
@@ -11,6 +13,7 @@ const navItems = [
   { href: '/daily-listening', label: 'Nghe' },
   { href: '/notes', label: 'Hằng ngày' },
   { href: '/vocab', label: 'Vocabulary' },
+  { href: '/vocab/picture', label: 'Từ điển tranh' },
   { href: '/vocab-review', label: 'Từ sai' },
   { href: '/grammar', label: 'Grammar' },
   { href: '/kanji', label: 'Kanji' },
@@ -47,6 +50,9 @@ export default function MainLayout({ children }: { children: ReactNode }) {
             {navItems.map(({ href, label, end }) => (
               <NavItem key={href} href={href} label={label} end={end} />
             ))}
+            <a href={englishAppUrl} className="nav-link app-switcher">
+              🇬🇧 English
+            </a>
           </nav>
         </div>
       </header>

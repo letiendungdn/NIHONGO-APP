@@ -79,6 +79,7 @@ model Vocabulary {
   jlptLevel     JlptLevel?
   pitchAccent   String?
   audioUrl      String?
+  imageUrl      String?
   frequencyRank Int?
   lessonId      Int
   lesson        Lesson     @relation(fields: [lessonId], references: [id])

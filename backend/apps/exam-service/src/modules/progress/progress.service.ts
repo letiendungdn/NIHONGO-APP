@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from '@app/prisma';
 import { SrsCardRepository } from '@app/prisma/srs-card.repository';
 import {
@@ -153,10 +154,11 @@ export class ProgressService {
   }
 
   upsertDailyGoals(userId: number, dto: UpsertDailyGoalsDto) {
+    const items = dto.items as unknown as Prisma.InputJsonValue;
     return this.prisma.dailyGoal.upsert({
       where: { userId_date: { userId, date: dto.date } },
-      create: { userId, date: dto.date, items: dto.items },
-      update: { items: dto.items },
+      create: { userId, date: dto.date, items },
+      update: { items },
     });
   }
 

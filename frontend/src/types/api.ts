@@ -18,6 +18,7 @@ export interface Vocabulary {
   romaji: string;
   meaning: string;
   lessonId: number;
+  imageUrl?: string | null;
 }
 
 export interface GrammarExample {

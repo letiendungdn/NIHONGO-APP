@@ -7,6 +7,7 @@ import PlayAllButton from '../components/PlayAllButton';
 import { usePlayAll } from '../hooks/usePlayAll';
 import { useLessonsQuery, useVocabulariesQuery } from '../hooks/queries';
 import StrokeOrder from '../components/StrokeOrder';
+import VocabPicture from '../components/VocabPicture';
 import { getStrokeText, shouldShowKanaStroke } from '../utils/japanese';
 import './VocabView.css';
 
@@ -176,6 +177,16 @@ export default function VocabView() {
                       aria-current={index === currentIndex ? 'true' : undefined}
                     >
                       <span className="vocab-word-list-num">{index + 1}</span>
+                      <VocabPicture
+                        word={vocab.romaji}
+                        meaning={vocab.meaning}
+                        kana={vocab.kana}
+                        kanji={vocab.kanji}
+                        imageUrl={vocab.imageUrl}
+                        size="xs"
+                        className="vocab-word-list-thumb"
+                        alt={vocab.kana}
+                      />
                       <span className="vocab-word-list-jp japanese-text">
                         {vocab.kanji || vocab.kana}
                       </span>
@@ -197,6 +208,16 @@ export default function VocabView() {
                 <button className="btn-audio" onClick={handlePronounce} title="Nghe phát âm">
                   🔊
                 </button>
+                <VocabPicture
+                  word={currentVocab.romaji}
+                  meaning={currentVocab.meaning}
+                  kana={currentVocab.kana}
+                  kanji={currentVocab.kanji}
+                  imageUrl={currentVocab.imageUrl}
+                  size="lg"
+                  className="flashcard-vocab-picture"
+                  alt={currentVocab.kana}
+                />
                 <span className="vocab-kanji japanese-text">
                   {currentVocab.kanji || currentVocab.kana}
                 </span>
@@ -206,6 +227,16 @@ export default function VocabView() {
                 <button className="btn-audio" onClick={handlePronounce} title="Nghe phát âm">
                   🔊
                 </button>
+                <VocabPicture
+                  word={currentVocab.romaji}
+                  meaning={currentVocab.meaning}
+                  kana={currentVocab.kana}
+                  kanji={currentVocab.kanji}
+                  imageUrl={currentVocab.imageUrl}
+                  size="md"
+                  className="flashcard-vocab-picture"
+                  alt={currentVocab.kana}
+                />
                 <span className="vocab-kana japanese-text">{currentVocab.kana}</span>
                 <span className="vocab-romaji">{currentVocab.romaji}</span>
                 <div className="divider"></div>
@@ -229,6 +260,16 @@ export default function VocabView() {
           </div>
 
           <div className="stroke-order-sidepanel glass-panel">
+            <VocabPicture
+              word={currentVocab.romaji}
+              meaning={currentVocab.meaning}
+              kana={currentVocab.kana}
+              kanji={currentVocab.kanji}
+              imageUrl={currentVocab.imageUrl}
+              size="md"
+              className="stroke-panel-picture"
+              alt={currentVocab.kana}
+            />
             <h3>Cách viết chữ:</h3>
             {shouldShowKanaStroke(currentVocab.kanji, currentVocab.kana) ? (
               <>

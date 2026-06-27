@@ -193,6 +193,20 @@ a {
   width: 100%;
 }
 
+.app-switcher {
+  padding: 0.35rem 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+}
+.app-switcher::after {
+  display: none;
+}
+.app-switcher:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
 .app-main {
   flex: 1;
   padding: 4rem 0;

@@ -7,6 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "seed:minna": "ts-node prisma/seed-minna.ts",
+    "seed:vocab-images": "ts-node prisma/seed-vocab-images.ts",
     "seed:reference": "ts-node prisma/seed-reference.ts",
     "seed:kll": "ts-node prisma/seed-kll.ts",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\" \"test/**/*.ts\"",

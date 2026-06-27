@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import * as fs from 'fs';
 import * as path from 'path';
+import { resolveVocabImage } from './vocab-images';
 
 const bundlePath = path.join(__dirname, 'data', 'minna-bundle.json');
 
@@ -76,6 +77,12 @@ export async function seedMinna(prisma: PrismaClient) {
 
     const vocabList = bundle.vocab[String(i)] || [];
     for (const vocab of vocabList) {
+      const imageUrl = resolveVocabImage({
+        word: vocab.romaji,
+        meaning: vocab.meaning,
+        kana: vocab.kana,
+        kanji: vocab.kanji,
+      });
       await prisma.vocabulary.create({
         data: {
           lessonId: lesson.id,
@@ -83,6 +90,7 @@ export async function seedMinna(prisma: PrismaClient) {
           kana: vocab.kana,
           romaji: vocab.romaji,
           meaning: vocab.meaning,
+          imageUrl,
         },
       });
       totalVocab++;
