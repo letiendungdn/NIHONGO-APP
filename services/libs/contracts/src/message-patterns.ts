@@ -38,10 +38,6 @@ export const EXAM_PATTERNS = {
   GET_HISTORY: 'exam.history.get',
 } as const;
 
-export const EXAM_EVENTS = {
-  EXAM_SUBMITTED: 'exam.submitted',
-} as const;
-
 export const PROGRESS_PATTERNS = {
   SYNC_REVIEW: 'progress.review.sync',
   GET_REVIEW_BANK: 'progress.review.get',

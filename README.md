@@ -36,11 +36,11 @@ edu-platform/
 │  api-gateway    │     │  english-api    │
 │  (:3000)        │     │  (BFF in MFE)   │
 └────────┬────────┘     └────────┬────────┘
-         │ NATS                  │
+         │ gRPC                  │
     ┌────┴────┐                   │
     ▼         ▼                   ▼
  content   exam              english_learning
- service   service              (PostgreSQL)
+ :50051    :50052                (PostgreSQL)
     │         │
     └────┬────┘
          ▼
@@ -51,12 +51,12 @@ edu-platform/
 
 ```bash
 # Infrastructure
-docker compose up -d postgres redis nats
+docker compose up -d postgres redis
 
 # Backend (3 terminal)
 npm run dev:gateway      # api-gateway :3000
-npm run dev:content      # content-service
-npm run dev:exam         # exam-service
+npm run dev:content      # content-service gRPC :50051
+npm run dev:exam         # exam-service gRPC :50052
 
 # Frontends
 npm run dev:nihongo-web  # :5173

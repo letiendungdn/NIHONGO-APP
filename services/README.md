@@ -1,20 +1,20 @@
 # Microservices
 
-Backend services cho Edu Platform.
+Backend services cho Edu Platform — giao tiếp qua **gRPC**.
 
 | Service | Folder | Port | Mô tả |
 |---------|--------|------|--------|
-| **api-gateway** | `api-gateway/` | 3000 | HTTP entry, JWT auth, proxy NATS |
-| **content-service** | `content-service/` | — | Lessons, vocab, grammar, kanji, reading… |
-| **exam-service** | `exam-service/` | — | Mock exam, progress, SRS, analytics |
+| **api-gateway** | `api-gateway/` | 3000 | HTTP entry, JWT auth, gRPC client |
+| **content-service** | `content-service/` | 50051 | Lessons, vocab, grammar, kanji, reading… |
+| **exam-service** | `exam-service/` | 50052 | Mock exam, progress, SRS, analytics |
 | **english-api** | `english-api/` | 3001 | BFF tiếng Anh (Next.js routes trong `apps/english-web`) |
 
 ## Shared
 
 | Folder | Mô tả |
 |--------|--------|
-| `libs/common` | Guards, filters, config NestJS |
-| `libs/contracts` | NATS message patterns + DTOs |
+| `libs/common` | Guards, filters, gRPC dispatch utils |
+| `libs/contracts` | Message patterns, proto files, DTOs |
 | `libs/prisma` | PrismaService, repositories |
 | `prisma/` | Schema PostgreSQL `nihongo`, migrations, seeds |
 
@@ -22,15 +22,25 @@ Backend services cho Edu Platform.
 
 ```bash
 # Từ root monorepo
-npm run dev:gateway
-npm run dev:content
-npm run dev:exam
+npm run dev:gateway      # HTTP :3000
+npm run dev:content      # gRPC :50051
+npm run dev:exam         # gRPC :50052
 ```
 
-## NATS flow
+## gRPC flow
 
 ```
-Client → api-gateway → NATS → content-service / exam-service → PostgreSQL
+Client → api-gateway (HTTP)
+              │ gRPC Dispatch(pattern, payload)
+              ├──► content-service :50051
+              └──► exam-service :50052
+                        │
+                   PostgreSQL + Redis
 ```
 
-Message patterns: `libs/contracts/src/message-patterns.ts`
+Proto definitions: `libs/contracts/proto/`
+
+Environment:
+- `CONTENT_GRPC_URL` — gateway → content (default `localhost:50051`)
+- `EXAM_GRPC_URL` — gateway → exam (default `localhost:50052`)
+- `CONTENT_GRPC_PORT` / `EXAM_GRPC_PORT` — listen ports for each service

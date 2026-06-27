@@ -1,5 +1,5 @@
-import { Controller } from '@nestjs/common';
-import { MessagePattern, Payload } from '@nestjs/microservices';
+import { Controller, OnModuleInit } from '@nestjs/common';
+import { GrpcMethod } from '@nestjs/microservices';
 import {
   CONTENT_PATTERNS,
   CreateExerciseDto,
@@ -11,6 +11,7 @@ import {
   UpdateLessonDto,
   UpdateVocabularyDto,
 } from '@app/contracts';
+import { handleGrpcDispatch, type PatternHandler } from '@app/common';
 import { LessonsService } from './modules/lessons/lessons.service';
 import { VocabulariesService } from './modules/vocabularies/vocabularies.service';
 import { GrammarsService } from './modules/grammars/grammars.service';
@@ -22,7 +23,9 @@ import { ReferenceService } from './modules/reference/reference.service';
 import { ReadingService } from './modules/reading/reading.service';
 
 @Controller()
-export class ContentMsController {
+export class ContentMsController implements OnModuleInit {
+  private routes!: Record<string, PatternHandler>;
+
   constructor(
     private readonly lessonsService: LessonsService,
     private readonly vocabulariesService: VocabulariesService,
@@ -35,40 +38,110 @@ export class ContentMsController {
     private readonly readingService: ReadingService,
   ) {}
 
-  @MessagePattern(CONTENT_PATTERNS.GET_LESSONS)
+  onModuleInit() {
+    this.routes = {
+      [CONTENT_PATTERNS.GET_LESSONS]: () => this.getLessons(),
+      [CONTENT_PATTERNS.GET_LESSON]: (data) =>
+        this.getLesson(data as { lessonNumber: number }),
+      [CONTENT_PATTERNS.CREATE_LESSON]: (dto) =>
+        this.createLesson(dto as CreateLessonDto),
+      [CONTENT_PATTERNS.UPDATE_LESSON]: (data) =>
+        this.updateLesson(data as { id: number; dto: UpdateLessonDto }),
+      [CONTENT_PATTERNS.DELETE_LESSON]: (data) =>
+        this.deleteLesson(data as { id: number }),
+      [CONTENT_PATTERNS.GET_VOCABULARIES]: (data) =>
+        this.getVocabularies(
+          data as { lessonNumber?: number; page?: number; limit?: number },
+        ),
+      [CONTENT_PATTERNS.GET_VOCABULARY]: (data) =>
+        this.getVocabulary(data as { id: number }),
+      [CONTENT_PATTERNS.CREATE_VOCABULARY]: (dto) =>
+        this.createVocabulary(dto as CreateVocabularyDto),
+      [CONTENT_PATTERNS.UPDATE_VOCABULARY]: (data) =>
+        this.updateVocabulary(data as { id: number; dto: UpdateVocabularyDto }),
+      [CONTENT_PATTERNS.DELETE_VOCABULARY]: (data) =>
+        this.deleteVocabulary(data as { id: number }),
+      [CONTENT_PATTERNS.GET_GRAMMARS]: (data) =>
+        this.getGrammars(
+          data as { lessonNumber?: number; page?: number; limit?: number },
+        ),
+      [CONTENT_PATTERNS.GET_GRAMMAR]: (data) =>
+        this.getGrammar(data as { id: number }),
+      [CONTENT_PATTERNS.CREATE_GRAMMAR]: (dto) =>
+        this.createGrammar(dto as CreateGrammarDto),
+      [CONTENT_PATTERNS.UPDATE_GRAMMAR]: (data) =>
+        this.updateGrammar(data as { id: number; dto: UpdateGrammarDto }),
+      [CONTENT_PATTERNS.DELETE_GRAMMAR]: (data) =>
+        this.deleteGrammar(data as { id: number }),
+      [CONTENT_PATTERNS.GET_EXERCISES]: (data) =>
+        this.getExercises(data as { lessonNumber?: number }),
+      [CONTENT_PATTERNS.GET_EXERCISE]: (data) =>
+        this.getExercise(data as { id: number }),
+      [CONTENT_PATTERNS.CREATE_EXERCISE]: (dto) =>
+        this.createExercise(dto as CreateExerciseDto),
+      [CONTENT_PATTERNS.UPDATE_EXERCISE]: (data) =>
+        this.updateExercise(data as { id: number; dto: UpdateExerciseDto }),
+      [CONTENT_PATTERNS.DELETE_EXERCISE]: (data) =>
+        this.deleteExercise(data as { id: number }),
+      [CONTENT_PATTERNS.GET_KANJI_LESSONS]: () => this.getKanjiLessons(),
+      [CONTENT_PATTERNS.GET_KANJI_ENTRIES]: (data) =>
+        this.getKanjiEntries(data as { lessonNumber?: number }),
+      [CONTENT_PATTERNS.GET_KANJI_ENTRY]: (data) =>
+        this.getKanjiEntry(data as { id: number }),
+      [CONTENT_PATTERNS.GET_LISTENING_PLAYLIST]: (data) =>
+        this.getListeningPlaylist(
+          data as { lessonFrom: number; lessonTo: number; limit: number },
+        ),
+      [CONTENT_PATTERNS.IMPORT_VOCAB]: (data) =>
+        this.importVocab(data as { lessonNumber: number; text: string }),
+      [CONTENT_PATTERNS.GET_REFERENCE_LIST]: () => this.getReferenceList(),
+      [CONTENT_PATTERNS.GET_REFERENCE]: (data) =>
+        this.getReference(data as { slug: string }),
+      [CONTENT_PATTERNS.GET_READING_PASSAGES]: (data) =>
+        this.getReadingPassages(data as { jlptLevel?: string }),
+      [CONTENT_PATTERNS.GET_READING_PASSAGE]: (data) =>
+        this.getReadingPassage(data as { id: number }),
+      [CONTENT_PATTERNS.SUBMIT_READING]: (data) =>
+        this.submitReading(
+          data as {
+            passageId: number;
+            answers: Record<string, string>;
+            userId?: number;
+          },
+        ),
+    };
+  }
+
+  @GrpcMethod('ContentService', 'Dispatch')
+  dispatch(data: { pattern: string; payload: string }) {
+    return handleGrpcDispatch(this.routes, data);
+  }
+
   getLessons() {
     return this.lessonsService.findAll();
   }
 
-  @MessagePattern(CONTENT_PATTERNS.GET_LESSON)
-  getLesson(@Payload() data: { lessonNumber: number }) {
+  getLesson(data: { lessonNumber: number }) {
     return this.lessonsService.findOne(data.lessonNumber);
   }
 
-  @MessagePattern(CONTENT_PATTERNS.CREATE_LESSON)
-  createLesson(@Payload() dto: CreateLessonDto) {
+  createLesson(dto: CreateLessonDto) {
     return this.lessonsService.create(dto);
   }
 
-  @MessagePattern(CONTENT_PATTERNS.UPDATE_LESSON)
-  updateLesson(@Payload() data: { id: number; dto: UpdateLessonDto }) {
+  updateLesson(data: { id: number; dto: UpdateLessonDto }) {
     return this.lessonsService.update(data.id, data.dto);
   }
 
-  @MessagePattern(CONTENT_PATTERNS.DELETE_LESSON)
-  deleteLesson(@Payload() data: { id: number }) {
+  deleteLesson(data: { id: number }) {
     return this.lessonsService.remove(data.id);
   }
 
-  @MessagePattern(CONTENT_PATTERNS.GET_VOCABULARIES)
-  getVocabularies(
-    @Payload()
-    data: {
-      lessonNumber?: number;
-      page?: number;
-      limit?: number;
-    },
-  ) {
+  getVocabularies(data: {
+    lessonNumber?: number;
+    page?: number;
+    limit?: number;
+  }) {
     return this.vocabulariesService.findAll(
       data.lessonNumber,
       data.page,
@@ -76,35 +149,23 @@ export class ContentMsController {
     );
   }
 
-  @MessagePattern(CONTENT_PATTERNS.GET_VOCABULARY)
-  getVocabulary(@Payload() data: { id: number }) {
+  getVocabulary(data: { id: number }) {
     return this.vocabulariesService.findOne(data.id);
   }
 
-  @MessagePattern(CONTENT_PATTERNS.CREATE_VOCABULARY)
-  createVocabulary(@Payload() dto: CreateVocabularyDto) {
+  createVocabulary(dto: CreateVocabularyDto) {
     return this.vocabulariesService.create(dto);
   }
 
-  @MessagePattern(CONTENT_PATTERNS.UPDATE_VOCABULARY)
-  updateVocabulary(@Payload() data: { id: number; dto: UpdateVocabularyDto }) {
+  updateVocabulary(data: { id: number; dto: UpdateVocabularyDto }) {
     return this.vocabulariesService.update(data.id, data.dto);
   }
 
-  @MessagePattern(CONTENT_PATTERNS.DELETE_VOCABULARY)
-  deleteVocabulary(@Payload() data: { id: number }) {
+  deleteVocabulary(data: { id: number }) {
     return this.vocabulariesService.remove(data.id);
   }
 
-  @MessagePattern(CONTENT_PATTERNS.GET_GRAMMARS)
-  getGrammars(
-    @Payload()
-    data: {
-      lessonNumber?: number;
-      page?: number;
-      limit?: number;
-    },
-  ) {
+  getGrammars(data: { lessonNumber?: number; page?: number; limit?: number }) {
     return this.grammarsService.findAll(
       data.lessonNumber,
       data.page,
@@ -112,70 +173,59 @@ export class ContentMsController {
     );
   }
 
-  @MessagePattern(CONTENT_PATTERNS.GET_GRAMMAR)
-  getGrammar(@Payload() data: { id: number }) {
+  getGrammar(data: { id: number }) {
     return this.grammarsService.findOne(data.id);
   }
 
-  @MessagePattern(CONTENT_PATTERNS.CREATE_GRAMMAR)
-  createGrammar(@Payload() dto: CreateGrammarDto) {
+  createGrammar(dto: CreateGrammarDto) {
     return this.grammarsService.create(dto);
   }
 
-  @MessagePattern(CONTENT_PATTERNS.UPDATE_GRAMMAR)
-  updateGrammar(@Payload() data: { id: number; dto: UpdateGrammarDto }) {
+  updateGrammar(data: { id: number; dto: UpdateGrammarDto }) {
     return this.grammarsService.update(data.id, data.dto);
   }
 
-  @MessagePattern(CONTENT_PATTERNS.DELETE_GRAMMAR)
-  deleteGrammar(@Payload() data: { id: number }) {
+  deleteGrammar(data: { id: number }) {
     return this.grammarsService.remove(data.id);
   }
 
-  @MessagePattern(CONTENT_PATTERNS.GET_EXERCISES)
-  getExercises(@Payload() data: { lessonNumber?: number }) {
+  getExercises(data: { lessonNumber?: number }) {
     return this.exercisesService.findAll(data.lessonNumber);
   }
 
-  @MessagePattern(CONTENT_PATTERNS.GET_EXERCISE)
-  getExercise(@Payload() data: { id: number }) {
+  getExercise(data: { id: number }) {
     return this.exercisesService.findOne(data.id);
   }
 
-  @MessagePattern(CONTENT_PATTERNS.CREATE_EXERCISE)
-  createExercise(@Payload() dto: CreateExerciseDto) {
+  createExercise(dto: CreateExerciseDto) {
     return this.exercisesService.create(dto);
   }
 
-  @MessagePattern(CONTENT_PATTERNS.UPDATE_EXERCISE)
-  updateExercise(@Payload() data: { id: number; dto: UpdateExerciseDto }) {
+  updateExercise(data: { id: number; dto: UpdateExerciseDto }) {
     return this.exercisesService.update(data.id, data.dto);
   }
 
-  @MessagePattern(CONTENT_PATTERNS.DELETE_EXERCISE)
-  deleteExercise(@Payload() data: { id: number }) {
+  deleteExercise(data: { id: number }) {
     return this.exercisesService.remove(data.id);
   }
 
-  @MessagePattern(CONTENT_PATTERNS.GET_KANJI_LESSONS)
   getKanjiLessons() {
     return this.kanjiService.findAllLessons();
   }
 
-  @MessagePattern(CONTENT_PATTERNS.GET_KANJI_ENTRIES)
-  getKanjiEntries(@Payload() data: { lessonNumber?: number }) {
+  getKanjiEntries(data: { lessonNumber?: number }) {
     return this.kanjiService.findEntries(data.lessonNumber);
   }
 
-  @MessagePattern(CONTENT_PATTERNS.GET_KANJI_ENTRY)
-  getKanjiEntry(@Payload() data: { id: number }) {
+  getKanjiEntry(data: { id: number }) {
     return this.kanjiService.findOne(data.id);
   }
 
-  @MessagePattern(CONTENT_PATTERNS.GET_LISTENING_PLAYLIST)
-  getListeningPlaylist(
-    @Payload() data: { lessonFrom: number; lessonTo: number; limit: number },
-  ) {
+  getListeningPlaylist(data: {
+    lessonFrom: number;
+    lessonTo: number;
+    limit: number;
+  }) {
     return this.listeningService.getPlaylist(
       data.lessonFrom,
       data.lessonTo,
@@ -183,40 +233,31 @@ export class ContentMsController {
     );
   }
 
-  @MessagePattern(CONTENT_PATTERNS.IMPORT_VOCAB)
-  importVocab(@Payload() data: { lessonNumber: number; text: string }) {
+  importVocab(data: { lessonNumber: number; text: string }) {
     return this.importService.importVocabFromText(data.lessonNumber, data.text);
   }
 
-  @MessagePattern(CONTENT_PATTERNS.GET_REFERENCE_LIST)
   getReferenceList() {
     return this.referenceService.findAll();
   }
 
-  @MessagePattern(CONTENT_PATTERNS.GET_REFERENCE)
-  getReference(@Payload() data: { slug: string }) {
+  getReference(data: { slug: string }) {
     return this.referenceService.findBySlug(data.slug);
   }
 
-  @MessagePattern(CONTENT_PATTERNS.GET_READING_PASSAGES)
-  getReadingPassages(@Payload() data: { jlptLevel?: string }) {
+  getReadingPassages(data: { jlptLevel?: string }) {
     return this.readingService.findAll(data.jlptLevel);
   }
 
-  @MessagePattern(CONTENT_PATTERNS.GET_READING_PASSAGE)
-  getReadingPassage(@Payload() data: { id: number }) {
+  getReadingPassage(data: { id: number }) {
     return this.readingService.findOne(data.id);
   }
 
-  @MessagePattern(CONTENT_PATTERNS.SUBMIT_READING)
-  submitReading(
-    @Payload()
-    data: {
-      passageId: number;
-      answers: Record<string, string>;
-      userId?: number;
-    },
-  ) {
+  submitReading(data: {
+    passageId: number;
+    answers: Record<string, string>;
+    userId?: number;
+  }) {
     return this.readingService.submit(
       data.passageId,
       data.answers,

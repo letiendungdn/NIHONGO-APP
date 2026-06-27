@@ -1,15 +1,6 @@
 version: '3.9'
 
 services:
-  nats:
-    image: nats:2-alpine
-    container_name: nihongo-nats
-    restart: unless-stopped
-    ports:
-      - '4222:4222'
-      - '8222:8222'
-    command: ['--http_port', '8222']
-
   redis:
     image: redis:7-alpine
     container_name: nihongo-redis
@@ -48,12 +39,10 @@ services:
     restart: unless-stopped
     environment:
       DATABASE_URL: postgresql://nihongo:nihongo@postgres:5432/nihongo
-      NATS_URL: nats://nats:4222
+      CONTENT_GRPC_PORT: 50051
     depends_on:
       postgres:
         condition: service_healthy
-      nats:
-        condition: service_started
 
   exam-service:
     build:
@@ -63,13 +52,11 @@ services:
     restart: unless-stopped
     environment:
       DATABASE_URL: postgresql://nihongo:nihongo@postgres:5432/nihongo
-      NATS_URL: nats://nats:4222
       REDIS_URL: redis://redis:6379
+      EXAM_GRPC_PORT: 50052
     depends_on:
       postgres:
         condition: service_healthy
-      nats:
-        condition: service_started
       redis:
         condition: service_healthy
 
@@ -83,7 +70,8 @@ services:
       - '3000:3000'
     environment:
       PORT: 3000
-      NATS_URL: nats://nats:4222
+      CONTENT_GRPC_URL: content-service:50051
+      EXAM_GRPC_URL: exam-service:50052
       DATABASE_URL: postgresql://nihongo:nihongo@postgres:5432/nihongo
       JWT_SECRET: ${JWT_SECRET:-change-me-in-production}
       JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
@@ -91,7 +79,6 @@ services:
       ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@nihongo.local}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin123}
     depends_on:
-      - nats
       - content-service
       - exam-service
 

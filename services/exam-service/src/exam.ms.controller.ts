@@ -1,7 +1,6 @@
-import { Controller, Logger } from '@nestjs/common';
-import { EventPattern, MessagePattern, Payload } from '@nestjs/microservices';
+import { Controller, Logger, OnModuleInit } from '@nestjs/common';
+import { GrpcMethod } from '@nestjs/microservices';
 import {
-  EXAM_EVENTS,
   EXAM_PATTERNS,
   LogListeningDto,
   PROGRESS_PATTERNS,
@@ -9,107 +8,124 @@ import {
   UpsertDailyNoteDto,
   UpsertDailyGoalsDto,
 } from '@app/contracts';
+import { handleGrpcDispatch, type PatternHandler } from '@app/common';
 import { MockExamsService } from './modules/mock-exams/mock-exams.service';
 import { ProgressService } from './modules/progress/progress.service';
 
 @Controller()
-export class ExamMsController {
+export class ExamMsController implements OnModuleInit {
   private readonly logger = new Logger(ExamMsController.name);
+  private routes!: Record<string, PatternHandler>;
 
   constructor(
     private readonly mockExamsService: MockExamsService,
     private readonly progressService: ProgressService,
   ) {}
 
-  @MessagePattern(EXAM_PATTERNS.LIST_TEMPLATES)
+  onModuleInit() {
+    this.routes = {
+      [EXAM_PATTERNS.LIST_TEMPLATES]: () => this.listTemplates(),
+      [EXAM_PATTERNS.START_EXAM]: (data) =>
+        this.startExam(data as { level: 'n5' | 'n4' }),
+      [EXAM_PATTERNS.SUBMIT_EXAM]: (data) =>
+        this.submitExam(
+          data as {
+            examId: string;
+            answers: Record<string, string>;
+            userId?: number;
+          },
+        ),
+      [EXAM_PATTERNS.GET_HISTORY]: (data) =>
+        this.getHistory(data as { userId: number }),
+      [PROGRESS_PATTERNS.SYNC_REVIEW]: (data) =>
+        this.syncReview(data as { userId: number; dto: SyncReviewDto }),
+      [PROGRESS_PATTERNS.GET_REVIEW_BANK]: (data) =>
+        this.getReviewBank(data as { userId: number }),
+      [PROGRESS_PATTERNS.LOG_LISTENING]: (data) =>
+        this.logListening(data as { userId: number; dto: LogListeningDto }),
+      [PROGRESS_PATTERNS.GET_LISTENING_LOGS]: (data) =>
+        this.getListeningLogs(data as { userId: number }),
+      [PROGRESS_PATTERNS.GET_ANALYTICS]: (data) =>
+        this.getAnalytics(data as { userId: number }),
+      [PROGRESS_PATTERNS.UPSERT_DAILY_NOTE]: (data) =>
+        this.upsertDailyNote(data as { userId: number; dto: UpsertDailyNoteDto }),
+      [PROGRESS_PATTERNS.GET_DAILY_NOTES]: (data) =>
+        this.getDailyNotes(data as { userId: number; limit?: number }),
+      [PROGRESS_PATTERNS.UPSERT_DAILY_GOALS]: (data) =>
+        this.upsertDailyGoals(
+          data as { userId: number; dto: UpsertDailyGoalsDto },
+        ),
+      [PROGRESS_PATTERNS.GET_DAILY_GOALS]: (data) =>
+        this.getDailyGoals(data as { userId: number; limit?: number }),
+    };
+  }
+
+  @GrpcMethod('ExamService', 'Dispatch')
+  dispatch(data: { pattern: string; payload: string }) {
+    return handleGrpcDispatch(this.routes, data);
+  }
+
   listTemplates() {
     return this.mockExamsService.listTemplates();
   }
 
-  @MessagePattern(EXAM_PATTERNS.START_EXAM)
-  startExam(@Payload() data: { level: 'n5' | 'n4' }) {
+  startExam(data: { level: 'n5' | 'n4' }) {
     return this.mockExamsService.start(data.level);
   }
 
-  @MessagePattern(EXAM_PATTERNS.SUBMIT_EXAM)
-  submitExam(
-    @Payload()
-    data: {
-      examId: string;
-      answers: Record<string, string>;
-      userId?: number;
-    },
-  ) {
-    return this.mockExamsService.submit(data.examId, data.answers, data.userId);
+  async submitExam(data: {
+    examId: string;
+    answers: Record<string, string>;
+    userId?: number;
+  }) {
+    const result = await this.mockExamsService.submit(
+      data.examId,
+      data.answers,
+      data.userId,
+    );
+    this.logger.log(
+      `Exam submitted: examId=${data.examId} userId=${data.userId ?? 'guest'} level=${result.level} percent=${result.percent}% passed=${result.passed}`,
+    );
+    return result;
   }
 
-  @MessagePattern(EXAM_PATTERNS.GET_HISTORY)
-  getHistory(@Payload() data: { userId: number }) {
+  getHistory(data: { userId: number }) {
     return this.mockExamsService.getHistory(data.userId);
   }
 
-  @MessagePattern(PROGRESS_PATTERNS.SYNC_REVIEW)
-  syncReview(@Payload() data: { userId: number; dto: SyncReviewDto }) {
+  syncReview(data: { userId: number; dto: SyncReviewDto }) {
     return this.progressService.syncReviewBank(data.userId, data.dto);
   }
 
-  @MessagePattern(PROGRESS_PATTERNS.GET_REVIEW_BANK)
-  getReviewBank(@Payload() data: { userId: number }) {
+  getReviewBank(data: { userId: number }) {
     return this.progressService.getReviewBank(data.userId);
   }
 
-  @MessagePattern(PROGRESS_PATTERNS.LOG_LISTENING)
-  logListening(@Payload() data: { userId: number; dto: LogListeningDto }) {
+  logListening(data: { userId: number; dto: LogListeningDto }) {
     return this.progressService.logListening(data.userId, data.dto);
   }
 
-  @MessagePattern(PROGRESS_PATTERNS.GET_LISTENING_LOGS)
-  getListeningLogs(@Payload() data: { userId: number }) {
+  getListeningLogs(data: { userId: number }) {
     return this.progressService.getListeningHistory(data.userId);
   }
 
-  @MessagePattern(PROGRESS_PATTERNS.GET_ANALYTICS)
-  getAnalytics(@Payload() data: { userId: number }) {
+  getAnalytics(data: { userId: number }) {
     return this.progressService.getAnalytics(data.userId);
   }
 
-  @MessagePattern(PROGRESS_PATTERNS.UPSERT_DAILY_NOTE)
-  upsertDailyNote(
-    @Payload() data: { userId: number; dto: UpsertDailyNoteDto },
-  ) {
+  upsertDailyNote(data: { userId: number; dto: UpsertDailyNoteDto }) {
     return this.progressService.upsertDailyNote(data.userId, data.dto);
   }
 
-  @MessagePattern(PROGRESS_PATTERNS.GET_DAILY_NOTES)
-  getDailyNotes(@Payload() data: { userId: number; limit?: number }) {
+  getDailyNotes(data: { userId: number; limit?: number }) {
     return this.progressService.listDailyNotes(data.userId, data.limit);
   }
 
-  @MessagePattern(PROGRESS_PATTERNS.UPSERT_DAILY_GOALS)
-  upsertDailyGoals(
-    @Payload() data: { userId: number; dto: UpsertDailyGoalsDto },
-  ) {
+  upsertDailyGoals(data: { userId: number; dto: UpsertDailyGoalsDto }) {
     return this.progressService.upsertDailyGoals(data.userId, data.dto);
   }
 
-  @MessagePattern(PROGRESS_PATTERNS.GET_DAILY_GOALS)
-  getDailyGoals(@Payload() data: { userId: number; limit?: number }) {
+  getDailyGoals(data: { userId: number; limit?: number }) {
     return this.progressService.listDailyGoals(data.userId, data.limit);
-  }
-
-  @EventPattern(EXAM_EVENTS.EXAM_SUBMITTED)
-  onExamSubmitted(
-    @Payload()
-    data: {
-      examId: string;
-      userId?: number;
-      level: string;
-      percent: number;
-      passed: boolean;
-    },
-  ) {
-    this.logger.log(
-      `Exam submitted: examId=${data.examId} userId=${data.userId ?? 'guest'} level=${data.level} percent=${data.percent}% passed=${data.passed}`,
-    );
   }
 }

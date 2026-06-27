@@ -1,4 +1,5 @@
 export * from './message-patterns';
+export * from './grpc-paths';
 export * from './dto/vocabulary.dto';
 export * from './dto/grammar.dto';
 export * from './dto/exercise.dto';
