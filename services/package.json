@@ -6,11 +6,11 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "seed:minna": "ts-node prisma/seed-minna.ts",
-    "seed:vocab-images": "ts-node prisma/seed-vocab-images.ts",
-    "seed:reference": "ts-node prisma/seed-reference.ts",
-    "seed:kll": "ts-node prisma/seed-kll.ts",
-    "format": "prettier --write \"api-gateway/**/*.ts\" \"content-service/**/*.ts\" \"exam-service/**/*.ts\" \"libs/**/*.ts\" \"test/**/*.ts\"",
+    "seed:minna": "ts-node ../packages/prisma-nihongo/seed-minna.ts",
+    "seed:vocab-images": "ts-node ../packages/prisma-nihongo/seed-vocab-images.ts",
+    "seed:reference": "ts-node ../packages/prisma-nihongo/seed-reference.ts",
+    "seed:kll": "ts-node ../packages/prisma-nihongo/seed-kll.ts",
+    "format": "prettier --write \"api-gateway/**/*.ts\" \"content-service/**/*.ts\" \"exam-service/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start api-gateway",
     "start:dev": "nest start api-gateway --watch",
     "start:content": "nest start content-service --watch",
@@ -18,10 +18,11 @@
     "build": "nest build api-gateway",
     "build:content": "nest build content-service",
     "build:exam": "nest build exam-service",
-    "build:all": "nest build api-gateway && nest build content-service && nest build exam-service",
+    "build:all": "npm run prisma:generate && nest build api-gateway && nest build content-service && nest build exam-service",
+    "prisma:generate": "npm run generate -w @edu/prisma-nihongo",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/apps/api-gateway/api-gateway/src/main.js",
-    "lint": "eslint \"{api-gateway,content-service,exam-service,libs,test}/**/*.ts\" --fix",
+    "lint": "eslint \"{api-gateway,content-service,exam-service,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
@@ -96,15 +97,19 @@
       "<rootDir>/api-gateway",
       "<rootDir>/content-service",
       "<rootDir>/exam-service",
-      "<rootDir>/libs"
+      "<rootDir>/../packages/nest-common",
+      "<rootDir>/../packages/nest-contracts",
+      "<rootDir>/../packages/nest-prisma"
     ],
     "moduleNameMapper": {
-      "^@app/common$": "<rootDir>/libs/common/src",
-      "^@app/common/(.*)$": "<rootDir>/libs/common/src/$1",
-      "^@app/prisma$": "<rootDir>/libs/prisma/src",
-      "^@app/prisma/(.*)$": "<rootDir>/libs/prisma/src/$1",
-      "^@app/contracts$": "<rootDir>/libs/contracts/src",
-      "^@app/contracts/(.*)$": "<rootDir>/libs/contracts/src/$1"
+      "^@app/common$": "<rootDir>/../packages/nest-common/src",
+      "^@app/common/(.*)$": "<rootDir>/../packages/nest-common/src/$1",
+      "^@app/prisma$": "<rootDir>/../packages/nest-prisma/src",
+      "^@app/prisma/(.*)$": "<rootDir>/../packages/nest-prisma/src/$1",
+      "^@app/contracts$": "<rootDir>/../packages/nest-contracts/src",
+      "^@app/contracts/(.*)$": "<rootDir>/../packages/nest-contracts/src/$1",
+      "^@prisma/client$": "<rootDir>/../packages/prisma-nihongo/generated/client",
+      "^@prisma/client/(.*)$": "<rootDir>/../packages/prisma-nihongo/generated/client/$1"
     },
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
@@ -117,6 +122,7 @@
     "testEnvironment": "node"
   },
   "prisma": {
-    "seed": "ts-node prisma/seed.ts"
+    "schema": "../packages/prisma-nihongo/schema.prisma",
+    "seed": "ts-node ../packages/prisma-nihongo/seed.ts"
   }
 }

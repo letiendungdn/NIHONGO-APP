@@ -74,7 +74,7 @@ export class SrsCardRepository {
       orderBy: [{ mastered: 'asc' }, { wrongCount: 'desc' }],
     });
 
-    return cards.map((card) => ({
+    return cards.map((card: (typeof cards)[number]) => ({
       kana: card.kana,
       kanji: card.kanji,
       meaning: card.meaning,

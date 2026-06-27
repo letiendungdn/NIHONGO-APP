@@ -1,6 +1,6 @@
 import { join } from 'path';
 
-const protoDir = join(process.cwd(), 'libs/contracts/proto');
+const protoDir = join(__dirname, '../proto');
 
 export const CONTENT_PROTO_PATH = join(protoDir, 'content.proto');
 export const EXAM_PROTO_PATH = join(protoDir, 'exam.proto');

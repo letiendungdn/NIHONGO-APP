@@ -3,6 +3,11 @@
   "compilerOptions": {
     "outDir": "../dist/apps/api-gateway"
   },
-  "include": ["src/**/*", "../libs/**/*"],
+  "include": [
+    "src/**/*",
+    "../../packages/nest-common/src/**/*",
+    "../../packages/nest-contracts/src/**/*",
+    "../../packages/nest-prisma/src/**/*"
+  ],
   "exclude": ["**/*.spec.ts"]
 }

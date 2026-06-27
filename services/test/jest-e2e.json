@@ -7,11 +7,11 @@
     "^.+\\.(t|j)s$": "ts-jest"
   },
   "moduleNameMapper": {
-    "^@app/common$": "<rootDir>/../libs/common/src",
-    "^@app/common/(.*)$": "<rootDir>/../libs/common/src/$1",
-    "^@app/prisma$": "<rootDir>/../libs/prisma/src",
-    "^@app/prisma/(.*)$": "<rootDir>/../libs/prisma/src/$1",
-    "^@app/contracts$": "<rootDir>/../libs/contracts/src",
-    "^@app/contracts/(.*)$": "<rootDir>/../libs/contracts/src/$1"
+    "^@app/common$": "<rootDir>/../packages/nest-common/src",
+    "^@app/common/(.*)$": "<rootDir>/../packages/nest-common/src/$1",
+    "^@app/prisma$": "<rootDir>/../packages/nest-prisma/src",
+    "^@app/prisma/(.*)$": "<rootDir>/../packages/nest-prisma/src/$1",
+    "^@app/contracts$": "<rootDir>/../packages/nest-contracts/src",
+    "^@app/contracts/(.*)$": "<rootDir>/../packages/nest-contracts/src/$1"
   }
 }

@@ -1,69 +1,47 @@
 # Edu Platform — Monorepo
 
-Hệ sinh thái học ngôn ngữ: **micro frontends** + **microservices**.
+Hệ sinh thái học tiếng Nhật & tiếng Anh: **micro frontends** + **microservices** + **shared packages**.
 
 ## Cấu trúc
 
 ```
-edu-platform/
-├── apps/                    # Micro Frontends
-│   ├── nihongo-web/         # Next.js — học tiếng Nhật (:5173)
-│   └── english-web/         # Next.js — học tiếng Anh (:3001)
-├── services/                # Micro Backends
-│   ├── api-gateway/         # NestJS HTTP gateway (:3000)
-│   ├── content-service/     # NestJS — lessons, vocab, grammar, kanji…
-│   ├── exam-service/        # NestJS — mock exam, progress, SRS
-│   ├── english-api/         # BFF tiếng Anh (API trong english-web)
-│   ├── libs/                # Shared NestJS libs (@app/common, contracts, prisma)
-│   └── prisma/              # Schema + migrations DB nihongo
-├── packages/                # Shared packages
-│   └── vocab-images/        # OpenMoji picture dictionary map
+edu_app/
+├── apps/                      # Micro Frontends
+│   ├── nihongo-web/           # Next.js — tiếng Nhật (:5173)
+│   └── english-web/           # Next.js — tiếng Anh (:3001)
+├── services/                  # Micro Backends (gRPC)
+│   ├── api-gateway/           # HTTP :3000
+│   ├── content-service/       # gRPC :50051
+│   ├── exam-service/          # gRPC :50052
+│   └── english-api/           # BFF docs (API trong english-web)
+├── packages/                  # Shared libraries
+│   ├── vocab-images/          # OpenMoji map
+│   ├── nest-common/           # NestJS guards, gRPC utils
+│   ├── nest-contracts/        # Proto, DTOs, patterns
+│   ├── nest-prisma/           # Prisma module
+│   └── prisma-nihongo/        # DB schema + migrations + seeds
 ├── infra/
-│   └── backups/             # SQL dumps
-└── docker-compose.yml
-```
-
-## Kiến trúc
-
-```
-┌─────────────────┐     ┌─────────────────┐
-│  nihongo-web    │     │  english-web    │
-│  (MFE :5173)    │     │  (MFE :3001)    │
-└────────┬────────┘     └────────┬────────┘
-         │ /api/* proxy           │ Next.js API routes
-         ▼                        ▼
-┌─────────────────┐     ┌─────────────────┐
-│  api-gateway    │     │  english-api    │
-│  (:3000)        │     │  (BFF in MFE)   │
-└────────┬────────┘     └────────┬────────┘
-         │ gRPC                  │
-    ┌────┴────┐                   │
-    ▼         ▼                   ▼
- content   exam              english_learning
- :50051    :50052                (PostgreSQL)
-    │         │
-    └────┬────┘
-         ▼
-    PostgreSQL (nihongo)
+│   └── backups/               # SQL dumps
+├── docs/
+├── docker-compose.yml
+└── package.json
 ```
 
 ## Chạy dev
 
 ```bash
-# Infrastructure
+npm install
+
 docker compose up -d postgres redis
 
-# Backend (3 terminal)
-npm run dev:gateway      # api-gateway :3000
-npm run dev:content      # content-service gRPC :50051
-npm run dev:exam         # exam-service gRPC :50052
-
-# Frontends
+npm run dev:gateway      # :3000
+npm run dev:content      # gRPC :50051
+npm run dev:exam         # gRPC :50052
 npm run dev:nihongo-web  # :5173
 npm run dev:english-web  # :3001
 ```
 
-## Docker (full stack)
+## Docker
 
 ```bash
 docker compose up -d

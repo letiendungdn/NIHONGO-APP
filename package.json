@@ -19,7 +19,8 @@
     "build:english-web": "npm run build -w @edu/english-web",
     "docker:up": "docker compose up -d",
     "docker:down": "docker compose down",
-    "seed:vocab-images": "npm run seed:vocab-images -w @edu/nihongo-services"
+    "seed:vocab-images": "npm run seed:vocab-images -w @edu/nihongo-services",
+    "prisma:generate": "npm run generate -w @edu/prisma-nihongo"
   },
   "engines": {
     "node": ">=22"

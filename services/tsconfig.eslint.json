@@ -1,10 +1,14 @@
 {
   "extends": "./tsconfig.json",
   "include": [
-    "apps/**/*.ts",
-    "libs/**/*.ts",
-    "test/**/*.ts",
-    "prisma/**/*.ts"
+    "api-gateway/**/*.ts",
+    "content-service/**/*.ts",
+    "exam-service/**/*.ts",
+    "../packages/nest-common/**/*.ts",
+    "../packages/nest-contracts/**/*.ts",
+    "../packages/nest-prisma/**/*.ts",
+    "../packages/prisma-nihongo/**/*.ts",
+    "test/**/*.ts"
   ],
   "exclude": ["**/dist/**", "node_modules"]
 }

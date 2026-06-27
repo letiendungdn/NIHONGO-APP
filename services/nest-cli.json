@@ -37,29 +37,29 @@
     },
     "contracts": {
       "type": "library",
-      "root": "libs/contracts",
-      "sourceRoot": "libs/contracts/src",
+      "root": "../packages/nest-contracts",
+      "sourceRoot": "../packages/nest-contracts/src",
       "entryFile": "index",
       "compilerOptions": {
-        "tsConfigPath": "libs/contracts/tsconfig.lib.json"
+        "tsConfigPath": "../packages/nest-contracts/tsconfig.lib.json"
       }
     },
     "common": {
       "type": "library",
-      "root": "libs/common",
-      "sourceRoot": "libs/common/src",
+      "root": "../packages/nest-common",
+      "sourceRoot": "../packages/nest-common/src",
       "entryFile": "index",
       "compilerOptions": {
-        "tsConfigPath": "libs/common/tsconfig.lib.json"
+        "tsConfigPath": "../packages/nest-common/tsconfig.lib.json"
       }
     },
     "prisma": {
       "type": "library",
-      "root": "libs/prisma",
-      "sourceRoot": "libs/prisma/src",
+      "root": "../packages/nest-prisma",
+      "sourceRoot": "../packages/nest-prisma/src",
       "entryFile": "index",
       "compilerOptions": {
-        "tsConfigPath": "libs/prisma/tsconfig.lib.json"
+        "tsConfigPath": "../packages/nest-prisma/tsconfig.lib.json"
       }
     }
   }

@@ -23,12 +23,14 @@
     "noFallthroughCasesInSwitch": true,
     "paths": {
       "@edu/vocab-images": ["../packages/vocab-images/src"],
-      "@app/common": ["libs/common/src"],
-      "@app/common/*": ["libs/common/src/*"],
-      "@app/prisma": ["libs/prisma/src"],
-      "@app/prisma/*": ["libs/prisma/src/*"],
-      "@app/contracts": ["libs/contracts/src"],
-      "@app/contracts/*": ["libs/contracts/src/*"]
+      "@prisma/client": ["../packages/prisma-nihongo/generated/client"],
+      "@prisma/client/*": ["../packages/prisma-nihongo/generated/client/*"],
+      "@app/common": ["../packages/nest-common/src"],
+      "@app/common/*": ["../packages/nest-common/src/*"],
+      "@app/prisma": ["../packages/nest-prisma/src"],
+      "@app/prisma/*": ["../packages/nest-prisma/src/*"],
+      "@app/contracts": ["../packages/nest-contracts/src"],
+      "@app/contracts/*": ["../packages/nest-contracts/src/*"]
     }
   }
 }

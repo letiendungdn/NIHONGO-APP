@@ -3,6 +3,11 @@
   "compilerOptions": {
     "outDir": "../dist/apps/exam-service"
   },
-  "include": ["src/**/*", "../libs/**/*"],
+  "include": [
+    "src/**/*",
+    "../../packages/nest-common/src/**/*",
+    "../../packages/nest-contracts/src/**/*",
+    "../../packages/nest-prisma/src/**/*"
+  ],
   "exclude": ["**/*.spec.ts"]
 }

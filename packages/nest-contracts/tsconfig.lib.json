@@ -1,8 +1,8 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../services/tsconfig.json",
   "compilerOptions": {
     "declaration": true,
-    "outDir": "../../dist/libs/common"
+    "outDir": "../../services/dist/packages/nest-contracts"
   },
   "include": ["src/**/*"],
   "exclude": ["**/*.spec.ts"]

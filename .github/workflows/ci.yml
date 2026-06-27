@@ -33,8 +33,8 @@ jobs:
           cache: npm
           cache-dependency-path: package-lock.json
       - run: npm ci
-      - run: npx prisma generate && npx prisma migrate deploy
-        working-directory: services
+      - run: npm run generate -w @edu/prisma-nihongo
+      - run: npm run migrate:deploy -w @edu/prisma-nihongo
         env:
           DATABASE_URL: postgresql://nihongo:nihongo@localhost:5432/nihongo
       - run: npm run lint -w @edu/nihongo-services
@@ -43,7 +43,7 @@ jobs:
           DATABASE_URL: postgresql://nihongo:nihongo@localhost:5432/nihongo
           REDIS_URL: redis://localhost:6379
           JWT_SECRET: test-secret
-      - run: npm run build -w @edu/nihongo-services
+      - run: npm run build:all -w @edu/nihongo-services
 
   nihongo-web:
     runs-on: ubuntu-latest
