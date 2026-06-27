@@ -31,25 +31,21 @@ jobs:
         with:
           node-version: '22'
           cache: npm
-          cache-dependency-path: backend/package-lock.json
+          cache-dependency-path: package-lock.json
       - run: npm ci
-        working-directory: backend
       - run: npx prisma generate && npx prisma migrate deploy
-        working-directory: backend
+        working-directory: services
         env:
           DATABASE_URL: postgresql://nihongo:nihongo@localhost:5432/nihongo
-      - run: npm run lint
-        working-directory: backend
-      - run: npm test -- --coverage
-        working-directory: backend
+      - run: npm run lint -w @edu/nihongo-services
+      - run: npm test -- --coverage -w @edu/nihongo-services
         env:
           DATABASE_URL: postgresql://nihongo:nihongo@localhost:5432/nihongo
           REDIS_URL: redis://localhost:6379
           JWT_SECRET: test-secret
-      - run: npm run build
-        working-directory: backend
+      - run: npm run build -w @edu/nihongo-services
 
-  frontend:
+  nihongo-web:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -57,12 +53,21 @@ jobs:
         with:
           node-version: '22'
           cache: npm
-          cache-dependency-path: frontend/package-lock.json
+          cache-dependency-path: package-lock.json
       - run: npm ci
-        working-directory: frontend
-      - run: npm run lint
-        working-directory: frontend
-      - run: npm run build
-        working-directory: frontend
+      - run: npm run lint -w @edu/nihongo-web
+      - run: npm run build -w @edu/nihongo-web
         env:
           API_URL: http://localhost:3000
+
+  english-web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - run: npm ci
+      - run: npm run lint -w @edu/english-web

@@ -42,8 +42,8 @@ services:
 
   content-service:
     build:
-      context: ./backend
-      dockerfile: apps/content-service/Dockerfile
+      context: .
+      dockerfile: services/content-service/Dockerfile
     container_name: nihongo-content
     restart: unless-stopped
     environment:
@@ -57,8 +57,8 @@ services:
 
   exam-service:
     build:
-      context: ./backend
-      dockerfile: apps/exam-service/Dockerfile
+      context: .
+      dockerfile: services/exam-service/Dockerfile
     container_name: nihongo-exam
     restart: unless-stopped
     environment:
@@ -75,8 +75,8 @@ services:
 
   api-gateway:
     build:
-      context: ./backend
-      dockerfile: apps/api-gateway/Dockerfile
+      context: .
+      dockerfile: services/api-gateway/Dockerfile
     container_name: nihongo-gateway
     restart: unless-stopped
     ports:
@@ -87,7 +87,7 @@ services:
       DATABASE_URL: postgresql://nihongo:nihongo@postgres:5432/nihongo
       JWT_SECRET: ${JWT_SECRET:-change-me-in-production}
       JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
-      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost:5173}
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost:5173,http://localhost:3001}
       ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@nihongo.local}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin123}
     depends_on:
@@ -95,11 +95,11 @@ services:
       - content-service
       - exam-service
 
-  frontend:
+  nihongo-web:
     build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    container_name: nihongo-frontend
+      context: .
+      dockerfile: apps/nihongo-web/Dockerfile
+    container_name: nihongo-web
     restart: unless-stopped
     ports:
       - '5173:5173'
@@ -107,6 +107,21 @@ services:
       API_URL: http://api-gateway:3000
     depends_on:
       - api-gateway
+
+  english-web:
+    build:
+      context: .
+      dockerfile: apps/english-web/Dockerfile
+    container_name: english-web
+    restart: unless-stopped
+    ports:
+      - '3001:3001'
+    environment:
+      DATABASE_URL: postgresql://nihongo:nihongo@postgres:5432/english_learning
+      NEXT_PUBLIC_NIHONGO_APP_URL: http://localhost:5173
+    depends_on:
+      postgres:
+        condition: service_healthy
 
 volumes:
   postgres_data:
